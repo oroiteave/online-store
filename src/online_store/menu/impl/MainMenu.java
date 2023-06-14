@@ -80,7 +80,7 @@ public class MainMenu implements Menu{
 
 	@Override
 	public void printMenuHeader() {
-		System.out.println("***** MAIN MENU *****");
+		System.out.println("*** MAIN MENU ***");
 		if (context.getLoggedInUser() == null) {
 			System.out.println(MAIN_MENU_TEXT_FOR_LOGGED_OUT_USER);
 		} else {
