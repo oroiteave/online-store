@@ -45,7 +45,7 @@ public class SettingsMenu implements Menu{
 					new MainMenu().start();
 				}
 			}
-			sc.close();
+			//sc.close();
 		}
 	}
 

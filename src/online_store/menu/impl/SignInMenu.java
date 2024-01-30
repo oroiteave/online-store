@@ -36,7 +36,7 @@ public class SignInMenu implements Menu{
 		}else {
 			System.out.println("Unfortunately, such login and password doesn’t exist");
 		}
-		sc.close();
+		//sc.close();
 		context.getMainMenu().start();
 	}
 

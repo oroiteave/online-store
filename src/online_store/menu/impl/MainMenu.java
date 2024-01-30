@@ -73,7 +73,7 @@ public class MainMenu implements Menu{
 					continue;
 				}
 			}
-			sc.close();
+			//sc.close();
 		}
 		menuToNavigate.start();
 	}

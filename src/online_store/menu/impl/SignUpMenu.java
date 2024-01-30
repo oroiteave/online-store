@@ -41,7 +41,7 @@ public class SignUpMenu implements Menu{
 		} else {
 			System.out.println(errorMessage);
 		}
-		sc.close();
+		//sc.close();
 		context.getMainMenu().start();
 	}
 

@@ -30,7 +30,7 @@ public class CheckoutMenu implements Menu{
 			if (!createOrder(userInput)) {
 				continue;
 			}
-			sc.close();
+			//sc.close();
 			context.getSessionCart().clear();
 			break;
 		}
