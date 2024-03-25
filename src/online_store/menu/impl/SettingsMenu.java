@@ -1,6 +1,7 @@
 package online_store.menu.impl;
 
 
+import online_store.Main;
 import online_store.configs.ApplicationContext;
 import online_store.menu.Menu;
 
@@ -26,6 +27,9 @@ public class SettingsMenu implements Menu{
 			printMenuHeader();
 			Scanner sc = new Scanner(System.in);
 			String userInput = sc.next();
+			if (userInput.equalsIgnoreCase(Main.EXIT_COMMAND)) {
+				System.exit(0);
+			}
 			if(userInput.equalsIgnoreCase("menu")) {
 				new MainMenu().start();
 			}
