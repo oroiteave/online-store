@@ -1,5 +1,6 @@
 package online_store.entities.impl;
 
+import online_store.annotations.Validate;
 import online_store.entities.User;
 
 public class DefaultUser implements User{
@@ -7,9 +8,16 @@ public class DefaultUser implements User{
 	private static int userCount=0;
 	
 	private int id;
+	
+	@Validate(pattern = "[a-zA-Z]+")
 	private String firstName;
+	
+	@Validate(pattern = "[a-zA-Z]+")
 	private String lastName;
+	
 	private String password;
+	
+	@Validate(pattern = ".+@.+")
 	private String email;
 	
 	{
