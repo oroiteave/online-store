@@ -33,7 +33,7 @@ public class SettingsMenu implements Menu{
 			if(userInput.equalsIgnoreCase("menu")) {
 				new MainMenu().start();
 			}
-			if(!userInput.equals("1") || !userInput.equals("2")) {
+			if(!userInput.equals("1") && !userInput.equals("2")) {
 				System.out.println("Only 1, 2 is allowed. Try one more time");
 				continue;
 			}else {
