@@ -7,12 +7,15 @@ import online_store.menu.Menu;
 import online_store.services.UserManagementService;
 import online_store.services.impl.DefaultUserManagementService;
 
+import java.util.ResourceBundle;
 import java.util.Scanner;
 public class SignInMenu implements Menu{
+	private ResourceBundle rb;
 	private ApplicationContext context;
 	private UserManagementService userManagementService;
 
 	{
+		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
 		userManagementService = DefaultUserManagementService.getInstance();
 	}
@@ -23,18 +26,18 @@ public class SignInMenu implements Menu{
 		
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("Enter your email");
+		System.out.println(rb.getString("enter.your.email"));
 		String email = sc.next();
-		System.out.println("Enter your password");
+		System.out.println(rb.getString("enter.your.password"));
 		String password = sc.next();
 		
 		User user = userManagementService.getUserByEmail(email);
 		
-		if(password!=null && password.equals(password)) {
+		if(user != null && user.getPassword().equals(password)) {
 			context.setLoggedInUser(user);
-			System.out.println("Glad to see you back "+user.getFirstName() + user.getLastName());
+			System.out.println(rb.getString("welcome.msg")+user.getFirstName() + user.getLastName());
 		}else {
-			System.out.println("Unfortunately, such login and password doesn’t exist");
+			System.out.println(rb.getString("login.or.password.doest.exist.error.msg"));
 		}
 		//sc.close();
 		context.getMainMenu().start();
@@ -42,6 +45,6 @@ public class SignInMenu implements Menu{
 
 	@Override
 	public void printMenuHeader() {
-		System.out.println("*** SIGN IN ***");
+		System.out.println(rb.getString("sign.in.header"));
 	}
 }

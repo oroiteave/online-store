@@ -8,13 +8,16 @@ import online_store.menu.Menu;
 import online_store.services.ProductManagementService;
 import online_store.services.impl.DefaultProductManagementService;
 
+import java.util.ResourceBundle;
 import java.util.Scanner;
 public class ProductCatalogMenu implements Menu{
+	private ResourceBundle rb;
 	private static final String CHECKOUT_COMMAND = "checkout";
 	private ApplicationContext context;
 	private ProductManagementService productManagementService;
 
 	{
+		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
 		productManagementService = DefaultProductManagementService.getInstance();
 	}
@@ -29,7 +32,7 @@ public class ProductCatalogMenu implements Menu{
 			if(context.getLoggedInUser()==null) {
 				menuToNavigate = new MainMenu();
 				System.out.println();
-				System.out.println("You are not logged, sign in or create a new account");
+				System.out.println(rb.getString("product.catalog.not.logged.in.warning.msg"));
 				System.out.println();
 				break;
 			}
@@ -41,7 +44,7 @@ public class ProductCatalogMenu implements Menu{
 			if(userInput.equalsIgnoreCase(CHECKOUT_COMMAND)) {
 				Cart cart = context.getSessionCart();
 				if(cart == null || cart.isEmpty()) {
-					System.out.println("Your cart is empty. Please, add product to cart first and then proceed with checkout");
+					System.out.println(rb.getString("empty.cart.error.msg"));
 				}else {
 					menuToNavigate = new CheckoutMenu();
 					break;
@@ -50,8 +53,7 @@ public class ProductCatalogMenu implements Menu{
 			}else {
 				Product product = getProductToAdd(userInput);
 				if(product == null) {
-					System.out.println("Please, enter product ID if you want to add product to cart. Or enter ‘checkout’ "
-							+ "if you want to proceed with checkout. Or enter ‘menu’ if you want to navigate back to the main menu.");
+					System.out.println(rb.getString("enter.product.id.or.checkout"));
 					continue;
 				}
 				addProductToCart(product);
@@ -71,7 +73,7 @@ public class ProductCatalogMenu implements Menu{
 	}
 	
 	private String readUserInput() {
-		System.out.print("Product ID to add to cart or enter 'checkout' to proceed with checkout: ");
+		System.out.print(rb.getString("enter.product.id"));
 		Scanner sc = new Scanner(System.in);
 		String userInput = sc.next();
 		//sc.close();
@@ -86,16 +88,13 @@ public class ProductCatalogMenu implements Menu{
 	
 	private void addProductToCart(Product product) {
 		context.getSessionCart().addProduct(product);
-		System.out.printf("Product %s has been added to your cart. "
-				+ "If you want to add a new product - enter the product id. "
-				+ "If you want to proceed with checkout - enter word "
-				+ "'checkout' to console %n", product.getProductName());
+		System.out.printf(rb.getString("product.has.been.added"), product.getProductName());
 	}
 	
 	@Override
 	public void printMenuHeader() {
-		System.out.println("*** PRODUCT CATALOG ***");
-		System.out.println("Enter product id to add it to the cart or 'menu' if you want to navigate back to the main menu");	
+		System.out.println(rb.getString("product.catalog.header"));
+		System.out.println(rb.getString("catalog.welcome"));	
 		System.out.println();
 	}
 }

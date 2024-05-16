@@ -12,6 +12,7 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="C:/Users/oroi/jars/newMockitoJars/apiguardian-api-1.1.2.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
