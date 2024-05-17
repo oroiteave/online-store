@@ -4,6 +4,7 @@ import online_store.Main;
 import online_store.configs.ApplicationContext;
 import online_store.menu.Menu;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 public class MainMenu implements Menu{
@@ -12,8 +13,8 @@ public class MainMenu implements Menu{
 	private ApplicationContext context;
 	
 	{
-		context = ApplicationContext.getInstance();
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
+		context = ApplicationContext.getInstance();
 	}
 	
 	@Override
@@ -57,6 +58,9 @@ public class MainMenu implements Menu{
 					break mainLoop;
 				case 6:
 					menuToNavigate = new CustomerListMenu();
+					break mainLoop;
+				case 7:
+					menuToNavigate = new ChangeLenguageMenu();
 					break mainLoop;
 				default:
 					System.out.println(rb.getString("error.msg"));

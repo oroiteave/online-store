@@ -32,7 +32,7 @@ public class CustomerListMenu implements Menu{
 	
 	@Override
 	public void printMenuHeader() {
-		System.out.println(rb.getString("order"));
+		System.out.println(rb.getString("users"));
 	}
 
 }
