@@ -23,40 +23,40 @@ public class ValidatorTest {
 
 	@Test
 	void shouldValidateFirstNameWithoutAnyNumbersWithLatinCharsOnly() {
-		user = new DefaultUser("Sergey", "Ivanov", "password", "email@email.com");
+		user = new DefaultUser("Oroi", "Teave", "password", "email@email.com");
 
 		assertTrue(testInstance.isValid(user));
 	}
 
 	@Test
 	void shouldFailValidationFirstNameWithDigits() {
-		user = new DefaultUser("Sergey1", "Ivanov", "password", "email@email.com");
+		user = new DefaultUser("Oroi1", "Teave", "password", "email@email.com");
 		assertFalse(testInstance.isValid(user));
 	}
 
 	@Test
 	void shouldValidateLastNameWithoutAnyNumbersWithLatinCharsOnly() {
-		user = new DefaultUser("Sergey", "Ivanov", "password", "email@email.com");
+		user = new DefaultUser("Oroi", "Teave", "password", "email@email.com");
 
 		assertTrue(testInstance.isValid(user));
 	}
 
 	@Test
 	void shouldFailValidationLastNameWithDigits() {
-		user = new DefaultUser("Sergey", "Ivanov1", "password", "email@email.com");
+		user = new DefaultUser("Oroi", "Teave1", "password", "email@email.com");
 		assertFalse(testInstance.isValid(user));
 	}
 
 	@Test
 	void shouldValidateEmailWithAtCharacter() {
-		user = new DefaultUser("Sergey", "Ivanov", "password", "email@email.com");
+		user = new DefaultUser("Oroi", "Teave", "password", "email@email.com");
 
 		assertTrue(testInstance.isValid(user));
 	}
 
 	@Test
 	void shouldFailValidationEmailWithoutAtCharacter() {
-		user = new DefaultUser("Sergey", "Ivanov", "password", "email-email.com");
+		user = new DefaultUser("Oroi", "Teave", "password", "email-email.com");
 
 		assertFalse(testInstance.isValid(user));
 	}

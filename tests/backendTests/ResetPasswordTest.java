@@ -52,8 +52,8 @@ class ResetPasswordTest {
 		
 		verify(mailSenderMock).sendEmail(any(), captor.capture());
 	    String[] parts = captor.getValue().split(":");
+	    System.out.println(parts[0].trim());
 	    assertTrue(parts.length >= 2);
 	    assertTrue(parts[1].trim().equals(userPass));
 	}
-
 }

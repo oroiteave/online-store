@@ -5,21 +5,21 @@ import online_store.Main;
 import online_store.configs.ApplicationContext;
 import online_store.menu.Menu;
 
+import java.util.ResourceBundle;
 import java.util.Scanner;
 public class SettingsMenu implements Menu{
-	private static final String SETTINGS = "1. Change Password" + System.lineSeparator()
-	+ "2. Change Email";
-
+	private ResourceBundle rb;
 	private ApplicationContext context;
 
 	{
+		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
 	}
 
 	@Override
 	public void start() {
 		if(context.getLoggedInUser() == null) {
-			System.out.println("Please, log in or create new account to change your account settings");
+			System.out.println(rb.getString("settings.not.logged.in.error.msg"));
 			new MainMenu().start();
 			return;
 		}
@@ -34,7 +34,7 @@ public class SettingsMenu implements Menu{
 				new MainMenu().start();
 			}
 			if(!userInput.equals("1") && !userInput.equals("2")) {
-				System.out.println("Only 1, 2 is allowed. Try one more time");
+				System.out.println(rb.getString("setting.option.validate.msg"));
 				continue;
 			}else {
 				int userOption = Integer.parseInt(userInput);
@@ -55,7 +55,7 @@ public class SettingsMenu implements Menu{
 
 	@Override
 	public void printMenuHeader() {
-		System.out.println("*** SETTINGS ***");
-		System.out.println(SETTINGS);
+		System.out.println(rb.getString("settings.header"));
+		System.out.println(rb.getString("settings.options"));
 	}
 }

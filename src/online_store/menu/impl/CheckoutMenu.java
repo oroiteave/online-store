@@ -8,12 +8,15 @@ import online_store.menu.Menu;
 import online_store.services.OrderManagementService;
 import online_store.services.impl.DefaultOrderManagementService;
 
+import java.util.ResourceBundle;
 import java.util.Scanner;
 public class CheckoutMenu implements Menu{
+	private ResourceBundle rb;
 	private ApplicationContext context;
 	private OrderManagementService orderManagementService;
 	
 	{
+		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
 		orderManagementService = DefaultOrderManagementService.getInstance();
 	}
@@ -35,14 +38,14 @@ public class CheckoutMenu implements Menu{
 			break;
 		}
 		
-		System.out.println("Thanks a lot for your purchase. Details about order delivery are sent to your email.");
+		System.out.println(rb.getString("thanks"));
 		context.getMainMenu().start();
 	}
 	
 	public boolean createOrder(String creditCardNumber) {
 		Order order = new DefaultOrder();
 		if(!order.isCreditCardNumberValid(creditCardNumber)) {
-			System.out.println("You entered invalid credit card number. Valid credit card should contain 16 digits. Please, try one more time.");
+			System.out.println(rb.getString("invalid.credit.card.error.msg"));
 			return false;
 		}
 		order.setCreditCardNumber(creditCardNumber);
@@ -55,8 +58,8 @@ public class CheckoutMenu implements Menu{
 	
 	@Override
 	public void printMenuHeader() {
-		System.out.println("*** CHECKOUT ***");
-		System.out.println("Enter your credit card number without spaces and press enter if you confirm purchase: ");
+		System.out.println(rb.getString("checkout.header"));
+		System.out.println(rb.getString("enter.your.credit.card"));
 	}
 
 }
