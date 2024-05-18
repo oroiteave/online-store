@@ -62,6 +62,9 @@ public class MainMenu implements Menu{
 				case 7:
 					menuToNavigate = new ChangeLenguageMenu();
 					break mainLoop;
+				case 8:
+					menuToNavigate = new ResetPasswordMenu();
+					break mainLoop;
 				default:
 					System.out.println(rb.getString("error.msg"));
 					continue;

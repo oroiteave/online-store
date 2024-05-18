@@ -5,7 +5,10 @@ import online_store.services.ResetPasswordService;
 import online_store.util.mail.MailSender;
 
 public class DefaultResetPasswordService implements ResetPasswordService{
-	private MailSender mailSender; 
+	private MailSender mailSender;
+	{
+		mailSender = DefaultMailSender.getInstance();
+	}
 	
 	public void resetPasswordForUser(User user) {
 		System.out.println("Password changed succefully, please check your email");
