@@ -8,5 +8,7 @@ public interface UserManagementService {
 	User[] getUsers();
 
 	User getUserByEmail(String userEmail);
+	
+	void resetPasswordForUser(User user);
 
 }

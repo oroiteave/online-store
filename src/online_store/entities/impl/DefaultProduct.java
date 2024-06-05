@@ -45,4 +45,19 @@ public class DefaultProduct implements Product{
 		this.price = price;
 		
 	}
+	@Override
+	public void setId(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setProductName(String productName) {
+		this.productName = productName;
+		
+	}
+	@Override
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+		
+	}
 }

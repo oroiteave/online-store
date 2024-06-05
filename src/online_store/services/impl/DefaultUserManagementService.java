@@ -3,6 +3,7 @@ package online_store.services.impl;
 
 import online_store.entities.User;
 import online_store.services.UserManagementService;
+import online_store.util.mail.MailSender;
 
 import java.util.Arrays;
 	public class DefaultUserManagementService implements UserManagementService{
@@ -14,14 +15,16 @@ import java.util.Arrays;
 	
 	private static DefaultUserManagementService instance;
 	
+	private MailSender mailSender;
 	private User[] users;
 	private int lastUserIndex;
 	
 	{
 		users = new User[DEFAULT_USERS_CAPACITY];
+		mailSender = DefaultMailSender.getInstance();
 	}
 
-	private DefaultUserManagementService() {
+	public DefaultUserManagementService() {
 	}
 	
 	@Override
@@ -57,6 +60,11 @@ import java.util.Arrays;
 			instance = new DefaultUserManagementService();
 		}
 		return instance;
+	}
+	
+	public void resetPasswordForUser(User user) {
+		System.out.println("Password changed succefully, please check your email");
+		mailSender.sendEmail(user.getEmail(), user.getPassword());
 	}
 
 	

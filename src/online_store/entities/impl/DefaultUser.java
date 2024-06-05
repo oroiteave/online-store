@@ -20,6 +20,12 @@ public class DefaultUser implements User{
 	@Validate(pattern = ".+@.+")
 	private String email;
 	
+	private double money;
+	
+	private String creditCard;
+	
+	private String roleName;
+	
 	{
 		id = ++userCount;
 	}
@@ -33,6 +39,23 @@ public class DefaultUser implements User{
 		this.password = password;
 		this.email = email;
 	}
+	
+	public DefaultUser(String firstName, String lastName, String password, String email, String creditCard) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.email = email;
+		this.setCreditCard(creditCard);
+	}
+	
+	public DefaultUser(int id, String firstName, String lastName, String password, String email) {
+		this.id = id;
+		userCount--;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.email = email;
+	}
 
 	@Override
 	public String getFirstName() {
@@ -40,10 +63,20 @@ public class DefaultUser implements User{
 	}
 
 	@Override
+	public void setFirstName(String newFirstName) {
+		this.firstName = newFirstName;
+	}
+	
+	@Override
 	public String getLastName() {
 		return lastName;
 	}
 
+	@Override
+	public void setLastName(String newLastName) {
+		this.lastName = newLastName;
+	}
+	
 	@Override
 	public String getPassword() {
 		return password;
@@ -82,7 +115,44 @@ public class DefaultUser implements User{
 		return id;
 	}
 	
+	@Override
+	public void setId(int id) {
+//		if(id )
+	}
+	
+	@Override
+	public double getMoney() {
+		return money;
+	}
+	
+	@Override
+	public void setMoney(double newMoney) {
+		this.money = newMoney;
+	}
+	
+	@Override
+	public String getCreditCard() {
+		return creditCard;
+	}
+
+	@Override
+	public void setCreditCard(String creditCard) {
+		this.creditCard = creditCard;
+	}
+
+	@Override
+	public String getRoleName() {
+		return roleName;
+	}
+
+	@Override
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	
 	void clearState() {
 		userCount=0;
 	}
+
 }

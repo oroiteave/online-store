@@ -2,23 +2,23 @@ package online_store.menu.impl;
 
 
 import online_store.configs.ApplicationContext;
-import online_store.entities.Order;
-import online_store.entities.impl.DefaultOrder;
+import online_store.entities.Purchase;
+import online_store.entities.impl.DefaultPurchase;
 import online_store.menu.Menu;
-import online_store.services.OrderManagementService;
-import online_store.services.impl.DefaultOrderManagementService;
+import online_store.services.PurchaseManagementService;
+import online_store.services.impl.DefaultPurchaseManagementService;
 
 import java.util.ResourceBundle;
 import java.util.Scanner;
 public class CheckoutMenu implements Menu{
 	private ResourceBundle rb;
 	private ApplicationContext context;
-	private OrderManagementService orderManagementService;
+	private PurchaseManagementService productManagementService;
 	
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
-		orderManagementService = DefaultOrderManagementService.getInstance();
+		productManagementService = DefaultPurchaseManagementService.getInstance();
 	}
 	
 	@Override
@@ -30,10 +30,9 @@ public class CheckoutMenu implements Menu{
 			Scanner sc = new Scanner(System.in);
 			String userInput = sc.next();
 			
-			if (!createOrder(userInput)) {
+			if (!createPurchase(userInput)) {
 				continue;
 			}
-			//sc.close();
 			context.getSessionCart().clear();
 			break;
 		}
@@ -42,16 +41,16 @@ public class CheckoutMenu implements Menu{
 		context.getMainMenu().start();
 	}
 	
-	public boolean createOrder(String creditCardNumber) {
-		Order order = new DefaultOrder();
-		if(!order.isCreditCardNumberValid(creditCardNumber)) {
+	public boolean createPurchase(String creditCardNumber) {
+		Purchase purchase = new DefaultPurchase();
+		if(!purchase.isCreditCardNumberValid(creditCardNumber)) {
 			System.out.println(rb.getString("invalid.credit.card.error.msg"));
 			return false;
 		}
-		order.setCreditCardNumber(creditCardNumber);
-		order.setCustomerId(context.getLoggedInUser().getId());
-		order.setProducts(context.getSessionCart().getProducts());
-		orderManagementService.addOrder(order);
+		purchase.setCreditCardNumber(creditCardNumber);
+		purchase.setCustomerId(context.getLoggedInUser().getId());
+		purchase.setProducts(context.getSessionCart().getProducts());
+		productManagementService.addPurchase(purchase);
 		return true;
 
 	}

@@ -6,19 +6,15 @@ import java.util.Scanner;
 import online_store.Main;
 import online_store.entities.User;
 import online_store.menu.Menu;
-import online_store.services.ResetPasswordService;
 import online_store.services.UserManagementService;
-import online_store.services.impl.DefaultResetPasswordService;
 import online_store.services.impl.DefaultUserManagementService;
 
 public class ResetPasswordMenu implements Menu{
 
 	private ResourceBundle rb;
 	private UserManagementService userManagementService;
-	private ResetPasswordService resetPassword;
 	
 	{
-		resetPassword = new DefaultResetPasswordService();
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		userManagementService = DefaultUserManagementService.getInstance();
 	}
@@ -38,7 +34,7 @@ public class ResetPasswordMenu implements Menu{
 			}
 			User user = userManagementService.getUserByEmail(userInput);
 			if(user !=null) {
-				Thread thread = new Thread(() -> resetPassword.resetPasswordForUser(user));
+				Thread thread = new Thread(() -> userManagementService.resetPasswordForUser(user));
 				thread.start();
 				break;
 			}else {

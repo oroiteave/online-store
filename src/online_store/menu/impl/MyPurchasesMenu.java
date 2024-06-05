@@ -1,22 +1,23 @@
 package online_store.menu.impl;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import online_store.configs.ApplicationContext;
-import online_store.entities.Order;
+import online_store.entities.Purchase;
 import online_store.menu.Menu;
-import online_store.services.OrderManagementService;
-import online_store.services.impl.DefaultOrderManagementService;
+import online_store.services.PurchaseManagementService;
+import online_store.services.impl.DefaultPurchaseManagementService;
 
-public class MyOrdersMenu implements Menu{
+public class MyPurchasesMenu implements Menu{
 	private ResourceBundle rb;
 	private ApplicationContext context;
-	private OrderManagementService orderManagementService;
+	private PurchaseManagementService purchaseManagementService;
 
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
-		orderManagementService = DefaultOrderManagementService.getInstance();
+		purchaseManagementService = DefaultPurchaseManagementService.getInstance();
 	}
 
 	@Override
@@ -27,12 +28,12 @@ public class MyOrdersMenu implements Menu{
 			return;
 		}
 		
-		Order[] loggedOrders = orderManagementService.getOrdersByUserId(context.getLoggedInUser().getId());
-		if(loggedOrders == null || loggedOrders.length ==0) {
+		List<Purchase> loggedProducts = purchaseManagementService.getPurchasesByUserId(context.getLoggedInUser().getId());
+		if(loggedProducts == null || loggedProducts.size() ==0) {
 			System.out.println(rb.getString("no.orders.yet.error.msg"));
 		}else {
 			printMenuHeader();
-			printOrders(loggedOrders);
+			printOrders(loggedProducts);
 		}
 		
 		new MainMenu().start();
@@ -43,9 +44,9 @@ public class MyOrdersMenu implements Menu{
 		System.out.println(rb.getString("orders.header"));
 		System.out.println();
 	}
-	private void printOrders(Order[] orders) {
+	private void printOrders(List<Purchase> purchases) {
 		int i=1;
-		for(Order o: orders) {
+		for(Purchase o: purchases) {
 			System.out.println("------ "+rb.getString("order")  + i + " ------");
 			System.out.println(o);
 			i++;

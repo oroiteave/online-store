@@ -4,20 +4,22 @@ package online_store.entities.impl;
 import online_store.entities.Cart;
 import online_store.entities.Product;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 public class DefaultCart implements Cart{
 	private static final int DEFAULT_PRODUCTS_NUMBER = 10;
 	
-	private Product[] products;
+	private List<Product> products;
 	private int lastIndexAdded;
 	
 	{
-		products = new Product[DEFAULT_PRODUCTS_NUMBER];
+		products = new ArrayList<Product>(DEFAULT_PRODUCTS_NUMBER);
 	}
 	
 	@Override
 	public boolean isEmpty() {
-		if(products == null || products.length==0) {
+		if(products == null || products.size()==0) {
 			return true;
 		}
 		for(Product p: products) {
@@ -33,25 +35,25 @@ public class DefaultCart implements Cart{
 		if(product==null) {
 			return;
 		}
-		if(lastIndexAdded>=products.length) {
-			products = Arrays.copyOf(products, products.length<<1);
+		if(lastIndexAdded>=products.size()) {
+			((ArrayList<Product>) products).ensureCapacity(products.size()<<1);
 		}
-		products[lastIndexAdded++] = product;
+		products.add(lastIndexAdded++, product);
 	}
 
 	@Override
-	public Product[] getProducts() {
+	public List<Product> getProducts() {
 		int notNulls=0;
 		for(Product p: products) {
 			if(p!=null) {
 				notNulls++;
 			}
 		}
-		Product[] productNotNull = new Product[notNulls];
+		List<Product> productNotNull = new ArrayList<Product>(notNulls);
 		int i =0;
 		for(Product p: products) {
 			if(p!=null) {
-				productNotNull[i] = products[i];
+				productNotNull.add(i, products.get(i));
 				i++;
 			}
 		}
@@ -60,6 +62,6 @@ public class DefaultCart implements Cart{
 
 	@Override
 	public void clear() {
-		products = new Product[DEFAULT_PRODUCTS_NUMBER];
+		products = new ArrayList<Product>(DEFAULT_PRODUCTS_NUMBER);
 	}
 }

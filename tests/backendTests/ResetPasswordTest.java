@@ -2,9 +2,10 @@ package backendTests;
 
 import online_store.entities.User;
 import online_store.entities.impl.DefaultUser;
-import online_store.services.impl.DefaultResetPasswordService;
+import online_store.services.impl.DefaultUserManagementService;
 import online_store.util.mail.MailSender;
-import online_store.services.ResetPasswordService;
+import online_store.services.UserManagementService;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.verify;
 class ResetPasswordTest {
 	
 	@InjectMocks
-	private ResetPasswordService resetPasswordService = new DefaultResetPasswordService();
+	private UserManagementService resetPasswordService = new DefaultUserManagementService();
 	
 	@Mock
 	private MailSender mailSenderMock;

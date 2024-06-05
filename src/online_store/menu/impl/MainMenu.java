@@ -51,7 +51,7 @@ public class MainMenu implements Menu{
 					menuToNavigate = new ProductCatalogMenu();
 					break mainLoop;
 				case 4:
-					menuToNavigate = new MyOrdersMenu();
+					menuToNavigate = new MyPurchasesMenu();
 					break mainLoop;
 				case 5:
 					menuToNavigate = new SettingsMenu();
