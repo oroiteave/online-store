@@ -8,6 +8,7 @@ import online_store.entities.User;
 import online_store.menu.Menu;
 import online_store.services.UserManagementService;
 import online_store.services.impl.DefaultUserManagementService;
+import online_store.services.impl.MySqlUserManagementService;
 
 public class ResetPasswordMenu implements Menu{
 
@@ -16,7 +17,7 @@ public class ResetPasswordMenu implements Menu{
 	
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
-		userManagementService = DefaultUserManagementService.getInstance();
+		userManagementService = new MySqlUserManagementService();
 	}
 	
 	@Override

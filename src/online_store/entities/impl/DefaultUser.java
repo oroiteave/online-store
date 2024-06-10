@@ -117,7 +117,7 @@ public class DefaultUser implements User{
 	
 	@Override
 	public void setId(int id) {
-//		if(id )
+		this.id = id;
 	}
 	
 	@Override

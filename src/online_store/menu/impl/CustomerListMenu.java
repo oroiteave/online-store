@@ -1,11 +1,12 @@
 package online_store.menu.impl;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import online_store.entities.User;
 import online_store.menu.Menu;
 import online_store.services.UserManagementService;
-import online_store.services.impl.DefaultUserManagementService;
+import online_store.services.impl.MySqlUserManagementService;
 
 public class CustomerListMenu implements Menu{
 	private ResourceBundle rb;
@@ -13,7 +14,7 @@ public class CustomerListMenu implements Menu{
 	
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
-		userManagementService = DefaultUserManagementService.getInstance();
+		userManagementService = new MySqlUserManagementService();
 	}
 	
 	@Override
@@ -24,7 +25,7 @@ public class CustomerListMenu implements Menu{
 	}
 
 	private void printCustomers() {
-		User[] users = userManagementService.getUsers();
+		List<User> users = userManagementService.getUsers();
 		for(User u: users) {
 			System.out.println(u.toString());
 		}

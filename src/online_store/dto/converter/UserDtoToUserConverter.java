@@ -9,7 +9,7 @@ import online_store.entities.User;
 import online_store.entities.impl.DefaultUser;
 
 public class UserDtoToUserConverter {
-private RoleDtoToRoleConverter roleConverter;
+	private RoleDtoToRoleConverter roleConverter;
 	
 	{
 		roleConverter = new RoleDtoToRoleConverter();
@@ -31,8 +31,9 @@ private RoleDtoToRoleConverter roleConverter;
 		user.setId(userDto.getId());
 		user.setFirstName(userDto.getFirstName());
 		user.setLastName(userDto.getLastName());
-		if (userDto.getRoleDto() != null) 
+		if (userDto.getRoleDto() != null) {
 			user.setRoleName(userDto.getRoleDto().getRoleName());
+		}
 		user.setMoney(userDto.getMoney().doubleValue());
 		user.setCreditCard(userDto.getCreditCard());
 		

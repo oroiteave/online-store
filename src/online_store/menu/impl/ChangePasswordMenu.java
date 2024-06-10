@@ -22,7 +22,7 @@ public class ChangePasswordMenu implements Menu{
 		String newPassword = sc.next();
 		context.getLoggedInUser().setPassword(newPassword);
 		System.out.println(rb.getString("password.successfully.changed.msg"));
-		//sc.close();
+		
 		new MainMenu().start();
 	}
 

@@ -10,5 +10,5 @@ public interface PurchaseDao {
 	
 	List<PurchaseDto> getPurchaces();
 	
-	PurchaseDto getPurchasesByUserId(int id);
+	List<PurchaseDto> getPurchasesByUserId(int id);
 }

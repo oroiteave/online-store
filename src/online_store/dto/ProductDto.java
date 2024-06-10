@@ -3,7 +3,7 @@ package online_store.dto;
 import java.math.BigDecimal;
 
 public class ProductDto {
-	private Integer id;
+	private int id;
 	private String productName;
 	private BigDecimal price;
 	private CategoryDto categoryDto;

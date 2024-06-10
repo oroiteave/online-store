@@ -6,8 +6,9 @@ import online_store.entities.Cart;
 import online_store.entities.Product;
 import online_store.menu.Menu;
 import online_store.services.ProductManagementService;
-import online_store.services.impl.DefaultProductManagementService;
+import online_store.services.impl.MySqlProductManagementService;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 public class ProductCatalogMenu implements Menu{
@@ -17,9 +18,9 @@ public class ProductCatalogMenu implements Menu{
 	private ProductManagementService productManagementService;
 
 	{
+		productManagementService = new MySqlProductManagementService();
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
-		productManagementService = DefaultProductManagementService.getInstance();
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class ProductCatalogMenu implements Menu{
 
 	
 	public void printProducts() {
-		Product[] products = productManagementService.getProducts();
+		List<Product> products = productManagementService.getProducts();
 		for(Product p: products) {
 			System.out.println(p.toString());
 		}

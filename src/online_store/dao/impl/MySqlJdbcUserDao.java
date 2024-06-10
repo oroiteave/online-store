@@ -19,7 +19,25 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public boolean saveUser(UserDto user) {
-		// TODO Auto-generated method stub
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,credit_card,password) VALUES (?, ?, ?, ?, ?, ?, ?);")){
+			
+			ps.setString(1, user.getFirstName());
+			ps.setString(2, user.getLastName());
+			ps.setString(3, user.getEmail());
+			if(user.getRoleDto() != null && user.getRoleDto().getId() != null) {
+				ps.setInt(4, user.getRoleDto().getId());
+			}else {
+				ps.setNull(4, java.sql.Types.NULL);
+			}
+			ps.setBigDecimal(5, user.getMoney());
+			ps.setString(6, user.getCreditCard());
+			ps.setString(7, user.getPassword());
+			ps.executeUpdate();
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -39,6 +57,7 @@ public class MySqlJdbcUserDao implements UserDao{
 					user.setMoney(rs.getBigDecimal("money"));
 					user.setCreditCard(rs.getString("credit_card"));
 					user.setRoleDto(role.getRoleById(rs.getInt("fk_user_role")));
+					user.setPassword(rs.getString("password"));
 					users.add(user);
 				}
 				return users;
@@ -53,7 +72,7 @@ public class MySqlJdbcUserDao implements UserDao{
 	@Override
 	public UserDto getUserByEmail(String userEmail) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("SELECT * FROM user WHERE email = '?'")){
+				var ps = conn.prepareStatement("SELECT * FROM user WHERE email = ?")){
 			
 			ps.setString(1, userEmail);
 			
@@ -67,6 +86,7 @@ public class MySqlJdbcUserDao implements UserDao{
 					user.setMoney(rs.getBigDecimal("money"));
 					user.setCreditCard(rs.getString("credit_card"));
 					user.setRoleDto(role.getRoleById(rs.getInt("fk_user_role")));
+					user.setPassword(rs.getString("password"));
 					return user;
 				}
 			}
@@ -94,6 +114,7 @@ public class MySqlJdbcUserDao implements UserDao{
 					user.setMoney(rs.getBigDecimal("money"));
 					user.setCreditCard(rs.getString("credit_card"));
 					user.setRoleDto(role.getRoleById(rs.getInt("fk_user_role")));
+					user.setPassword(rs.getString("password"));
 					return user;
 				}
 			}

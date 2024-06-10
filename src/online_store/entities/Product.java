@@ -1,8 +1,6 @@
 package online_store.entities;
 
-import java.io.Serializable;
-
-public interface Product extends Serializable{
+public interface Product{
 	int getId();
 	String getProductName();
 	String getCategoryName();

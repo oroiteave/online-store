@@ -6,7 +6,7 @@ import online_store.entities.Purchase;
 import online_store.entities.impl.DefaultPurchase;
 import online_store.menu.Menu;
 import online_store.services.PurchaseManagementService;
-import online_store.services.impl.DefaultPurchaseManagementService;
+import online_store.services.impl.MySqlPurchaseManagementService;
 
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -18,7 +18,7 @@ public class CheckoutMenu implements Menu{
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
-		productManagementService = DefaultPurchaseManagementService.getInstance();
+		productManagementService = new MySqlPurchaseManagementService();
 	}
 	
 	@Override

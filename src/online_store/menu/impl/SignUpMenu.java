@@ -6,7 +6,7 @@ import online_store.entities.User;
 import online_store.entities.impl.DefaultUser;
 import online_store.menu.Menu;
 import online_store.services.UserManagementService;
-import online_store.services.impl.DefaultUserManagementService;
+import online_store.services.impl.MySqlUserManagementService;
 
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -17,7 +17,7 @@ public class SignUpMenu implements Menu{
 
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
-		userManagementService = DefaultUserManagementService.getInstance();
+		userManagementService = new MySqlUserManagementService();
 		context = ApplicationContext.getInstance();
 	}
 
@@ -44,7 +44,6 @@ public class SignUpMenu implements Menu{
 		} else {
 			System.out.println(errorMessage);
 		}
-		//sc.close();
 		context.getMainMenu().start();
 	}
 

@@ -5,18 +5,13 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import online_store.Main;
-import online_store.configs.ApplicationContext;
 import online_store.menu.Menu;
 
 public class ChangeLenguageMenu implements Menu{
 	
 	private ResourceBundle rb;
-	private ApplicationContext context;
-	
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
-		
-		context = ApplicationContext.getInstance();
 	}
 
 	@Override

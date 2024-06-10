@@ -31,9 +31,9 @@ private CategoryDtoToCategoryConverter categoryConverter;
 		product.setId(productDto.getId());
 		product.setPrice(productDto.getPrice().doubleValue());
 		product.setProductName(productDto.getProductName());
-		if (productDto.getCategoryDto() != null)
+		if (productDto.getCategoryDto() != null) {
 			product.setCategoryName(productDto.getCategoryDto().getCategoryName());
-		
+		}
 		return product;
 	}
 

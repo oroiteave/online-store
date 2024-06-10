@@ -5,7 +5,8 @@ import online_store.entities.User;
 import online_store.services.UserManagementService;
 import online_store.util.mail.MailSender;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 	public class DefaultUserManagementService implements UserManagementService{
 	private static final String NOT_UNIQUE_EMAIL_ERROR_MESSAGE = "This email is already used by another user. Please, use another email";
 	private static final String EMPTY_EMAIL_ERROR_MESSAGE = "You have to input email to register. Please, try one more time";
@@ -16,11 +17,11 @@ import java.util.Arrays;
 	private static DefaultUserManagementService instance;
 	
 	private MailSender mailSender;
-	private User[] users;
+	private List<User> users;
 	private int lastUserIndex;
 	
 	{
-		users = new User[DEFAULT_USERS_CAPACITY];
+		users = new ArrayList<User>(DEFAULT_USERS_CAPACITY);
 		mailSender = DefaultMailSender.getInstance();
 	}
 
@@ -36,10 +37,10 @@ import java.util.Arrays;
 		if(errorMessage != null && !errorMessage.isEmpty()) {
 			return errorMessage;
 		}
-		if (users.length <= lastUserIndex) {
-			users = Arrays.copyOf(users, users.length << 1);
+		if (users.size() <= lastUserIndex) {
+			users = new ArrayList<User>(users.size()<<1);
 		}
-		users[lastUserIndex++] = user;
+		users.add(lastUserIndex++, user);
 		return NO_ERROR_MESSAGE;
 	}
 	
@@ -69,18 +70,18 @@ import java.util.Arrays;
 
 	
 	@Override
-	public User[] getUsers() {
-		int notNullUser =0;
+	public List<User> getUsers() {
+		int notNullUser = 0;
 		for(User u:users) {
 			if(u!=null) {
 				notNullUser++;
 			}
 		}
 		int i=0;
-		User[] notNullUsers = new User[notNullUser];
+		List<User> notNullUsers = new ArrayList<User>(notNullUser);
 		for(User u:users) {
 			if(u!=null) {
-				notNullUsers[i++] = u;
+				notNullUsers.add(i++, u);
 			}
 		}
 		return notNullUsers;
@@ -98,6 +99,6 @@ import java.util.Arrays;
 	
 	void clearServiceState() {
 		lastUserIndex =0;
-		users = new User[DEFAULT_USERS_CAPACITY];
+		users = new ArrayList<User>(DEFAULT_USERS_CAPACITY);
 	}
 }

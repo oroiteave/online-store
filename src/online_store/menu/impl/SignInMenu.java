@@ -5,11 +5,12 @@ import online_store.configs.ApplicationContext;
 import online_store.entities.User;
 import online_store.menu.Menu;
 import online_store.services.UserManagementService;
-import online_store.services.impl.DefaultUserManagementService;
+import online_store.services.impl.MySqlUserManagementService;
 
 import java.util.ResourceBundle;
 import java.util.Scanner;
 public class SignInMenu implements Menu{
+	
 	private ResourceBundle rb;
 	private ApplicationContext context;
 	private UserManagementService userManagementService;
@@ -17,7 +18,7 @@ public class SignInMenu implements Menu{
 	{
 		rb = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME);
 		context = ApplicationContext.getInstance();
-		userManagementService = DefaultUserManagementService.getInstance();
+		userManagementService = new MySqlUserManagementService();
 	}
 
 	@Override
@@ -33,9 +34,9 @@ public class SignInMenu implements Menu{
 		
 		User user = userManagementService.getUserByEmail(email);
 		
-		if(user != null && user.getPassword().equals(password)) {
+		if(user != null && user.getPassword() != null && user.getPassword().equals(password)) {
 			context.setLoggedInUser(user);
-			System.out.println(rb.getString("welcome.msg")+user.getFirstName() + user.getLastName());
+			System.out.println(rb.getString("welcome.msg")+user.getFirstName()+ " " + user.getLastName());
 		}else {
 			System.out.println(rb.getString("login.or.password.doest.exist.error.msg"));
 		}

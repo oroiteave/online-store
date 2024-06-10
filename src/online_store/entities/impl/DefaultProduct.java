@@ -25,20 +25,20 @@ public class DefaultProduct implements Product{
 
 	@Override
 	public int getId() {
-		return this.id;
+		return id;
 	}
 
 	@Override
 	public String getProductName() {
-		return this.productName;
+		return productName;
 	}
 	@Override
 	public String getCategoryName() {
-		return this.categoryName;
+		return categoryName;
 	}
 	@Override
 	public double getPrice() {
-		return this.price;
+		return price;
 	}
 	@Override
 	public void setPrice(double price) {
@@ -47,7 +47,7 @@ public class DefaultProduct implements Product{
 	}
 	@Override
 	public void setId(int id) {
-		// TODO Auto-generated method stub
+		this.id = id;
 		
 	}
 	@Override

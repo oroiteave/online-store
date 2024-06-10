@@ -4,7 +4,6 @@ import online_store.Main;
 import online_store.configs.ApplicationContext;
 import online_store.menu.Menu;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 public class MainMenu implements Menu{
