@@ -1,0 +1,25 @@
+@charset "ISO-8859-1";
+.navbar-brand img {
+    height: 60px;
+}
+.navbar-brand{
+	margin-left: 50px;
+}
+.navbar-nav {
+    flex-direction: row;
+}
+.nav-item {
+    margin-left: 10px;
+}
+.ml-auto {
+    margin-left: auto !important;
+}
+
+.form-inline .form-control {
+    width: 300px;
+    margin-right: 10px;
+}
+
+.form-inline .btn {
+    margin-left: 10px;
+}
