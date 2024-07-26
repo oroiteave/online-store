@@ -3,10 +3,14 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(data => {
             document.getElementById('header-placeholder').innerHTML = data;
-            updateLoggedInUserHeader();
-            searchQuery();
+            insertFunctions();
         });
 });
+
+function insertFunctions(){
+	updateLoggedInUserHeader();
+    searchQuery();
+}
 
 function updateLoggedInUserHeader() {
         fetch('/online-store.web/getUserName')
@@ -31,27 +35,36 @@ function updateLoggedInUserHeader() {
 
 function searchQuery(){
     const sessionInput = document.getElementById('searchQuery');
-     const suggestions = document.getElementById('suggestions');
+    const suggestions = document.getElementById('suggestions');
     
-    sessionInput.addEventListener('input',updateValue);
+	sessionInput.addEventListener('input',updateValue);
+	document.addEventListener('click', function(event) {
+        if (!event.target.closest('.form-inline')) {
+            suggestions.classList.remove('show');
+        }
+    });  
+	
     
     function updateValue(e){
         const query = e.target.value;
-
-		fetch(`/online-store.web/getproductslikesearch?query=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(products => {
-            if (products.length > 0) {
-                suggestions.innerHTML = products.map(product => 
-                    `<a class="dropdown-item" href="#">${product.productName}</a>`
-                ).join('');
-                suggestions.classList.add('show');
-            } else {
-                suggestions.innerHTML = '';
-                suggestions.classList.remove('show');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+		if(query.length>0){
+			fetch(`/online-store.web/getproductslikesearch?query=${encodeURIComponent(query)}`)
+	        .then(response => response.json())
+	        .then(products => {
+	            if (products.length > 0) {
+	                suggestions.innerHTML = products.map(product => 
+	                    `<a class="dropdown-item" href="#">${product.productName}</a>`
+	                ).join('');
+	                suggestions.classList.add('show');
+	            } else {
+	                suggestions.innerHTML = '';
+	                suggestions.classList.remove('show');
+	            }
+	        })
+	        .catch(error => console.error('Error:', error));
+		}else{
+			suggestions.innerHTML = '';
+            suggestions.classList.remove('show');
+		}
 	}
-	
 }

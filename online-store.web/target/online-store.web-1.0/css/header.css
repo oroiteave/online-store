@@ -23,3 +23,18 @@
 .form-inline .btn {
     margin-left: 10px;
 }
+
+#suggestions {
+    width: 100%; /* Ajusta el ancho del dropdown para que coincida con el input */
+}
+
+.dropdown-menu {
+    left: auto !important; /* Alinea el dropdown con el input */
+    right: 0 !important; /* Asegura que el dropdown no se extienda fuera del contenedor */
+    text-align: center; /* Centra el texto de los elementos del dropdown */
+}
+
+.dropdown-item {
+    width: 100%; /* Asegura que los elementos del dropdown ocupen todo el ancho del dropdown */
+    text-align: left; /* Opcional: si prefieres que el texto esté alineado a la izquierda */
+}

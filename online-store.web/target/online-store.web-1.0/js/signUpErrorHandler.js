@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('/online-store.web/getError')
+    fetch('/online-store.web/signUp')
         .then(response => response.json())
         .then(data => {
             if (data) {
