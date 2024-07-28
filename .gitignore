@@ -1,1 +1,3 @@
-/online-store.web/
+/online-store.web/target/
+/online-store.persistence/target/
+/online-store.core/target/
