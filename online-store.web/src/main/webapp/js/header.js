@@ -53,7 +53,7 @@ function searchQuery(){
 	        .then(products => {
 	            if (products.length > 0) {
 	                suggestions.innerHTML = products.map(product => 
-	                    `<a class="dropdown-item" href="#">${product.productName}</a>`
+	                    `<a class="dropdown-item" href="product.html?id=${product.id}">${product.productName}</a>`
 	                ).join('');
 	                suggestions.classList.add('show');
 	            } else {
