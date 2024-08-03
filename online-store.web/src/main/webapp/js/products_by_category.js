@@ -8,15 +8,19 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(products => {
                 const productsContainer = document.getElementById('products-container');
                 productsContainer.innerHTML = products.map(product => `
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <img src="images/${product.imgName}" class="card-img-top" alt="${product.productName}">
-                            <div class="card-body">
-                                <h5 class="card-title">${product.productName}</h5>
-                                <p class="card-text">${product.description}</p>
-                                <p class="card-text">${product.price} $</p>
+                     <div class="col-md-4">
+                        <a href="product.html?id=${product.id}" class="text-decoration-none text-dark">
+                            <div class="card mb-4 product-card">
+                                <div class="image-container">
+                                    <img src="images/${product.imgName}" alt="${product.productName}">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.productName}</h5>
+                                    <p class="card-text">${product.description}</p>
+                                    <p class="card-text">${product.price} $</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 `).join('');
             })
