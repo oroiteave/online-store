@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function renderProducts(products) {
         const productsContainer = document.getElementById('products-container');
-        productsContainer.innerHTML = products.data.map(product => `
+        productsContainer.innerHTML = products.map(product => `
             <div class="col-md-4">
                 <a href="product.html?id=${product.id}" class="text-decoration-none text-dark">
                     <div class="card mb-4 product-card">
