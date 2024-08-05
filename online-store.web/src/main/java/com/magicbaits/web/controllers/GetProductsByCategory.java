@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/getproductsbycategory")
 public class GetProductsByCategory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final int PAGINATION_LIMIT = 6;
 	
 	private ProductFacade productFacade;
 	{
@@ -26,8 +27,9 @@ public class GetProductsByCategory extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String categoryId = request.getParameter("id");
+		String page = request.getParameter("page");
 		
-		List<Product> products = productFacade.getProductsByCategoryId(Integer.parseInt(categoryId));
+		List<Product> products = productFacade.getProductsByCategoryIdForPageWithLimit(Integer.parseInt(categoryId),Integer.parseInt(page),PAGINATION_LIMIT);
 		
 		Gson gson = new Gson();
 		String  json = gson.toJson(products);
