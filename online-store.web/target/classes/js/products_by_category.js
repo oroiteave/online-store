@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function fetchProductsByCategory(page) {
         fetch(`/online-store.web/getproductsbycategory?id=${encodeURIComponent(categoryId)}&page=${page}`)
             .then(response => response.json())
-            .then(products => {
+            .then(data => {
+				const products = data.products;
+				const numberOfPages = data.numberOfPages;
+				
                 renderProducts(products);
-                renderPagination(page, 2);
+                renderPagination(page, numberOfPages);
             })
             .catch(error => console.error('Error fetching products:', error));
     }
