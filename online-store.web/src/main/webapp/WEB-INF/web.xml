@@ -16,9 +16,19 @@
 		<description></description>
 		<servlet-class>com.magicbaits.web.controllers.GetProductsByCategory</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>GetProduct</servlet-name>
+		<display-name>GetProduct</display-name>
+		<description></description>
+		<servlet-class>com.magicbaits.web.controllers.GetProduct</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetProductsByCategory</servlet-name>
 		<url-pattern>/GetProductsByCategory</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetProduct</servlet-name>
+		<url-pattern>/GetProduct</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
         <welcome-file>homepage.html</welcome-file> 

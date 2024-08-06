@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/getproductsbycategory")
 public class GetProductsByCategory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final int PAGINATION_LIMIT = 6;
 	
 	private ProductFacade productFacade;
 	{
@@ -26,11 +27,15 @@ public class GetProductsByCategory extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String categoryId = request.getParameter("id");
+		String page = request.getParameter("page");
 		
-		List<Product> products = productFacade.getProductsByCategoryId(Integer.parseInt(categoryId));
+		List<Product> products = productFacade.getProductsByCategoryIdForPageWithLimit(Integer.parseInt(categoryId),Integer.parseInt(page),PAGINATION_LIMIT);
+		int numberOfPages = productFacade.getNumberOfPagesForCategory(Integer.parseInt(categoryId),PAGINATION_LIMIT);
+		
+		 ProductResponse productResponse = new ProductResponse(products, numberOfPages);
 		
 		Gson gson = new Gson();
-		String  json = gson.toJson(products);
+		String  json = gson.toJson(productResponse);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -39,4 +44,21 @@ public class GetProductsByCategory extends HttpServlet {
 		out.print(json);
 		out.flush();
 	}
+	 private class ProductResponse {
+	        private List<Product> products;
+	        private int numberOfPages;
+
+	        public ProductResponse(List<Product> products, int numberOfPages) {
+	            this.products = products;
+	            this.numberOfPages = numberOfPages;
+	        }
+
+	        public List<Product> getProducts() {
+	            return products;
+	        }
+
+	        public int getNumberOfPages() {
+	            return numberOfPages;
+	        }
+	    }
 }
