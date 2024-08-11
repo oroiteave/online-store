@@ -30,7 +30,6 @@ public class SignInServlet extends HttpServlet {
 		
 		if (user != null && user.getPassword().equals(request.getParameter("password"))) {
 			request.getSession().setAttribute(LOGGED_IN_USER_ATTR, user);
-			request.getSession().setAttribute("userName", user.getFirstName());
 			if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
 				response.sendRedirect(baseUrl + "/admin/panel");
 			} else {

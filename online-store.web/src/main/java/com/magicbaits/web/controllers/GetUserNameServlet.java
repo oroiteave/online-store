@@ -3,6 +3,8 @@ package com.magicbaits.web.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.magicbaits.persistence.enteties.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +18,8 @@ public class GetUserNameServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-        String userName = (session != null) ? (String) session.getAttribute("userName") : null;
+        //String userName = (session != null) ? (String) session.getAttribute("userName") : null;
+		String userName = (session != null) ? ((User) session.getAttribute("loggedInUser")).getFirstName() : null;
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();

@@ -24,11 +24,20 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 if (data.userName != null) {
                     document.getElementById("payment-button-container").innerHTML=`
-                    <button id="realButton" class="btn btn-primary">Comprar</button>`;
+                    <button id="buyButton" class="btn btn-primary">Comprar</button>`;
                     
-                    const realButton = document.getElementById("realButton");
+                    const realButton = document.getElementById("buyButton");
                     realButton.addEventListener('click', function() {
             			window.location.href = `checkout.html?id=${encodeURIComponent(productId)}`;
+        			});
+				}
+				else{
+					document.getElementById("payment-button-container").innerHTML=`
+                    <button id="buyButton" class="btn btn-primary">Iniciar sesion</button>`;
+                    
+                    const realButton = document.getElementById("buyButton");
+                    realButton.addEventListener('click', function() {
+            			window.location.href = `sign-in.html`;
         			});
 				}
 			})
