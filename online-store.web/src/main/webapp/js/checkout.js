@@ -65,3 +65,22 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error('Error fetching product details:', error));
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const radioInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
+    const addressForm = document.querySelector('#addressForm');
+
+    function handleRadioChange() {
+        if (document.getElementById("flexRadioDefault3").checked) {
+            addressForm.style.display = "none";
+        } else {
+            addressForm.style.display = "block";
+        }
+    }
+
+    radioInputs.forEach(radio => {
+        radio.addEventListener('change', handleRadioChange);
+    });
+
+    handleRadioChange();
+});
