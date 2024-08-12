@@ -1,5 +1,6 @@
 package com.magicbaits.persistence.dao.impl;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.magicbaits.persistence.dao.AddressDao;
@@ -63,18 +64,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 			
 			try(var rs = ps.executeQuery()){
 				if(rs.next()) {
-					AddressDto addressDto = new AddressDto();
-					addressDto.setId(rs.getInt("id"));
-					addressDto.setUser(userDao.getUserById(rs.getInt("fk_adress_user")));
-					addressDto.setShippingCompany(rs.getString("shipping_company"));
-					addressDto.setFirstDirection(rs.getString("direction_1"));
-					addressDto.setSecondDirection(rs.getString("direction_2"));
-					addressDto.setCity(rs.getString("city"));
-					addressDto.setHouseNumber(rs.getInt("number"));
-					addressDto.setPostalCode(rs.getInt("postal_code"));
-					addressDto.setExtraMessage(rs.getString("extra_message"));
-					addressDto.setPhoneNumber(rs.getString("phone_number"));
-					return addressDto;
+					return parseAddressFromResultSet(rs);
 				}
 			}
 			
@@ -84,4 +74,91 @@ public class MySqlJdbcAddressDao implements AddressDao{
 		return null;
 	}
 
+	@Override
+	public AddressDto getAddressByUserId(int userId) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT * FROM address WHERE fk_adress_user = ?;")){
+			
+			ps.setInt(1, userId);
+			
+			try(var rs = ps.executeQuery()){
+				if(rs.next()) {
+					return parseAddressFromResultSet(rs);
+				}
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Override
+	public boolean updateAddress(AddressDto address) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("UPDATE address SET shipping_company = ?, direction_1 = ?, direction_2 = ?,"
+						+ "city = ?, number = ?, postal_code = ?, extra_message = ?, phone_number = ? WHERE = ?")){
+			
+			ps.setString(1, address.getShippingCompany());
+			
+			if(address.getFirstDirection()!=null) {
+				ps.setString(2, address.getFirstDirection());
+			}else {ps.setNull(2, java.sql.Types.NULL);}
+			
+			if(address.getSecondDirection()!=null) {
+				ps.setString(3, address.getSecondDirection());
+			}else {ps.setNull(3, java.sql.Types.NULL);}
+			
+			ps.setString(4, address.getCity());
+			ps.setInt(5, address.getHouseNumber());
+			ps.setInt(6, address.getPostalCode());
+			
+			if(address.getExtraMessage()!=null) {
+				ps.setString(7, address.getExtraMessage());
+			}else {ps.setNull(7, java.sql.Types.NULL);}
+			
+			if(address.getPhoneNumber()!=null) {
+				ps.setString(8, address.getPhoneNumber());
+			}else {ps.setNull(8, java.sql.Types.NULL);}
+			
+			ps.executeUpdate();
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public int totalAddressByUserId(int userId) {
+		int result = 0;
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT COUNT(*) AS address_amount FROM address WHERE fk_address_user = ?")){
+			ps.setInt(1, userId);
+			try(var rs = ps.executeQuery()){
+				result = rs.getInt("address_amount");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private AddressDto parseAddressFromResultSet(ResultSet rs) {
+		AddressDto addressDto = new AddressDto();
+		try {
+			addressDto.setId(rs.getInt("id"));
+			addressDto.setUser(userDao.getUserById(rs.getInt("fk_adress_user")));
+			addressDto.setShippingCompany(rs.getString("shipping_company"));
+			addressDto.setFirstDirection(rs.getString("direction_1"));
+			addressDto.setSecondDirection(rs.getString("direction_2"));
+			addressDto.setCity(rs.getString("city"));
+			addressDto.setHouseNumber(rs.getInt("number"));
+			addressDto.setPostalCode(rs.getInt("postal_code"));
+			addressDto.setExtraMessage(rs.getString("extra_message"));
+			addressDto.setPhoneNumber(rs.getString("phone_number"));
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return addressDto;
+	}
 }

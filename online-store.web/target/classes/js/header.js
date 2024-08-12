@@ -16,7 +16,7 @@ function updateLoggedInUserHeader() {
         fetch('/online-store.web/getUserName')
             .then(response => response.json())
             .then(data => {
-                if (data.userName != null) {
+                if (data != null) {
                     document.getElementById("loggedInControllerUserName").innerHTML = `
                     <li class="nav-item"><a class="nav-link" href="profile-page.html#">Bienvenido ${data.userName}</a></li>`;
         			document.getElementById("loggedInControllerLogOut").innerHTML =`

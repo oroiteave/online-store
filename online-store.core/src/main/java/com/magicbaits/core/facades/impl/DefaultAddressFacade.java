@@ -29,4 +29,18 @@ public class DefaultAddressFacade implements AddressFacade{
 		return addressConverter.convertAddressDtoToAddress(addressDao.getAddressByPurchaseId(purchaseId));
 	}
 
+	@Override
+	public Address addressByUserId(int userId) {
+		return addressConverter.convertAddressDtoToAddress(addressDao.getAddressByUserId(userId));
+	}
+
+	@Override
+	public int userAddressExist(int userId) {
+		return addressDao.totalAddressByUserId(userId);
+	}
+
+	@Override
+	public boolean updateAddress(Address address) {
+		return addressDao.updateAddress(addressConverter.convertAddressToAddressDto(address));
+	}
 }

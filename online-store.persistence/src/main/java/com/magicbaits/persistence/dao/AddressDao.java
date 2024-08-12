@@ -5,4 +5,7 @@ import com.magicbaits.persistence.dto.AddressDto;
 public interface AddressDao {
 	boolean saveAddress(AddressDto address);
 	AddressDto getAddressByPurchaseId(int purchaseId);
+	AddressDto getAddressByUserId(int userId);
+	boolean updateAddress(AddressDto address);
+	int totalAddressByUserId(int userId);
 }
