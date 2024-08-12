@@ -18,7 +18,7 @@ function updateLoggedInUserHeader() {
             .then(data => {
                 if (data.userName != null) {
                     document.getElementById("loggedInControllerUserName").innerHTML = `
-                    <li class="nav-item"><a class="nav-link">Bienvenido ${data.userName}</a></li>`;
+                    <li class="nav-item"><a class="nav-link" href="profile-page.html#">Bienvenido ${data.userName}</a></li>`;
         			document.getElementById("loggedInControllerLogOut").innerHTML =`
         			<li class="nav-item"><form action="logout" method="GET">
                         <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
