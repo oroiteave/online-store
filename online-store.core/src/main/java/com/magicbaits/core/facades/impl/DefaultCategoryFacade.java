@@ -11,8 +11,8 @@ import com.magicbaits.persistence.enteties.Category;
 public class DefaultCategoryFacade implements CategoryFacade{
 	
 	private static DefaultCategoryFacade instance;
-	CategoryDao categoryDao = new MySqlJdbcCategoryDao();
-	CategoryDtoToCategoryConverter categoryConverter = new CategoryDtoToCategoryConverter();
+	private CategoryDao categoryDao = new MySqlJdbcCategoryDao();
+	private CategoryDtoToCategoryConverter categoryConverter = new CategoryDtoToCategoryConverter();
 	
 	public static synchronized DefaultCategoryFacade getInstance() {
 		if(instance==null) {

@@ -1,12 +1,10 @@
 package com.magicbaits.persistence.dao.impl;
 
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.UserDao;
 import com.magicbaits.persistence.dto.AddressDto;
-import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.utils.DBUtils;
 
 public class MySqlJdbcAddressDao implements AddressDao{

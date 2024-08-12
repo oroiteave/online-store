@@ -10,7 +10,7 @@ public class AddressDtoToAddressConverter {
 		userConverter = new UserDtoToUserConverter();
 	}
 	
-	Address convertAddressDtoToAddress(AddressDto addressDto){
+	public Address convertAddressDtoToAddress(AddressDto addressDto){
 		if(addressDto == null) {
 			return null;
 		}
@@ -44,7 +44,7 @@ public class AddressDtoToAddressConverter {
 		return address;
 	}
 	
-	AddressDto convertAddressToAddressDto(Address address) {
+	public AddressDto convertAddressToAddressDto(Address address) {
 		if(address==null) {
 			return null;
 		}
