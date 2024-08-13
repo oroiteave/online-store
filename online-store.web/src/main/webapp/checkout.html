@@ -60,69 +60,68 @@
             </div>
 			<div id="addressForm">
 	            <div class="row">
-	              <div class="col-6 mb-3">
-	                <p class="mb-0">Telefono</p>
-	                <div class="form-outline">
-	                  <input type="tel" id="typePhone" value="+569" class="form-control" />
-	                </div>
-	              </div>
-	            </div>
-	            <div class="row">
-	              <div class="col-sm-8 mb-3">
-	                <p class="mb-0">Direccion 1</p>
-	                <div class="form-outline">
-	                  <input type="text" id="typeText" placeholder="Direccion de casa/departamento" class="form-control" />
-	                </div>
-	              </div>
-	              <div class="col-sm-8 mb-3">
-	                <p class="mb-0">Direccion 2</p>
-	                <div class="form-outline">
-	                  <input type="text" id="typeText" placeholder="Segunda direccion (opcional)" class="form-control" />
-	                </div>
-	              </div>
-	
-	              <div class="col-sm-4 mb-3">
-	                <p class="mb-0">Ciudad</p>
-	                <select class="form-select">
-	                  <option value="1">Arica</option>
-	                  <option value="2">Iquique</option>
-	                  <option value="3">Antofagasta</option>
-	                  <option value="4">Copiapo</option>
-	                  <option value="5">Coquimbo</option>
-	                  <option value="6">Viña del mar</option>
-	                  <option value="7">Valparaiso</option>
-	                  <option value="8">Santiago</option>
-	                  <option value="9">Rancagua</option>
-	                  <option value="10">Concepcion</option>
-	                  <option value="11">Los Angeles</option>
-	                  <option value="12">Temuco</option>
-	                  <option value="13">Puerto Mont</option>
-	                  <option value="14">Punta Arenas</option>
-	                </select>
-	              </div>
-	
-	              <div class="col-sm-4 mb-3">
-	                <p class="mb-0">Casa</p>
-	                <div class="form-outline">
-	                  <input type="text" id="typeText" placeholder="N° de casa o depto" class="form-control" />
-	                </div>
-	              </div>
-	
-	              <div class="col-sm-4 col-6 mb-3">
-	                <p class="mb-0">Codigo postal</p>
-	                <div class="form-outline">
-	                  <input type="text" id="typeText" class="form-control" />
-	                </div>
-	              </div>
-	
-	            </div>
-	
-	            <div class="mb-3">
-	              <p class="mb-0">Mensaje extra (Opcional)</p>
-	              <div class="form-outline">
-	                <textarea class="form-control" id="textAreaExample1" rows="2"></textarea>
-	              </div>
-	            </div>
+				  <div class="col-6 mb-3">
+				    <p class="mb-0">Telefono</p>
+				    <div class="form-outline">
+				      <input type="tel" id="typePhone" name="phone" placeholder="+569 0000 0000" class="form-control" required />
+				    </div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="col-sm-8 mb-3">
+				    <p class="mb-0">Direccion 1</p>
+				    <div class="form-outline">
+				      <input type="text" id="address1" name="address1" placeholder="Direccion de casa/departamento" class="form-control" required />
+				    </div>
+				  </div>
+				  <div class="col-sm-8 mb-3">
+				    <p class="mb-0">Direccion 2</p>
+				    <div class="form-outline">
+				      <input type="text" id="address2" name="address2" placeholder="Segunda direccion (opcional)" class="form-control" />
+				    </div>
+				  </div>
+				
+				  <div class="col-sm-4 mb-3">
+				    <p class="mb-0">Ciudad</p>
+				    <select class="form-select" id="city" name="city" required>
+				      <option value="1">Arica</option>
+				      <option value="2">Iquique</option>
+				      <option value="3">Antofagasta</option>
+				      <option value="4">Copiapo</option>
+				      <option value="5">Coquimbo</option>
+				      <option value="6">Viña del mar</option>
+				      <option value="7">Valparaiso</option>
+				      <option value="8">Santiago</option>
+				      <option value="9">Rancagua</option>
+				      <option value="10">Concepcion</option>
+				      <option value="11">Los Angeles</option>
+				      <option value="12">Temuco</option>
+				      <option value="13">Puerto Mont</option>
+				      <option value="14">Punta Arenas</option>
+				    </select>
+				  </div>
+				
+				  <div class="col-sm-4 mb-3">
+				    <p class="mb-0">Casa</p>
+				    <div class="form-outline">
+				      <input type="text" id="houseNumber" name="houseNumber" placeholder="N° de casa o depto" class="form-control" required />
+				    </div>
+				  </div>
+				
+				  <div class="col-sm-4 col-6 mb-3">
+				    <p class="mb-0">Codigo postal</p>
+				    <div class="form-outline">
+				      <input type="text" id="postalCode" name="postalCode" class="form-control" required />
+				    </div>
+				  </div>
+				</div>
+				
+				<div class="mb-3">
+				  <p class="mb-0">Mensaje extra (Opcional)</p>
+				  <div class="form-outline">
+				    <textarea class="form-control" id="extraMessage" name="extraMessage" rows="2"></textarea>
+				  </div>
+				</div>
 			</div>
             <div class="float-end">
 		      <div id="paypal-button-container"></div>
@@ -138,7 +137,7 @@
           <div class="d-flex justify-content-between" id="product-price"></div>
 
           <hr />
-          <h6 class="text-dark my-4">Items en el carrito</h6>
+          <h6 class="text-dark my-4">Item a pagar</h6>
 
           <div class="d-flex align-items-center mb-4" id="product-details"></div>
           
