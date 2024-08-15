@@ -3,7 +3,6 @@ package com.magicbaits.web.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.google.gson.Gson;
 import com.magicbaits.persistence.enteties.User;
 
 import jakarta.servlet.ServletException;

@@ -20,8 +20,8 @@ public class DefaultAddressFacade implements AddressFacade{
 	}
 	
 	@Override
-	public void saveAddress(Address address) {
-		addressDao.saveAddress(addressConverter.convertAddressToAddressDto(address));
+	public int saveAddress(Address address) {
+		return addressDao.saveAddress(addressConverter.convertAddressToAddressDto(address));
 	}
 
 	@Override

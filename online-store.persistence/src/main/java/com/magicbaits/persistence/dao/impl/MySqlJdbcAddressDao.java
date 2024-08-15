@@ -2,6 +2,7 @@ package com.magicbaits.persistence.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.UserDao;
@@ -16,10 +17,10 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	}
 
 	@Override
-	public boolean saveAddress(AddressDto address) {
+	public int saveAddress(AddressDto address) {
 		try(var conn = DBUtils.getConnection();
 				var ps = conn.prepareStatement("INSERT INTO address (fk_adress_user, shipping_company, direction_1, direction_2, city, number, postal_code,"
-						+ " extra_message, phone_number) VALUES(?,?,?,?,?,?,?,?,?);")){
+						+ " extra_message, phone_number) VALUES(?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
 			
 			if(address.getUser() != null) {
 				ps.setInt(1, address.getUser().getId());
@@ -48,11 +49,15 @@ public class MySqlJdbcAddressDao implements AddressDao{
 			}else {ps.setNull(9, java.sql.Types.NULL);}
 			
 			ps.executeUpdate();
-			return true;
+			try(var generatedKeys = ps.getGeneratedKeys()){
+				if(generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				}
+			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return 0;
 	}
 
 	@Override

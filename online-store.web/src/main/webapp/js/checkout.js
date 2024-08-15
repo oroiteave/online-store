@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('product-price').innerHTML =`
                 	<p class="mb-2">Precio total:</p>
             		<p class="mb-2 fw-bold">$${product.price}</p>`;
+            
+            paypalButton(product);
             		
-            //sb-vlqft27291221@personal.example.com
-            //'TI5>vpK
             })
             .catch(error => console.error('Error fetching product details:', error));
     }
@@ -45,13 +45,13 @@ document.addEventListener("DOMContentLoaded", function() {
     handleRadioChange();
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+function paypalButton(product) {
     const paypalButtonContainer = document.getElementById('paypal-button-container');
     const formInputs = document.querySelectorAll('input[required], select[required]');
     const radioOption1 = document.getElementById('flexRadioDefault1');
     const radioOption2 = document.getElementById('flexRadioDefault2');
     const radioLocalPickup = document.getElementById('flexRadioDefault3');
-
+    
     function checkFormValidity() {
         let allValid = true;
         formInputs.forEach(input => {
@@ -61,13 +61,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (allValid || (radioLocalPickup && radioLocalPickup.checked)) {
-            paypalButtonContainer.style.display = 'block'; // Mostrar el botón si todos los campos están completos
+            paypalButtonContainer.style.display = 'block';
         } else {
-            paypalButtonContainer.style.display = 'none'; // Ocultar el botón si falta algún campo
+            paypalButtonContainer.style.display = 'none';
         }
     }
 
-    // Escuchar cambios en todos los campos requeridos
     formInputs.forEach(input => {
         input.addEventListener('input', checkFormValidity);
     });
@@ -78,8 +77,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Verificar inicialmente si todos los campos están completos
     checkFormValidity();
+    
+    //client account credentials:
+    //sb-vlqft27291221@personal.example.com
+    //'TI5>vpK
+
+	
 
     paypal.Buttons({
         style: {
@@ -101,24 +105,30 @@ document.addEventListener('DOMContentLoaded', function () {
         onApprove: function (data, actions) {
             actions.order.capture()
                 .then(function (details) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/online-store.web/addPurchase';
-
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'productId';
-                    input.value = productId;
-
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-
-                    form.submit();
-                });
+                const formElement = document.querySelector('#checkoutForm');
+				const params = new URLSearchParams(new FormData(formElement));
+				
+				params.append('productId', product.id);
+                
+                fetch('/online-store.web/addPurchase', {
+                    method: 'POST',
+                    headers: {
+        				'Content-Type': 'application/x-www-form-urlencoded'
+    				},
+                    body: params.toString()
+                }).then(response => {
+				    if (response.redirected) {
+				        window.location.href = response.url; 
+				    } else {
+				        return response.json();
+				    }
+				})
+				.catch(error => console.error('Error en el envío:', error));
+            });
         },
         onCancel: function (data) {
             alert("Pago cancelado");
             console.log(data);
         }
     }).render('#paypal-button-container');
-});
+};

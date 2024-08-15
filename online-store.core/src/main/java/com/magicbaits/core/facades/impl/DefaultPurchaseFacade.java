@@ -21,8 +21,8 @@ public class DefaultPurchaseFacade implements PurchaseFacade{
 	}
 	
 	@Override
-	public void addPurchase(Purchase purchase) {
-		purchaseDao.savePurchase(converter.convertPurchaseToPurchaseDto(purchase));
+	public boolean addPurchase(Purchase purchase) {
+		return purchaseDao.savePurchase(converter.convertPurchaseToPurchaseDto(purchase));
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import com.magicbaits.persistence.dto.PurchaseDto;
 
 public interface PurchaseDao {
 	
-	void savePurchase(PurchaseDto order);
+	boolean savePurchase(PurchaseDto order);
 	
 	List<PurchaseDto> getPurchaces();
 	

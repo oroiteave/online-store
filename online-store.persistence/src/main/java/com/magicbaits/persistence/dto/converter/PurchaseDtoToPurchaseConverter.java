@@ -10,17 +10,19 @@ import com.magicbaits.persistence.enteties.impl.DefaultPurchase;
 public class PurchaseDtoToPurchaseConverter {
 	private ProductDtoToProductConverter productConverter;
 	private UserDtoToUserConverter userConverter;
+	private AddressDtoToAddressConverter addressConverter;
 	
 	{
 		productConverter = new ProductDtoToProductConverter();
 		userConverter = new UserDtoToUserConverter();
+		addressConverter = new AddressDtoToAddressConverter();
 	}
 	
 	public Purchase convertPurchaseDtoToPurchase(PurchaseDto purchaseDto) {
 		Purchase purchase = new DefaultPurchase();
-		purchase.setCreditCardNumber(purchaseDto.getUserDto().getCreditCard());
 		purchase.setCustomerId(purchaseDto.getUserDto().getId());
 		purchase.setProducts(productConverter.convertProductDtosToProducts(purchaseDto.getProductDtos()));
+		purchase.setAddress(addressConverter.convertAddressDtoToAddress(purchaseDto.getAddressDto()));
 		
 		return purchase;
 	}
@@ -29,6 +31,7 @@ public class PurchaseDtoToPurchaseConverter {
 		PurchaseDto purchaseDto = new PurchaseDto();
 		purchaseDto.setProductDtos(productConverter.convertProductsToProductDtos(purchase.getProducts()));
 		purchaseDto.setUserDto(userConverter.convertUserIdToUserDtoWithOnlyId(purchase.getCustomerId()));
+		purchaseDto.setAddressDto(addressConverter.convertAddressToAddressDto(purchase.getAddress()));
 		
 		return purchaseDto;
 	}

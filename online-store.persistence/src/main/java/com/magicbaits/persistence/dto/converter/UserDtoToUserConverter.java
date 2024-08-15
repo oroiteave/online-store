@@ -36,7 +36,6 @@ public class UserDtoToUserConverter {
 			user.setRoleName(userDto.getRoleDto().getRoleName());
 		}
 		user.setMoney(userDto.getMoney().doubleValue());
-		user.setCreditCard(userDto.getCreditCard());
 		user.setPartnerCode(userDto.getPartnerCode());
 		
 		return user;
@@ -55,7 +54,6 @@ public class UserDtoToUserConverter {
 		userDto.setPassword(user.getPassword());
 		userDto.setRoleDto(roleConverter.convertRoleNameToRoleDtoWithOnlyRoleName(user.getRoleName()));
 		userDto.setMoney(BigDecimal.valueOf(user.getMoney()));
-		userDto.setCreditCard(user.getCreditCard());
 		userDto.setPartnerCode(user.getPartnerCode());
 		userDto.setReferrerUser(convertUserToUserDto(user.getReferrerUser()));
 		
