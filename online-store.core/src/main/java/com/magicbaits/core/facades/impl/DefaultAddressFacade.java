@@ -30,13 +30,13 @@ public class DefaultAddressFacade implements AddressFacade{
 	}
 
 	@Override
-	public Address addressByUserId(int userId) {
+	public Address getAddressByUserId(int userId) {
 		return addressConverter.convertAddressDtoToAddress(addressDao.getAddressByUserId(userId));
 	}
 
 	@Override
-	public int userAddressExist(int userId) {
-		return addressDao.totalAddressByUserId(userId);
+	public boolean userAddressExist(int userId) {
+		return addressDao.existAddressByUserId(userId);
 	}
 
 	@Override

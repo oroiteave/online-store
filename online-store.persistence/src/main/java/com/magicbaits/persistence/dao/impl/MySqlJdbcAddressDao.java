@@ -134,18 +134,21 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	}
 	
 	@Override
-	public int totalAddressByUserId(int userId) {
+	public boolean existAddressByUserId(int userId) {
 		int result = 0;
 		try(var conn = DBUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT COUNT(*) AS address_amount FROM address WHERE fk_address_user = ?")){
 			ps.setInt(1, userId);
 			try(var rs = ps.executeQuery()){
 				result = rs.getInt("address_amount");
+				if(result>0) {
+					return true;
+				}
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return false;
 	}
 
 	private AddressDto parseAddressFromResultSet(ResultSet rs) {

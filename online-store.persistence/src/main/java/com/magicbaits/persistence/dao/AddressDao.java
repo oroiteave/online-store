@@ -7,5 +7,5 @@ public interface AddressDao {
 	AddressDto getAddressByPurchaseId(int purchaseId);
 	AddressDto getAddressByUserId(int userId);
 	boolean updateAddress(AddressDto address);
-	int totalAddressByUserId(int userId);
+	boolean existAddressByUserId(int userId);
 }

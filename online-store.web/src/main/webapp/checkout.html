@@ -23,6 +23,12 @@
 
             <h5 class="card-title mb-3">informacion para envio</h5>
             
+            <div id="saved-address" style="display: none;">
+			  <p><strong>Tu dirección:</strong></p>
+			  <p id="address-details"></p>
+			  <button id="modify-address-btn" class="btn btn-primary">Modificar dirección</button>
+			</div>
+            
 			<form id = "checkoutForm">
             <div class="row mb-3">
               <div class="col-lg-4 mb-3">
@@ -62,7 +68,7 @@
 			<div id="addressForm">
 	            <div class="row">
 				  <div class="col-6 mb-3">
-				    <p class="mb-0">Telefono</p>
+				    <p class="mb-0">Telefono*</p>
 				    <div class="form-outline">
 				      <input type="tel" id="typePhone" name="phone" placeholder="+569 0000 0000" class="form-control" required />
 				    </div>
@@ -70,7 +76,7 @@
 				</div>
 				<div class="row">
 				  <div class="col-sm-8 mb-3">
-				    <p class="mb-0">Direccion 1</p>
+				    <p class="mb-0">Direccion 1*</p>
 				    <div class="form-outline">
 				      <input type="text" id="address1" name="address1" placeholder="Direccion de casa/departamento" class="form-control" required />
 				    </div>
@@ -103,14 +109,14 @@
 				  </div>
 				
 				  <div class="col-sm-4 mb-3">
-				    <p class="mb-0">Casa</p>
+				    <p class="mb-0">Casa/Depto*</p>
 				    <div class="form-outline">
 				      <input type="text" id="houseNumber" name="houseNumber" placeholder="N° de casa o depto" class="form-control" required />
 				    </div>
 				  </div>
 				
 				  <div class="col-sm-4 col-6 mb-3">
-				    <p class="mb-0">Codigo postal</p>
+				    <p class="mb-0">Codigo postal*</p>
 				    <div class="form-outline">
 				      <input type="text" id="postalCode" name="postalCode" class="form-control" required />
 				    </div>
@@ -126,7 +132,7 @@
 			</div>
 			</form>
             <div class="float-end">
-		      <div id="paypal-button-container"></div>
+		      <div id="paypal-button-container" style="padding-top: 20px"></div>
             </div>
           </div>
         </div>

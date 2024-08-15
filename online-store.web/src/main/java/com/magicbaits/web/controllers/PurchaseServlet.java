@@ -43,35 +43,48 @@ public class PurchaseServlet extends HttpServlet {
 		User user = ((User) request.getSession().getAttribute("loggedInUser"));
 		int userId = user.getId();
 		
-		System.out.println(request.getParameter("flexRadioDefault"));
-		System.out.println(request.getParameter("phone"));
-		System.out.println(request.getParameter("address1"));
-		
 		String productId = request.getParameter("productId");
 		Product product = productFacade.getProductById(Integer.parseInt(productId));
 		List<Product> products = new ArrayList<>();
 		products.add(product);
 		
 		Address address = new DefaultAddress();
-		address.setUser(user);
-		address.setShippingCompany(request.getParameter("flexRadioDefault"));
-		address.setFirstDirection(request.getParameter("address1"));
-		address.setSecondDirection(request.getParameter("address2"));
-		address.setCity(request.getParameter("city"));
-		address.setHouseNumber(Integer.parseInt(request.getParameter("houseNumber")));
-		address.setPostalCode(Integer.parseInt(request.getParameter("postalCode")));
-		address.setPhoneNumber(request.getParameter("phone"));
-		address.setExtraMessage(request.getParameter("extraMessage"));
-		address.setId(addressFacade.saveAddress(address));
+		if(!addressFacade.userAddressExist(userId)) {
+			address = createAddress(request, user);
+		}else {
+			address = addressFacade.getAddressByUserId(userId);
+		}
 		
 		Purchase purchase = new DefaultPurchase();
 		purchase.setCustomerId(userId);
 		purchase.setProducts(products);
 		purchase.setAddress(address);
 		
-		purchaseFacade.addPurchase(purchase);
+		if(purchaseFacade.addPurchase(purchase)) {
+			response.sendRedirect(baseUrl+"/transaction-approve.html");
+		}else {
+			response.sendRedirect(baseUrl+"/transaction-fail.html");
+		}
+	}
+	
+	private Address createAddress(HttpServletRequest request, User user) {
+		Address address = new DefaultAddress();
 		
+		address.setUser(user);
+		address.setShippingCompany(request.getParameter("flexRadioDefault"));
 		
-		response.sendRedirect(baseUrl+"/transaction-approve.html");
+		if(!address.getShippingCompany().equals("localPickup")) {
+			address.setFirstDirection(request.getParameter("address1"));
+			address.setSecondDirection(request.getParameter("address2"));
+			address.setCity(request.getParameter("city"));
+			address.setHouseNumber(Integer.parseInt(request.getParameter("houseNumber")));
+			address.setPostalCode(Integer.parseInt(request.getParameter("postalCode")));
+			address.setPhoneNumber(request.getParameter("phone"));
+			address.setExtraMessage(request.getParameter("extraMessage"));
+		}
+		
+		address.setId(addressFacade.saveAddress(address));
+		
+		return address;
 	}
 }

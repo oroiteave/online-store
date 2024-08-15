@@ -19,14 +19,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 	<p class="mb-2">Precio total:</p>
             		<p class="mb-2 fw-bold">$${product.price}</p>`;
             
+            addressFormSave();
             paypalButton(product);
-            		
+            radioButtonsCheck();
             })
             .catch(error => console.error('Error fetching product details:', error));
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+function radioButtonsCheck() {
     const radioInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
     const addressForm = document.querySelector('#addressForm');
 
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     handleRadioChange();
-});
+};
 
 function paypalButton(product) {
     const paypalButtonContainer = document.getElementById('paypal-button-container');
@@ -51,6 +52,9 @@ function paypalButton(product) {
     const radioOption1 = document.getElementById('flexRadioDefault1');
     const radioOption2 = document.getElementById('flexRadioDefault2');
     const radioLocalPickup = document.getElementById('flexRadioDefault3');
+    const savedAddressContainer = document.getElementById('saved-address');
+    const checkoutFormContainer = document.getElementById('checkoutForm');
+    const modifyAddressBtn = document.getElementById('modify-address-btn');
     
     function checkFormValidity() {
         let allValid = true;
@@ -60,12 +64,14 @@ function paypalButton(product) {
             }
         });
 
-        if (allValid || (radioLocalPickup && radioLocalPickup.checked)) {
+        if (allValid || (radioLocalPickup && radioLocalPickup.checked) || checkoutFormContainer.style.display === 'none') {
             paypalButtonContainer.style.display = 'block';
         } else {
             paypalButtonContainer.style.display = 'none';
         }
     }
+
+	modifyAddressBtn.addEventListener('click',checkFormValidity);
 
     formInputs.forEach(input => {
         input.addEventListener('input', checkFormValidity);
@@ -90,7 +96,7 @@ function paypalButton(product) {
             layout: 'vertical',
             color: 'blue',
             shape: 'rect',
-            label: 'paypal'
+            label: 'paypal',
         },
         createOrder: function (data, actions) {
             return actions.order.create({
@@ -132,3 +138,35 @@ function paypalButton(product) {
         }
     }).render('#paypal-button-container');
 };
+
+function addressFormSave(){
+	const savedAddress = {
+        phone: "+569 0000 0000",
+        address1: "Calle Falsa 123",
+        address2: "Depto 4B",
+        city: "Santiago",
+        houseNumber: "45",
+        postalCode: "7550000"
+    };
+
+    const addressDetailsElement = document.getElementById('address-details');
+    const savedAddressContainer = document.getElementById('saved-address');
+    const checkoutFormContainer = document.getElementById('checkoutForm');
+    const modifyAddressBtn = document.getElementById('modify-address-btn');
+
+    if (savedAddress) {
+        addressDetailsElement.innerHTML = `
+            ${savedAddress.phone}<br>
+            ${savedAddress.address1} ${savedAddress.address2}<br>
+            ${savedAddress.city}, ${savedAddress.houseNumber}<br>
+            Código postal: ${savedAddress.postalCode}
+        `;
+        savedAddressContainer.style.display = 'block';
+        checkoutFormContainer.style.display = 'none';
+    }
+
+    modifyAddressBtn.addEventListener('click', function() {
+        savedAddressContainer.style.display = 'none';
+        checkoutFormContainer.style.display = 'block';
+    });
+}
