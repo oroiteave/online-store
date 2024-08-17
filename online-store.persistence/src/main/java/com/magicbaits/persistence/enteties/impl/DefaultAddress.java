@@ -16,6 +16,7 @@ public class DefaultAddress implements Address{
 	private String extraMessage;
 	private String phoneNumber;
 	
+
 	@Override
 	public int getId() {
 		return id;
@@ -114,5 +115,12 @@ public class DefaultAddress implements Address{
 	@Override
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	@Override
+	public String toString() {
+		return "DefaultAddress [id=" + id + ", user=" + user + ", shippingCompany=" + shippingCompany
+				+ ", firstDirection=" + firstDirection + ", secondDirection=" + secondDirection + ", city=" + city
+				+ ", houseNumber=" + houseNumber + ", postalCode=" + postalCode + ", extraMessage=" + extraMessage
+				+ ", phoneNumber=" + phoneNumber + "]";
 	}
 }

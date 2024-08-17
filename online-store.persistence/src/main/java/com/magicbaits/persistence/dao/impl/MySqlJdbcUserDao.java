@@ -21,7 +21,7 @@ public class MySqlJdbcUserDao implements UserDao{
 	@Override
 	public boolean saveUser(UserDto user) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,partner_code,referrer_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")){
+				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,password,partner_code,referrer_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")){
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());

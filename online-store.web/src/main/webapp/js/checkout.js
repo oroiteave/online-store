@@ -47,49 +47,9 @@ function radioButtonsCheck() {
 };
 
 function paypalButton(product) {
-    const paypalButtonContainer = document.getElementById('paypal-button-container');
-    const formInputs = document.querySelectorAll('input[required], select[required]');
-    const radioOption1 = document.getElementById('flexRadioDefault1');
-    const radioOption2 = document.getElementById('flexRadioDefault2');
-    const radioLocalPickup = document.getElementById('flexRadioDefault3');
-    const savedAddressContainer = document.getElementById('saved-address');
-    const checkoutFormContainer = document.getElementById('checkoutForm');
-    const modifyAddressBtn = document.getElementById('modify-address-btn');
-    
-    function checkFormValidity() {
-        let allValid = true;
-        formInputs.forEach(input => {
-            if (!input.value) {
-                allValid = false;
-            }
-        });
-
-        if (allValid || (radioLocalPickup && radioLocalPickup.checked) || checkoutFormContainer.style.display === 'none') {
-            paypalButtonContainer.style.display = 'block';
-        } else {
-            paypalButtonContainer.style.display = 'none';
-        }
-    }
-
-	modifyAddressBtn.addEventListener('click',checkFormValidity);
-
-    formInputs.forEach(input => {
-        input.addEventListener('input', checkFormValidity);
-    });
-    
-    [radioLocalPickup, radioOption1, radioOption2].forEach(radio => {
-        if (radio) {
-            radio.addEventListener('change', checkFormValidity);
-        }
-    });
-
-    checkFormValidity();
-    
     //client account credentials:
     //sb-vlqft27291221@personal.example.com
     //'TI5>vpK
-
-	
 
     paypal.Buttons({
         style: {
@@ -112,11 +72,20 @@ function paypalButton(product) {
             actions.order.capture()
                 .then(function (details) {
                 const formElement = document.querySelector('#checkoutForm');
-				const params = new URLSearchParams(new FormData(formElement));
+                const checkoutFormContainer = document.getElementById('checkoutForm');
+				const params = new URLSearchParams();
+				
+				if(checkoutFormContainer.style.display ==='none'){
+					params.append('useSaveAddress','true');
+				}else{
+					new FormData(formElement).forEach((value, key) => {
+				        params.append(key, value);
+				    });
+				}
 				
 				params.append('productId', product.id);
                 
-                fetch('/online-store.web/addPurchase', {
+                fetch('/online-store.web/purchase', {
                     method: 'POST',
                     headers: {
         				'Content-Type': 'application/x-www-form-urlencoded'
@@ -139,34 +108,74 @@ function paypalButton(product) {
     }).render('#paypal-button-container');
 };
 
-function addressFormSave(){
-	const savedAddress = {
-        phone: "+569 0000 0000",
-        address1: "Calle Falsa 123",
-        address2: "Depto 4B",
-        city: "Santiago",
-        houseNumber: "45",
-        postalCode: "7550000"
-    };
 
+
+function addressFormSave(){
     const addressDetailsElement = document.getElementById('address-details');
     const savedAddressContainer = document.getElementById('saved-address');
+    const paypalButtonContainer = document.getElementById('paypal-button-container');
+    const formInputs = document.querySelectorAll('input[required], select[required]');
+    const radioOption1 = document.getElementById('flexRadioDefault1');
+    const radioOption2 = document.getElementById('flexRadioDefault2');
+    const radioLocalPickup = document.getElementById('flexRadioDefault3');
     const checkoutFormContainer = document.getElementById('checkoutForm');
     const modifyAddressBtn = document.getElementById('modify-address-btn');
+    const useSaveAddressBtn = document.getElementById('use-address-btn');
+    const useSaveAddressConteiner = document.getElementById('use-address-container');
+    
+    function checkFormValidity() {
+        let allValid = true;
+        formInputs.forEach(input => {
+            if (!input.value) {
+                allValid = false;
+            }
+        });
 
-    if (savedAddress) {
-        addressDetailsElement.innerHTML = `
-            ${savedAddress.phone}<br>
-            ${savedAddress.address1} ${savedAddress.address2}<br>
-            ${savedAddress.city}, ${savedAddress.houseNumber}<br>
-            Código postal: ${savedAddress.postalCode}
-        `;
-        savedAddressContainer.style.display = 'block';
-        checkoutFormContainer.style.display = 'none';
+        if (allValid || (radioLocalPickup && radioLocalPickup.checked) || checkoutFormContainer.style.display === 'none') {
+            paypalButtonContainer.style.display = 'block';
+        } else {
+            paypalButtonContainer.style.display = 'none';
+        }
     }
-
-    modifyAddressBtn.addEventListener('click', function() {
-        savedAddressContainer.style.display = 'none';
-        checkoutFormContainer.style.display = 'block';
-    });
+	    
+	fetch('/online-store.web/purchase')
+	.then(response => response.json())
+	.then(address =>{
+	    if (address) {
+	        addressDetailsElement.innerHTML = `
+	            ${address.phoneNumber}<br>
+	            ${address.firstDirection} ${address.secondDirection}<br>
+	            ${address.city}, ${address.houseNumber}<br>
+	            Código postal: ${address.postalCode}
+	        `;
+	        savedAddressContainer.style.display = 'block';
+	        checkoutFormContainer.style.display = 'none';
+	        useSaveAddressConteiner.style.display = 'none';
+	    }
+		modifyAddressBtn.addEventListener('click',checkFormValidity);
+	
+	    formInputs.forEach(input => {
+	        input.addEventListener('input', checkFormValidity);
+	    });
+	    
+	    [radioLocalPickup, radioOption1, radioOption2].forEach(radio => {
+	        if (radio) {
+	            radio.addEventListener('change', checkFormValidity);
+	        }
+	    });
+	    useSaveAddressBtn.addEventListener('click',function(){
+			savedAddressContainer.style.display = 'block';
+	        checkoutFormContainer.style.display = 'none';
+	        useSaveAddressConteiner.style.display = 'none';
+		    checkFormValidity();
+		})
+		
+	    modifyAddressBtn.addEventListener('click', function() {
+	        savedAddressContainer.style.display = 'none';
+	        checkoutFormContainer.style.display = 'block';
+	        useSaveAddressConteiner.style.display = 'block';
+		    checkFormValidity();
+	    });
+	    checkFormValidity();
+	}).catch(error => console.error('Error fetching address details:', error));
 }

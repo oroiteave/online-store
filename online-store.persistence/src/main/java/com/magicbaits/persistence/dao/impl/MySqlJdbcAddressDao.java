@@ -101,7 +101,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	public boolean updateAddress(AddressDto address) {
 		try(var conn = DBUtils.getConnection();
 				var ps = conn.prepareStatement("UPDATE address SET shipping_company = ?, direction_1 = ?, direction_2 = ?,"
-						+ "city = ?, number = ?, postal_code = ?, extra_message = ?, phone_number = ? WHERE = ?")){
+						+ "city = ?, number = ?, postal_code = ?, extra_message = ?, phone_number = ? WHERE id = ?")){
 			
 			ps.setString(1, address.getShippingCompany());
 			
@@ -125,6 +125,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 				ps.setString(8, address.getPhoneNumber());
 			}else {ps.setNull(8, java.sql.Types.NULL);}
 			
+			ps.setInt(9, address.getId());
 			ps.executeUpdate();
 			return true;
 		}catch(SQLException e) {
@@ -137,12 +138,14 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	public boolean existAddressByUserId(int userId) {
 		int result = 0;
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("SELECT COUNT(*) AS address_amount FROM address WHERE fk_address_user = ?")){
+				var ps = conn.prepareStatement("SELECT COUNT(*) AS address_amount FROM address WHERE fk_adress_user = ?")){
 			ps.setInt(1, userId);
 			try(var rs = ps.executeQuery()){
-				result = rs.getInt("address_amount");
-				if(result>0) {
-					return true;
+				if(rs.next()) {
+					result = rs.getInt("address_amount");
+					if(result>0) {
+						return true;
+					}
 				}
 			}
 		}catch(SQLException e) {
