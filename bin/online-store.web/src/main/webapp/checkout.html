@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="icon" href="images/gengar_logo.svg" type="image/x-icon">
+	<title>Checkout</title>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <section class="bg-light py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 mb-4">
+
+        <!-- Checkout -->
+        <div class="card shadow-0 border">
+          <div class="p-4">
+            <h5 class="card-title mb-3">Checkout</h5>
+
+            <hr class="my-4" />
+
+            <h5 class="card-title mb-3">informacion para envio</h5>
+            
+            <div id="saved-address" style="display: none;">
+			  <p><strong>Tu dirección:</strong></p>
+			  <p id="address-details"></p>
+			  <button id="modify-address-btn" class="btn btn-primary">Modificar dirección</button>
+			</div>
+            
+			<form id = "checkoutForm">
+            <div class="row mb-3">
+              <div class="col-lg-4 mb-3">
+                <!-- Default checked radio -->
+                <div class="form-check h-100 border rounded-3">
+                  <div class="p-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="Starken" checked />
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Starken <br />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 mb-3">
+                <!-- Default radio -->
+                <div class="form-check h-100 border rounded-3">
+                  <div class="p-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Chilexpress"/>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Chilexpress <br />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 mb-3">
+                <!-- Default radio -->
+                <div class="form-check h-100 border rounded-3">
+                  <div class="p-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value ="localPickup"/>
+                    <label class="form-check-label" for="flexRadioDefault3">
+                      Retiro en local <br />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+			<div id="addressForm">
+	            <div class="row">
+				  <div class="col-6 mb-3">
+				    <p class="mb-0">Telefono*</p>
+				    <div class="form-outline">
+				      <input type="tel" id="typePhone" name="phone" placeholder="+569 0000 0000" class="form-control" required />
+				    </div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="col-sm-8 mb-3">
+				    <p class="mb-0">Direccion 1*</p>
+				    <div class="form-outline">
+				      <input type="text" id="address1" name="address1" placeholder="Direccion de casa/departamento" class="form-control" required />
+				    </div>
+				  </div>
+				  <div class="col-sm-8 mb-3">
+				    <p class="mb-0">Direccion 2</p>
+				    <div class="form-outline">
+				      <input type="text" id="address2" name="address2" placeholder="Segunda direccion (opcional)" class="form-control" />
+				    </div>
+				  </div>
+				
+				  <div class="col-sm-4 mb-3">
+				    <p class="mb-0">Ciudad</p>
+				    <select class="form-select" id="city" name="city" required>
+				      <option value="Arica">Arica</option>
+				      <option value="Iquique">Iquique</option>
+				      <option value="Antofagasta">Antofagasta</option>
+				      <option value="Copiapo">Copiapo</option>
+				      <option value="Coquimbo">Coquimbo</option>
+				      <option value="Viña del mar">Viña del mar</option>
+				      <option value="Valparaiso">Valparaiso</option>
+				      <option value="Santiago">Santiago</option>
+				      <option value="Rancagua">Rancagua</option>
+				      <option value="Concepcion">Concepcion</option>
+				      <option value="Los Angeles">Los Angeles</option>
+				      <option value="Temuco">Temuco</option>
+				      <option value="Puerto Mont">Puerto Mont</option>
+				      <option value="Punta Arenas">Punta Arenas</option>
+				    </select>
+				  </div>
+				
+				  <div class="col-sm-4 mb-3">
+				    <p class="mb-0">Casa/Depto*</p>
+				    <div class="form-outline">
+				      <input type="text" id="houseNumber" name="houseNumber" placeholder="N° de casa o depto" class="form-control" required />
+				    </div>
+				  </div>
+				
+				  <div class="col-sm-4 col-6 mb-3">
+				    <p class="mb-0">Codigo postal*</p>
+				    <div class="form-outline">
+				      <input type="text" id="postalCode" name="postalCode" class="form-control" required />
+				    </div>
+				  </div>
+				</div>
+				
+				<div class="mb-3">
+				  <p class="mb-0">Mensaje extra (Opcional)</p>
+				  <div class="form-outline">
+				    <textarea class="form-control" id="extraMessage" name="extraMessage" rows="2"></textarea>
+				  </div>
+				</div>
+			</div>
+			</form>
+			<div id = "use-address-container" style="display: none;">
+				<button id="use-address-btn" class="btn btn-primary">Usar direccion guardada</button>
+			</div>
+            <div class="float-end">
+		      <div id="paypal-button-container" style="padding-top: 20px"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Checkout -->
+      </div>
+      <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+        <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+          <h6 class="mb-3">Total</h6>
+          <hr />
+          <div class="d-flex justify-content-between" id="product-price"></div>
+
+          <hr />
+          <h6 class="text-dark my-4">Item a pagar</h6>
+
+          <div class="d-flex align-items-center mb-4" id="product-details"></div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+	<script src="https://sandbox.paypal.com/sdk/js?client-id=ASTG_ZLqe-yVftX14U0tb9WvtZDAu7Tlp0oonmag56FqBb-vWkv4i8BPrHCpe0uxCWXFShAtCjam_m3K&components=buttons"></script>
+    <script src="js/header.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

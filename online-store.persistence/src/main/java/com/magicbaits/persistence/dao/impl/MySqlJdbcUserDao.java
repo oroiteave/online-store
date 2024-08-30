@@ -21,7 +21,7 @@ public class MySqlJdbcUserDao implements UserDao{
 	@Override
 	public boolean saveUser(UserDto user) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,credit_card,password,partner_code,referrer_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);")){
+				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,password,partner_code,referrer_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")){
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
@@ -35,13 +35,12 @@ public class MySqlJdbcUserDao implements UserDao{
 				ps.setNull(4, java.sql.Types.NULL);
 			}
 			ps.setBigDecimal(5, user.getMoney());
-			ps.setString(6, user.getCreditCard());
-			ps.setString(7, user.getPassword());
-			ps.setString(8, user.getPartnerCode());
+			ps.setString(6, user.getPassword());
+			ps.setString(7, user.getPartnerCode());
 			if(user.getReferrerUser()!= null) {
-				ps.setInt(9, user.getReferrerUser().getId());
+				ps.setInt(8, user.getReferrerUser().getId());
 			}else {
-				ps.setNull(9, java.sql.Types.NULL);
+				ps.setNull(8, java.sql.Types.NULL);
 			}
 			ps.executeUpdate();
 			return true;
@@ -133,7 +132,6 @@ public class MySqlJdbcUserDao implements UserDao{
 			user.setLastName(rs.getString("last_name"));
 			user.setEmail(rs.getString("email"));
 			user.setMoney(rs.getBigDecimal("money"));
-			user.setCreditCard(rs.getString("credit_card"));
 			user.setRoleDto(role.getRoleById(rs.getInt("fk_user_role")));
 			user.setPassword(rs.getString("password"));
 			user.setPartnerCode(rs.getString("partner_code"));
@@ -147,10 +145,8 @@ public class MySqlJdbcUserDao implements UserDao{
 	@Override
 	public void updateUser(UserDto user) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("UPDATE user SET firstName = ?,"
-						+ "lastName = ?, email = ?, fk_user_role = ?, money = ?,"
-						+ "creditCard = ?, password = ?, partner_code = ?,"
-						+ "referrer_user_id = ? WHERE id = ?")){
+				var ps = conn.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, email = ?, fk_user_role = ?, money = ?,"
+						+ "password = ?, partner_code = ?, referrer_user_id = ? WHERE id = ?")){
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
@@ -158,21 +154,22 @@ public class MySqlJdbcUserDao implements UserDao{
 			
 			if(user.getRoleDto()!= null && user.getRoleDto().getId() != null) {
 				ps.setInt(4, user.getRoleDto().getId());
+			}else if(user.getRoleDto() != null && !user.getRoleDto().getRoleName().isEmpty()){
+				ps.setInt(4, role.getRoleByName(user.getRoleDto().getRoleName()).getId());
 			}else {
 				ps.setNull(4, java.sql.Types.NULL);
 			}
 			ps.setBigDecimal(5, user.getMoney());
-			ps.setString(6, user.getCreditCard());
-			ps.setString(7, user.getPassword());
-			ps.setString(8, user.getPartnerCode());
+			ps.setString(6, user.getPassword());
+			ps.setString(7, user.getPartnerCode());
 			
 			if(user.getReferrerUser() !=null) {
-				ps.setInt(9, user.getReferrerUser().getId());
+				ps.setInt(8, user.getReferrerUser().getId());
 			}else {
-				ps.setNull(9, java.sql.Types.NULL);
+				ps.setNull(8, java.sql.Types.NULL);
 			}
 			
-			ps.setInt(10, user.getId());
+			ps.setInt(9, user.getId());
 			
 			ps.executeUpdate();
 		}catch(SQLException e) {

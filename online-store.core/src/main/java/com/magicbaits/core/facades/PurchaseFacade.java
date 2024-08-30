@@ -5,7 +5,7 @@ import java.util.List;
 import com.magicbaits.persistence.enteties.Purchase;
 
 public interface PurchaseFacade {
-	void addPurchase(Purchase purchase);
+	boolean addPurchase(Purchase purchase);
 	
 	List<Purchase> getPurchases();
 	

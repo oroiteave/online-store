@@ -9,7 +9,6 @@ public class UserDto {
 	private String email;
 	private RoleDto roleDto;
 	private BigDecimal money;
-	private String creditCard;
 	private String password;
 	private String partnerCode;
 	private UserDto referrerUser;
@@ -49,12 +48,6 @@ public class UserDto {
 	}
 	public void setMoney(BigDecimal money) {
 		this.money = money;
-	}
-	public String getCreditCard() {
-		return creditCard;
-	}
-	public void setCreditCard(String creditCard) {
-		this.creditCard = creditCard;
 	}
 	public String getPassword() {
 		return this.password;

@@ -20,7 +20,6 @@ public class DefaultUser implements User{
 	private int id;
 	private String password;
 	private double money;
-	private String creditCard;
 	private String roleName;
 	private String partnerCode;
 	private User referrerUser;
@@ -30,33 +29,6 @@ public class DefaultUser implements User{
 		id = ++userCount;
 	}
 	
-	public DefaultUser() {
-	}
-	
-	public DefaultUser(String firstName, String lastName, String password, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-		this.email = email;
-	}
-	
-	public DefaultUser(String firstName, String lastName, String password, String email, String creditCard) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-		this.email = email;
-		this.setCreditCard(creditCard);
-	}
-	
-	public DefaultUser(int id, String firstName, String lastName, String password, String email) {
-		this.id = id;
-		userCount--;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-		this.email = email;
-	}
-
 	@Override
 	public String getFirstName() {
 		return firstName;
@@ -130,16 +102,6 @@ public class DefaultUser implements User{
 		this.money = newMoney;
 	}
 	
-	@Override
-	public String getCreditCard() {
-		return creditCard;
-	}
-
-	@Override
-	public void setCreditCard(String creditCard) {
-		this.creditCard = creditCard;
-	}
-
 	@Override
 	public String getRoleName() {
 		return roleName;

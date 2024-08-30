@@ -5,6 +5,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.ProductDao;
 import com.magicbaits.persistence.dao.PurchaseDao;
 import com.magicbaits.persistence.dao.UserDao;
@@ -16,19 +17,22 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	private ProductDao product;
 	private UserDao user;
+	private AddressDao address;
 	
 	{
 		product = new MySqlJdbcProductDao();
 		user = new MySqlJdbcUserDao();
+		address = new MySqlJdbcAddressDao();
 	}
 
 	@Override
-	public void savePurchase(PurchaseDto purchase) {
+	public boolean savePurchase(PurchaseDto purchase) {
 		try (var conn = DBUtils.getConnection(); 
-				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user) VALUES (?);", Statement.RETURN_GENERATED_KEYS);
+				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address) VALUES (?,?);", Statement.RETURN_GENERATED_KEYS);
 				var psPurchaseProduct = conn.prepareStatement("INSERT INTO purchase_product (purchase_id, product_id) VALUES (?, ?)")) {
 			
 			ps.setInt(1, purchase.getUserDto().getId());
+			ps.setInt(2, purchase.getAddressDto().getId());
 			ps.executeUpdate();
 			
 			try (var generatedKeys = ps.getGeneratedKeys()) {
@@ -41,6 +45,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	            	}
 	            	
 	            	psPurchaseProduct.executeBatch();
+	            	return true;
 	            }
 	            else {
 	                throw new SQLException("Creating purchase failed, no ID obtained.");
@@ -49,7 +54,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		return false;
 	}
 
 	@Override
@@ -64,6 +69,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					PurchaseDto purchase = new PurchaseDto();
 					purchase.setId(rs.getInt("id"));
 					purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
+					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -99,6 +105,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					PurchaseDto purchase = new PurchaseDto();
 					purchase.setId(rs.getInt("id"));
 					purchase.setUserDto(user.getUserById(id));
+					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
