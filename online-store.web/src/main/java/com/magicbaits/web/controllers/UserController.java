@@ -74,6 +74,8 @@ public class UserController {
 			user.setEmail(email);
 			userFacade.updateUser(user);
 			message = "Email cambiado con exito";
+		}else {
+			message = "El email no puede ser igual al anterior";
 		}
 		
 		return message;

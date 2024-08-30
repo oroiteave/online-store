@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 	function userDataRender(){
 		const userInfoContainer = document.getElementById('user-info-container');
+		const userEmailContainer = document.getElementById('user-email-container');
 	fetch('/user')
 	.then(response => response.json())
 	.then(user => {
@@ -27,7 +28,20 @@ document.addEventListener("DOMContentLoaded", function() {
 	            <button type="button" class="btn btn-primary" onClick="savePersonalInfo()">Guardar Cambios</button>
 	        </form>
 			`;
-			
+			userEmailContainer.innerHTML = `
+			<h4>Cambiar Correo Electrónico</h4>
+	        <form id="email-change-form">
+	            <div class="form-group">
+	                <label for="newEmail">Nuevo Correo Electrónico</label>
+	                <input type="email" id="newEmail" class="form-control" value="${user.email}" required>
+	            </div>
+	            <div class="form-group">
+	                <label for="confirmEmail">Confirmar Nuevo Correo Electrónico</label>
+	                <input type="email" id="confirmEmail" class="form-control" placeholder="Confirmar nuevo correo electrónico" required>
+	            </div>
+	            <button type="button" class="btn btn-primary" onclick="changeEmail()">Cambiar Correo Electrónico</button>
+	        </form>
+			`
 		}
 	});
 	}
