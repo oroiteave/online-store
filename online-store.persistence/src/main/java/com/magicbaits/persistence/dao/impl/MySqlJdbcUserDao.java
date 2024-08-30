@@ -145,10 +145,8 @@ public class MySqlJdbcUserDao implements UserDao{
 	@Override
 	public void updateUser(UserDto user) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("UPDATE user SET firstName = ?,"
-						+ "lastName = ?, email = ?, fk_user_role = ?, money = ?,"
-						+ "password = ?, partner_code = ?,"
-						+ "referrer_user_id = ? WHERE id = ?")){
+				var ps = conn.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, email = ?, fk_user_role = ?, money = ?,"
+						+ "password = ?, partner_code = ?, referrer_user_id = ? WHERE id = ?")){
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
@@ -156,6 +154,8 @@ public class MySqlJdbcUserDao implements UserDao{
 			
 			if(user.getRoleDto()!= null && user.getRoleDto().getId() != null) {
 				ps.setInt(4, user.getRoleDto().getId());
+			}else if(user.getRoleDto() != null && !user.getRoleDto().getRoleName().isEmpty()){
+				ps.setInt(4, role.getRoleByName(user.getRoleDto().getRoleName()).getId());
 			}else {
 				ps.setNull(4, java.sql.Types.NULL);
 			}

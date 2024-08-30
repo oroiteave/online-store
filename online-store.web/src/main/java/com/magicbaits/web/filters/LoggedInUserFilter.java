@@ -16,7 +16,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 
-@WebFilter("/checkout.html")
+@WebFilter(urlPatterns = {"/checkout.html","/profile-page.html"})
 public class LoggedInUserFilter extends HttpFilter implements Filter {
 	private static final long serialVersionUID = 1L;
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
