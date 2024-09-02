@@ -49,7 +49,6 @@ public class PurchaseController {
 		Purchase purchase = new DefaultPurchase();
 		purchase.setCustomerId(userId);
 		purchase.setProducts(products);
-		System.out.println(request.getParameter("flexRadioDefault"));
 		purchase.setShippingCompany(request.getParameter("flexRadioDefault"));
 		purchase.setExtraMessage(request.getParameter("extraMessage"));
 		
