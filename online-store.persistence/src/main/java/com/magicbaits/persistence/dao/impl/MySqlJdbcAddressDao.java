@@ -19,34 +19,29 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	@Override
 	public int saveAddress(AddressDto address) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("INSERT INTO address (fk_adress_user, shipping_company, direction_1, direction_2, city, number, postal_code,"
-						+ " extra_message, phone_number) VALUES(?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
+				var ps = conn.prepareStatement("INSERT INTO address (fk_adress_user,  direction_1, direction_2, city, number, postal_code,"
+						+ " phone_number) VALUES(?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
 			
 			if(address.getUser() != null) {
 				ps.setInt(1, address.getUser().getId());
 			}else {ps.setNull(1, java.sql.Types.NULL);}
 			
-			ps.setString(2, address.getShippingCompany());
 			
 			if(address.getFirstDirection()!=null) {
-				ps.setString(3, address.getFirstDirection());
-			}else {ps.setNull(3, java.sql.Types.NULL);}
+				ps.setString(2, address.getFirstDirection());
+			}else {ps.setNull(2, java.sql.Types.NULL);}
 			
 			if(address.getSecondDirection()!=null) {
-				ps.setString(4, address.getSecondDirection());
-			}else {ps.setNull(4, java.sql.Types.NULL);}
+				ps.setString(3, address.getSecondDirection());
+			}else {ps.setNull(3, java.sql.Types.NULL);}
 			
-			ps.setString(5, address.getCity());
-			ps.setInt(6, address.getHouseNumber());
-			ps.setInt(7, address.getPostalCode());
-			
-			if(address.getExtraMessage()!=null) {
-				ps.setString(8, address.getExtraMessage());
-			}else {ps.setNull(8, java.sql.Types.NULL);}
+			ps.setString(4, address.getCity());
+			ps.setInt(5, address.getHouseNumber());
+			ps.setInt(6, address.getPostalCode());
 			
 			if(address.getPhoneNumber()!=null) {
-				ps.setString(9, address.getPhoneNumber());
-			}else {ps.setNull(9, java.sql.Types.NULL);}
+				ps.setString(7, address.getPhoneNumber());
+			}else {ps.setNull(7, java.sql.Types.NULL);}
 			
 			ps.executeUpdate();
 			try(var generatedKeys = ps.getGeneratedKeys()){
@@ -100,32 +95,27 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	@Override
 	public boolean updateAddress(AddressDto address) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("UPDATE address SET shipping_company = ?, direction_1 = ?, direction_2 = ?,"
-						+ "city = ?, number = ?, postal_code = ?, extra_message = ?, phone_number = ? WHERE id = ?")){
+				var ps = conn.prepareStatement("UPDATE address SET direction_1 = ?, direction_2 = ?,"
+						+ "city = ?, number = ?, postal_code = ?, phone_number = ? WHERE id = ?")){
 			
-			ps.setString(1, address.getShippingCompany());
 			
 			if(address.getFirstDirection()!=null) {
-				ps.setString(2, address.getFirstDirection());
-			}else {ps.setNull(2, java.sql.Types.NULL);}
+				ps.setString(1, address.getFirstDirection());
+			}else {ps.setNull(1, java.sql.Types.NULL);}
 			
 			if(address.getSecondDirection()!=null) {
-				ps.setString(3, address.getSecondDirection());
-			}else {ps.setNull(3, java.sql.Types.NULL);}
+				ps.setString(2, address.getSecondDirection());
+			}else {ps.setNull(2, java.sql.Types.NULL);}
 			
-			ps.setString(4, address.getCity());
-			ps.setInt(5, address.getHouseNumber());
-			ps.setInt(6, address.getPostalCode());
-			
-			if(address.getExtraMessage()!=null) {
-				ps.setString(7, address.getExtraMessage());
-			}else {ps.setNull(7, java.sql.Types.NULL);}
+			ps.setString(3, address.getCity());
+			ps.setInt(4, address.getHouseNumber());
+			ps.setInt(5, address.getPostalCode());
 			
 			if(address.getPhoneNumber()!=null) {
-				ps.setString(8, address.getPhoneNumber());
-			}else {ps.setNull(8, java.sql.Types.NULL);}
+				ps.setString(6, address.getPhoneNumber());
+			}else {ps.setNull(6, java.sql.Types.NULL);}
 			
-			ps.setInt(9, address.getId());
+			ps.setInt(7, address.getId());
 			ps.executeUpdate();
 			return true;
 		}catch(SQLException e) {
@@ -159,13 +149,11 @@ public class MySqlJdbcAddressDao implements AddressDao{
 		try {
 			addressDto.setId(rs.getInt("id"));
 			addressDto.setUser(userDao.getUserById(rs.getInt("fk_adress_user")));
-			addressDto.setShippingCompany(rs.getString("shipping_company"));
 			addressDto.setFirstDirection(rs.getString("direction_1"));
 			addressDto.setSecondDirection(rs.getString("direction_2"));
 			addressDto.setCity(rs.getString("city"));
 			addressDto.setHouseNumber(rs.getInt("number"));
 			addressDto.setPostalCode(rs.getInt("postal_code"));
-			addressDto.setExtraMessage(rs.getString("extra_message"));
 			addressDto.setPhoneNumber(rs.getString("phone_number"));
 		}catch(SQLException e) {
 			e.printStackTrace();

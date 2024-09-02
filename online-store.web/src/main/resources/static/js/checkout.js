@@ -30,12 +30,16 @@ document.addEventListener("DOMContentLoaded", function() {
 function radioButtonsCheck() {
     const radioInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
     const addressForm = document.querySelector('#addressForm');
-
+	const savedAddressContainer = document.getElementById('saved-address');
+	const useSaveAddressConteiner = document.getElementById('use-address-container');
+	
     function handleRadioChange() {
-        if (document.getElementById("flexRadioDefault3").checked) {
-            addressForm.style.display = "none";
-        } else {
+        if ( !(document.getElementById("flexRadioDefault3").checked) && savedAddressContainer.style.display === 'none') {
             addressForm.style.display = "block";
+            useSaveAddressConteiner.style.display = 'block';
+        } else {
+            addressForm.style.display = "none";
+            useSaveAddressConteiner.style.display = 'none';
         }
     }
 
@@ -72,17 +76,18 @@ function paypalButton(product) {
             actions.order.capture()
                 .then(function (details) {
                 const formElement = document.querySelector('#checkoutForm');
-                const checkoutFormContainer = document.getElementById('checkoutForm');
+                const addressForm = document.querySelector('#addressForm');
+                const extraMessage = document.getElementById('extraMessage');
 				const params = new URLSearchParams();
 				
-				if(checkoutFormContainer.style.display ==='none'){
+				if(addressForm.style.display ==='none'){
 					params.append('useSaveAddress','true');
 				}else{
 					params.append('useSaveAddress','false');
+				}
 					new FormData(formElement).forEach((value, key) => {
 				        params.append(key, value);
 				    });
-				}
 				
 				params.append('productId', product.id);
                 
@@ -119,10 +124,10 @@ function addressFormSave(){
     const radioOption1 = document.getElementById('flexRadioDefault1');
     const radioOption2 = document.getElementById('flexRadioDefault2');
     const radioLocalPickup = document.getElementById('flexRadioDefault3');
-    const checkoutFormContainer = document.getElementById('checkoutForm');
     const modifyAddressBtn = document.getElementById('modify-address-btn');
     const useSaveAddressBtn = document.getElementById('use-address-btn');
     const useSaveAddressConteiner = document.getElementById('use-address-container');
+    const addressForm = document.querySelector('#addressForm');
     
     function checkFormValidity() {
         let allValid = true;
@@ -132,7 +137,7 @@ function addressFormSave(){
             }
         });
 
-        if (allValid || (radioLocalPickup && radioLocalPickup.checked) || checkoutFormContainer.style.display === 'none') {
+        if (allValid || (radioLocalPickup && radioLocalPickup.checked) || savedAddressContainer.style.display !== 'none') {
             paypalButtonContainer.style.display = 'block';
         } else {
             paypalButtonContainer.style.display = 'none';
@@ -156,10 +161,9 @@ function addressFormSave(){
 	            Código postal: ${address.postalCode}
 	        `;
 	        savedAddressContainer.style.display = 'block';
-	        checkoutFormContainer.style.display = 'none';
+	        addressForm.style.display = 'none';
 	        useSaveAddressConteiner.style.display = 'none';
 	    }
-		modifyAddressBtn.addEventListener('click',checkFormValidity);
 	
 	    formInputs.forEach(input => {
 	        input.addEventListener('input', checkFormValidity);
@@ -172,15 +176,17 @@ function addressFormSave(){
 	    });
 	    useSaveAddressBtn.addEventListener('click',function(){
 			savedAddressContainer.style.display = 'block';
-	        checkoutFormContainer.style.display = 'none';
+	        addressForm.style.display = 'none';
 	        useSaveAddressConteiner.style.display = 'none';
 		    checkFormValidity();
 		})
 		
 	    modifyAddressBtn.addEventListener('click', function() {
 	        savedAddressContainer.style.display = 'none';
-	        checkoutFormContainer.style.display = 'block';
-	        useSaveAddressConteiner.style.display = 'block';
+	        if(!radioLocalPickup.checked){
+		        addressForm.style.display = 'block';
+		        useSaveAddressConteiner.style.display = 'block';
+			}
 		    checkFormValidity();
 	    });
 	    checkFormValidity();

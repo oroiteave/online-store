@@ -7,7 +7,21 @@ public class PurchaseDto {
 	private UserDto userDto;
 	private List<ProductDto> productDtos;
 	private AddressDto addressDto;
+	private String shippingCompany;
+	private String extraMessage;
 	
+	public String getShippingCompany() {
+		return shippingCompany;
+	}
+	public void setShippingCompany(String shippingCompany) {
+		this.shippingCompany = shippingCompany;
+	}
+	public String getExtraMessage() {
+		return extraMessage;
+	}
+	public void setExtraMessage(String extraMessage) {
+		this.extraMessage = extraMessage;
+	}
 	public AddressDto getAddressDto() {
 		return addressDto;
 	}

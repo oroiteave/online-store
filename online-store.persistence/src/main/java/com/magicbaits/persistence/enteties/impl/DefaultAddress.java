@@ -7,13 +7,11 @@ public class DefaultAddress implements Address{
 
 	private int id;
 	private User user;
-	private String shippingCompany;
 	private String firstDirection;
 	private String secondDirection;
 	private String city;
 	private int houseNumber;
 	private int postalCode;
-	private String extraMessage;
 	private String phoneNumber;
 	
 
@@ -35,16 +33,6 @@ public class DefaultAddress implements Address{
 	@Override
 	public void setUser(User user) {
 		this.user = user;
-	}
-	
-	@Override
-	public String getShippingCompany() {
-		return shippingCompany;
-	}
-	
-	@Override
-	public void setShippingCompany(String shippingCompany) {
-		this.shippingCompany = shippingCompany;
 	}
 	
 	@Override
@@ -98,16 +86,6 @@ public class DefaultAddress implements Address{
 	}
 	
 	@Override
-	public String getExtraMessage() {
-		return extraMessage;
-	}
-	
-	@Override
-	public void setExtraMessage(String extraMessage) {
-		this.extraMessage = extraMessage;
-	}
-	
-	@Override
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -118,9 +96,7 @@ public class DefaultAddress implements Address{
 	}
 	@Override
 	public String toString() {
-		return "DefaultAddress [id=" + id + ", user=" + user + ", shippingCompany=" + shippingCompany
-				+ ", firstDirection=" + firstDirection + ", secondDirection=" + secondDirection + ", city=" + city
-				+ ", houseNumber=" + houseNumber + ", postalCode=" + postalCode + ", extraMessage=" + extraMessage
-				+ ", phoneNumber=" + phoneNumber + "]";
+		return "DefaultAddress [id=" + id + ", user=" + user + ", firstDirection=" + firstDirection + ", secondDirection=" + secondDirection + ", city=" + city
+				+ ", houseNumber=" + houseNumber + ", postalCode=" + postalCode + ", phoneNumber=" + phoneNumber + "]";
 	}
 }

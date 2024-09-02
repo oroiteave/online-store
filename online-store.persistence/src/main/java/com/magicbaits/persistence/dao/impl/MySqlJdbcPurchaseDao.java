@@ -28,11 +28,21 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	@Override
 	public boolean savePurchase(PurchaseDto purchase) {
 		try (var conn = DBUtils.getConnection(); 
-				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address) VALUES (?,?);", Statement.RETURN_GENERATED_KEYS);
+				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address,shipping_company,extra_message) VALUES (?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 				var psPurchaseProduct = conn.prepareStatement("INSERT INTO purchase_product (purchase_id, product_id) VALUES (?, ?)")) {
 			
 			ps.setInt(1, purchase.getUserDto().getId());
-			ps.setInt(2, purchase.getAddressDto().getId());
+			
+			if(purchase.getAddressDto()!=null) {
+				ps.setInt(2, purchase.getAddressDto().getId());
+			}else {ps.setNull(2, java.sql.Types.NULL);}
+			
+			ps.setString(3, purchase.getShippingCompany());
+			
+			if(purchase.getExtraMessage()!=null) {
+				ps.setString(4, purchase.getExtraMessage());
+			}else {ps.setNull(4, java.sql.Types.NULL);}
+			
 			ps.executeUpdate();
 			
 			try (var generatedKeys = ps.getGeneratedKeys()) {
@@ -70,6 +80,8 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					purchase.setId(rs.getInt("id"));
 					purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
 					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
+					purchase.setShippingCompany(rs.getString("shipping_company"));
+					purchase.setExtraMessage(rs.getString("extra_message"));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -106,6 +118,8 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					purchase.setId(rs.getInt("id"));
 					purchase.setUserDto(user.getUserById(id));
 					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
+					purchase.setShippingCompany(rs.getString("shipping_company"));
+					purchase.setExtraMessage(rs.getString("extra_message"));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
