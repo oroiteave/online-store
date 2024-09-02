@@ -46,17 +46,22 @@ public class PurchaseController {
 		List<Product> products = new ArrayList<>();
 		products.add(product);
 		
-		Address address = new DefaultAddress();
-		if(useSaveAddress!=null && useSaveAddress.equals("true")) {
-			address = addressFacade.getAddressByUserId(userId);
-		}else {
-			address = createAddress(request,user);
-		}
-		
 		Purchase purchase = new DefaultPurchase();
 		purchase.setCustomerId(userId);
 		purchase.setProducts(products);
-		purchase.setAddress(address);
+		System.out.println(request.getParameter("flexRadioDefault"));
+		purchase.setShippingCompany(request.getParameter("flexRadioDefault"));
+		purchase.setExtraMessage(request.getParameter("extraMessage"));
+		
+		if(!purchase.getShippingCompany().equals("localPickup")) {
+			Address address = new DefaultAddress();
+			if(useSaveAddress!=null && useSaveAddress.equals("true")) {
+				address = addressFacade.getAddressByUserId(userId);
+			}else {
+				address = createAddress(request,user);
+			}
+			purchase.setAddress(address);
+		}
 		
 		if(purchaseFacade.addPurchase(purchase)) {
 			return "redirect:/transaction-approve.html";
@@ -67,20 +72,16 @@ public class PurchaseController {
 	
 	private Address createAddress(HttpServletRequest request, User user) {
 		Address address = new DefaultAddress();
-		address.setShippingCompany(request.getParameter("flexRadioDefault"));
 		
-		if(!address.getShippingCompany().equals("localPickup")) {
-			address.setUser(user);
-			address.setFirstDirection(request.getParameter("address1"));
-			address.setSecondDirection(request.getParameter("address2"));
-			address.setCity(request.getParameter("city"));
-			address.setHouseNumber(Integer.parseInt(request.getParameter("houseNumber")));
-			address.setPostalCode(Integer.parseInt(request.getParameter("postalCode")));
-			address.setPhoneNumber(request.getParameter("phone"));
-			address.setExtraMessage(request.getParameter("extraMessage"));
-		}
+		address.setUser(user);
+		address.setFirstDirection(request.getParameter("address1"));
+		address.setSecondDirection(request.getParameter("address2"));
+		address.setCity(request.getParameter("city"));
+		address.setHouseNumber(Integer.parseInt(request.getParameter("houseNumber")));
+		address.setPostalCode(Integer.parseInt(request.getParameter("postalCode")));
+		address.setPhoneNumber(request.getParameter("phone"));
 		
-		if(addressFacade.userAddressExist(user.getId()) && !address.getShippingCompany().equals("localPickup")) {
+		if(addressFacade.userAddressExist(user.getId())) {
 			address.setId(addressFacade.getAddressByUserId(user.getId()).getId());
 			addressFacade.updateAddress(address);
 		}else {

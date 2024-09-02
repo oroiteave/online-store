@@ -4,16 +4,16 @@ import java.util.List;
 
 public interface Purchase {
 
-	void setProducts(List<Product> products);
-
-	void setCustomerId(int customerId);
-	
 	int getCustomerId();
-	
-	void setAddress(Address address);
-	
 	Address getAddress();
-	
 	List<Product> getProducts();
+	String getExtraMessage();
+	String getShippingCompany();
+	
+	void setProducts(List<Product> products);
+	void setCustomerId(int customerId);
+	void setAddress(Address address);
+	void setExtraMessage(String extraMessage);
+	void setShippingCompany(String shippingCompany);
 	
 }

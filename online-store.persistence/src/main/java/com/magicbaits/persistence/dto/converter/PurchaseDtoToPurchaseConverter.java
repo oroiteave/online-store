@@ -23,6 +23,10 @@ public class PurchaseDtoToPurchaseConverter {
 		purchase.setCustomerId(purchaseDto.getUserDto().getId());
 		purchase.setProducts(productConverter.convertProductDtosToProducts(purchaseDto.getProductDtos()));
 		purchase.setAddress(addressConverter.convertAddressDtoToAddress(purchaseDto.getAddressDto()));
+		purchase.setShippingCompany(purchaseDto.getShippingCompany());
+		if(purchaseDto.getExtraMessage()!=null) {
+			purchase.setExtraMessage(purchaseDto.getExtraMessage());
+		}
 		
 		return purchase;
 	}
@@ -32,6 +36,10 @@ public class PurchaseDtoToPurchaseConverter {
 		purchaseDto.setProductDtos(productConverter.convertProductsToProductDtos(purchase.getProducts()));
 		purchaseDto.setUserDto(userConverter.convertUserIdToUserDtoWithOnlyId(purchase.getCustomerId()));
 		purchaseDto.setAddressDto(addressConverter.convertAddressToAddressDto(purchase.getAddress()));
+		purchaseDto.setShippingCompany(purchase.getShippingCompany());
+		if(purchase.getExtraMessage()!=null) {
+			purchaseDto.setExtraMessage(purchase.getExtraMessage());
+		}
 		
 		return purchaseDto;
 	}

@@ -3,13 +3,11 @@ package com.magicbaits.persistence.dto;
 public class AddressDto {
 	private int id;
 	private UserDto user;
-	private String shippingCompany;
 	private String firstDirection;
 	private String secondDirection;
 	private String city;
 	private int houseNumber;
 	private int postalCode;
-	private String extraMessage;
 	private String phoneNumber;
 	
 	public int getId() {
@@ -23,12 +21,6 @@ public class AddressDto {
 	}
 	public void setUser(UserDto user) {
 		this.user = user;
-	}
-	public String getShippingCompany() {
-		return shippingCompany;
-	}
-	public void setShippingCompany(String shippingCompany) {
-		this.shippingCompany = shippingCompany;
 	}
 	public String getFirstDirection() {
 		return firstDirection;
@@ -59,12 +51,6 @@ public class AddressDto {
 	}
 	public void setPostalCode(int postalCode) {
 		this.postalCode = postalCode;
-	}
-	public String getExtraMessage() {
-		return extraMessage;
-	}
-	public void setExtraMessage(String extraMessage) {
-		this.extraMessage = extraMessage;
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;

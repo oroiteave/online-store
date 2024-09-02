@@ -23,11 +23,6 @@
 
             <h5 class="card-title mb-3">informacion para envio</h5>
             
-            <div id="saved-address" style="display: none;">
-			  <p><strong>Tu dirección:</strong></p>
-			  <p id="address-details"></p>
-			  <button id="modify-address-btn" class="btn btn-primary">Modificar dirección</button>
-			</div>
             
 			<form id = "checkoutForm">
             <div class="row mb-3">
@@ -65,6 +60,13 @@
                 </div>
               </div>
             </div>
+            
+            <div id="saved-address" style="display: none;">
+			  <p><strong>Tu dirección:</strong></p>
+			  <p id="address-details"></p>
+			  <button id="modify-address-btn" class="btn btn-primary">Modificar dirección</button>
+			</div>
+			
 			<div id="addressForm">
 	            <div class="row">
 				  <div class="col-6 mb-3">
@@ -123,13 +125,13 @@
 				  </div>
 				</div>
 				
+			</div>
 				<div class="mb-3">
 				  <p class="mb-0">Mensaje extra (Opcional)</p>
 				  <div class="form-outline">
 				    <textarea class="form-control" id="extraMessage" name="extraMessage" rows="2"></textarea>
 				  </div>
 				</div>
-			</div>
 			</form>
 			<div id = "use-address-container" style="display: none;">
 				<button id="use-address-btn" class="btn btn-primary">Usar direccion guardada</button>

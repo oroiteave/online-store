@@ -18,7 +18,6 @@ public class AddressDtoToAddressConverter {
 		Address address = new DefaultAddress();
 		
 		address.setId(addressDto.getId());
-		address.setShippingCompany(addressDto.getShippingCompany());
 		address.setHouseNumber(addressDto.getHouseNumber());
 		address.setPostalCode(addressDto.getPostalCode());
 		
@@ -27,9 +26,6 @@ public class AddressDtoToAddressConverter {
 		}
 		if(addressDto.getCity()!=null) {
 			address.setCity(addressDto.getCity());
-		}
-		if(addressDto.getExtraMessage()!=null) {
-			address.setExtraMessage(addressDto.getExtraMessage());
 		}
 		if(addressDto.getFirstDirection()!=null) {
 			address.setFirstDirection(addressDto.getFirstDirection());
@@ -52,7 +48,6 @@ public class AddressDtoToAddressConverter {
 		AddressDto addressDto = new AddressDto();
 		
 		addressDto.setId(address.getId());
-		addressDto.setShippingCompany(address.getShippingCompany());
 		addressDto.setHouseNumber(address.getHouseNumber());
 		addressDto.setPostalCode(address.getPostalCode());
 		
@@ -61,9 +56,6 @@ public class AddressDtoToAddressConverter {
 		}
 		if(address.getCity()!=null) {
 			addressDto.setCity(address.getCity());
-		}
-		if(address.getExtraMessage()!=null) {
-			addressDto.setExtraMessage(address.getExtraMessage());
 		}
 		if(address.getFirstDirection()!=null) {
 			addressDto.setFirstDirection(address.getFirstDirection());
