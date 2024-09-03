@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	function userDataRender(){
 		const userInfoContainer = document.getElementById('user-info-container');
 		const userEmailContainer = document.getElementById('user-email-container');
-	fetch('/user')
+	fetch('/user/current')
 	.then(response => response.json())
 	.then(user => {
 		if(user!=null){
@@ -139,11 +139,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 		
 		fetch('/user', {
-                    method: 'PUT',
-                    headers: {
-        				'Content-Type': 'application/x-www-form-urlencoded'
-    				},
-                    body: params.toString()
+            method: 'PUT',
+            headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+            body: params.toString()
         })
         .then(response => response.text())
         .then(data => {

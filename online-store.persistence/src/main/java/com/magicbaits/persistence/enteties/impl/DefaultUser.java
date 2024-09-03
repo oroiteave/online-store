@@ -1,22 +1,14 @@
 package com.magicbaits.persistence.enteties.impl;
 
 import com.magicbaits.persistence.enteties.User;
-import com.magicbaits.persistence.utils.validation.Validate;
 
 public class DefaultUser implements User{
 	
 	private static int userCount=0;
 	
-	@Validate(pattern = "[a-zA-Z]+")
 	private String firstName;
-	
-	@Validate(pattern = "[a-zA-Z]+")
 	private String lastName;
-	
-	
-	@Validate(pattern = ".+@.+")
 	private String email;
-	
 	private int id;
 	private String password;
 	private double money;

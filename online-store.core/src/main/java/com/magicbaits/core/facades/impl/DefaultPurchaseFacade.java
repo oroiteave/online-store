@@ -34,4 +34,14 @@ public class DefaultPurchaseFacade implements PurchaseFacade{
 	public List<Purchase> getPurchaseByUserId(int id) {
 		return converter.convertPurchaseDtosToPurchases(purchaseDao.getPurchasesByUserId(id));
 	}
+
+	@Override
+	public boolean updatePurchase(Purchase purchase) {
+		return purchaseDao.updatePurchase(converter.convertPurchaseToPurchaseDto(purchase));
+	}
+
+	@Override
+	public Purchase getPurchaseById(int id) {
+		return converter.convertPurchaseDtoToPurchase(purchaseDao.getPurchaseById(id));
+	}
 }

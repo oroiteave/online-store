@@ -28,7 +28,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	@Override
 	public boolean savePurchase(PurchaseDto purchase) {
 		try (var conn = DBUtils.getConnection(); 
-				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address,shipping_company,extra_message) VALUES (?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address,shipping_company,extra_message,status) VALUES (?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 				var psPurchaseProduct = conn.prepareStatement("INSERT INTO purchase_product (purchase_id, product_id) VALUES (?, ?)")) {
 			
 			ps.setInt(1, purchase.getUserDto().getId());
@@ -42,6 +42,8 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 			if(purchase.getExtraMessage()!=null) {
 				ps.setString(4, purchase.getExtraMessage());
 			}else {ps.setNull(4, java.sql.Types.NULL);}
+			
+			ps.setString(5, purchase.getStatus());
 			
 			ps.executeUpdate();
 			
@@ -82,6 +84,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
 					purchase.setShippingCompany(rs.getString("shipping_company"));
 					purchase.setExtraMessage(rs.getString("extra_message"));
+					purchase.setStatus(rs.getString("status"));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -120,6 +123,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
 					purchase.setShippingCompany(rs.getString("shipping_company"));
 					purchase.setExtraMessage(rs.getString("extra_message"));
+					purchase.setStatus(rs.getString("status"));
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -136,6 +140,59 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 					purchases.add(purchase);
 				}
 				return purchases;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updatePurchase(PurchaseDto purchase) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("UPDATE purchase SET status = ? WHERE id = ?")){
+			
+			ps.setString(1, purchase.getStatus());
+			ps.setInt(2, purchase.getId());
+			
+			ps.executeUpdate();
+			
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	@Override
+	public PurchaseDto getPurchaseById(int id) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT * FROM purchase WHERE id = ?")){
+			ps.setInt(1, id);
+			try(var rs = ps.executeQuery()){
+				if(rs.next()) {
+					PurchaseDto purchase = new PurchaseDto();
+					purchase.setId(rs.getInt("id"));
+					purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
+					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
+					purchase.setShippingCompany(rs.getString("shipping_company"));
+					purchase.setExtraMessage(rs.getString("extra_message"));
+					purchase.setStatus(rs.getString("status"));
+					
+					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
+							var rsProducts = psProducts.executeQuery()){
+						List<ProductDto> products = new ArrayList<>();
+						
+						while(rsProducts.next()) {
+							products.add(product.getProductByProductId(rsProducts.getInt("product_id")));
+						}
+						purchase.setProductDtos(products);
+					}
+					return purchase;
+					
+				}
+				
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

@@ -9,14 +9,31 @@ import com.magicbaits.persistence.enteties.Purchase;
 
 public class DefaultPurchase implements Purchase{
 	
+	private int id;
 	private List<Product> products;
 	private int customerId;
 	private Address address;
 	private String shippingCompany;
 	private String extraMessage;
+	private String status;
 
 
 	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getShippingCompany() {
 		return shippingCompany;
 	}

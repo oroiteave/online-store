@@ -10,4 +10,8 @@ public interface PurchaseFacade {
 	List<Purchase> getPurchases();
 	
 	List<Purchase> getPurchaseByUserId(int id);
+	
+	boolean updatePurchase(Purchase purchase);
+	
+	Purchase getPurchaseById(int id);
 }
