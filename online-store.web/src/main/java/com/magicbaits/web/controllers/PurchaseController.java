@@ -34,6 +34,7 @@ public class PurchaseController {
 	private PurchaseFacade purchaseFacade;
 	private ProductFacade productFacade;
 	private AddressFacade addressFacade;
+	private static final int PAGINATION_LIMIT = 6;
 	
 	{
 		purchaseFacade = DefaultPurchaseFacade.getInstance();
@@ -44,6 +45,15 @@ public class PurchaseController {
 	@GetMapping("/purchase")
 	public List<Purchase> getPurchases(){
 		return purchaseFacade.getPurchases();
+	}
+	
+	@GetMapping("purchase/pages")
+	public PurchaseResponse getPurchasesWithPagesLimit(@RequestParam String page) {
+		int pageInt = Integer.parseInt(page);
+		List<Purchase> purchases = purchaseFacade.getPurchasesForPageWithLimit(pageInt, PAGINATION_LIMIT);
+		int numberOfPages = purchaseFacade.numberOfPagesForPurchases(PAGINATION_LIMIT);
+		System.out.println(numberOfPages + " " + purchases.get(0).toString());
+		return new PurchaseResponse(purchases,numberOfPages);
 	}
 	
 	@PutMapping("/purchase")
@@ -112,6 +122,27 @@ public class PurchaseController {
 			address.setId(addressFacade.saveAddress(address));
 		}
 		return address;
+	}
+	
+	private class PurchaseResponse {
+		private List<Purchase> purchases;
+		private int numberOfPages;
+		
+		public PurchaseResponse(List<Purchase> purchases, int numberOfPages) {
+            this.purchases = purchases;
+            this.numberOfPages = numberOfPages;
+        }
+
+        @SuppressWarnings("unused")
+		public List<Purchase> getPurchases() {
+            return purchases;
+        }
+
+        @SuppressWarnings("unused")
+		public int getNumberOfPages() {
+            return numberOfPages;
+        }
+		
 	}
 	
 }

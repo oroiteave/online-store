@@ -1,5 +1,6 @@
 package com.magicbaits.persistence.dao.impl;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -78,13 +79,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 			
 			try(var rs = ps.executeQuery()){
 				while(rs.next()) {
-					PurchaseDto purchase = new PurchaseDto();
-					purchase.setId(rs.getInt("id"));
-					purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
-					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
-					purchase.setShippingCompany(rs.getString("shipping_company"));
-					purchase.setExtraMessage(rs.getString("extra_message"));
-					purchase.setStatus(rs.getString("status"));
+					PurchaseDto purchase = parsePurchaseDtoFromResultSet(rs);
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -117,13 +112,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 				List<PurchaseDto> purchases = new ArrayList<>();
 				while(rs.next()) {
 					
-					PurchaseDto purchase = new PurchaseDto();
-					purchase.setId(rs.getInt("id"));
-					purchase.setUserDto(user.getUserById(id));
-					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
-					purchase.setShippingCompany(rs.getString("shipping_company"));
-					purchase.setExtraMessage(rs.getString("extra_message"));
-					purchase.setStatus(rs.getString("status"));
+					PurchaseDto purchase = parsePurchaseDtoFromResultSet(rs);
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -172,13 +161,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 			ps.setInt(1, id);
 			try(var rs = ps.executeQuery()){
 				if(rs.next()) {
-					PurchaseDto purchase = new PurchaseDto();
-					purchase.setId(rs.getInt("id"));
-					purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
-					purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
-					purchase.setShippingCompany(rs.getString("shipping_company"));
-					purchase.setExtraMessage(rs.getString("extra_message"));
-					purchase.setStatus(rs.getString("status"));
+					PurchaseDto purchase = parsePurchaseDtoFromResultSet(rs);
 					
 					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
 							var rsProducts = psProducts.executeQuery()){
@@ -198,5 +181,65 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public List<PurchaseDto> getPurchasePaginationLimit(int page, int paginationLimit) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT * FROM purchase LIMIT ?,?;")){
+			ps.setInt(1, ((paginationLimit * page) - paginationLimit));
+			ps.setInt(2, paginationLimit);
+			try(var rs = ps.executeQuery()){
+				List<PurchaseDto> purchases = new ArrayList<>();
+				while(rs.next()) {
+					
+					PurchaseDto purchase = parsePurchaseDtoFromResultSet(rs);
+					
+					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
+							var rsProducts = psProducts.executeQuery()){
+						
+						List<ProductDto> products = new ArrayList<>();
+						while(rsProducts.next()) {
+							
+							ProductDto productDto = new ProductDto();
+							productDto = product.getProductByProductId(rsProducts.getInt("product_id"));
+							products.add(productDto);
+						}
+						purchase.setProductDtos(products);
+					}
+					purchases.add(purchase);
+				}
+				return purchases;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public int getPurchaseCount() {
+		try(var conn =DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT COUNT(id) as amount FROM purchase;")){
+			try(var rs = ps.executeQuery()){
+				if(rs.next()) {
+					return rs.getInt("amount");
+				}
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	private PurchaseDto parsePurchaseDtoFromResultSet(ResultSet rs) throws SQLException{
+		PurchaseDto purchase = new PurchaseDto();
+		purchase.setId(rs.getInt("id"));
+		purchase.setUserDto(user.getUserById(rs.getInt("fk_purchase_user")));
+		purchase.setAddressDto(address.getAddressByPurchaseId(purchase.getId()));
+		purchase.setShippingCompany(rs.getString("shipping_company"));
+		purchase.setExtraMessage(rs.getString("extra_message"));
+		purchase.setStatus(rs.getString("status"));
+		return purchase;
 	}
 }

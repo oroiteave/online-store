@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error('Error fetching product:', error));
 	}
 	function renderBuyButton(productId){
-		fetch(`/user`)
+		fetch(`/user/current`)
             .then(response => {
 				if (response.ok) {
 		            return response.text().then(text => text ? JSON.parse(text) : null);

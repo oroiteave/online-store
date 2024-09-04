@@ -15,4 +15,8 @@ public interface PurchaseDao {
 	boolean updatePurchase(PurchaseDto purchase);
 	
 	PurchaseDto getPurchaseById(int id);
+	
+	List<PurchaseDto> getPurchasePaginationLimit(int page, int paginationLimit);
+	
+	int getPurchaseCount();
 }
