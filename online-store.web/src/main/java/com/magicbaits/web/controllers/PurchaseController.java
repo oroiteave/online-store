@@ -34,7 +34,7 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class PurchaseController {
 
-	private String LOGGED_IN_USER_ATTR = "loggedInUser";
+	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	private PurchaseFacade purchaseFacade;
 	private ProductFacade productFacade;
 	private AddressFacade addressFacade;
