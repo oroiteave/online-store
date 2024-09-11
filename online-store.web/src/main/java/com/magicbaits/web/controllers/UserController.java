@@ -115,11 +115,6 @@ public class UserController {
         response.sendRedirect("/sign-in.html");
 	}
 	
-	@GetMapping("/errorMessage")
-	public String errorMessage(HttpSession session) {
-		return (String) session.getAttribute("errorMessage");
-	}
-	
 	private String validateSignUp(User user, String confirmPassword) {
 		
 		if(!validatePassword(user.getPassword())) {

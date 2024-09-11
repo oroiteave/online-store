@@ -4,9 +4,10 @@ import static com.magicbaits.persistence.dto.RoleDto.ADMIN_ROLE_NAME;
 
 import java.io.IOException;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.facades.impl.DefaultUserFacade;
@@ -15,7 +16,7 @@ import com.magicbaits.persistence.enteties.User;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class SessionController {
 	
 private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
@@ -26,24 +27,47 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	}
 
 	@PostMapping("/logout")
-	public String logOut(HttpSession session, HttpServletResponse response) throws IOException{
+	public void logOut(HttpSession session, HttpServletResponse response) throws IOException{
 		if(session != null) {
 			session.invalidate();
 		}
-		return "redirect:/index.html";
+		response.sendRedirect("/index.html");
 	}
 	
 	@PostMapping("/login")
-	public String signIn(@RequestParam String email,@RequestParam String password, HttpSession session,  HttpServletResponse response) throws IOException{
+	public void signIn(@RequestParam String email,@RequestParam String password, HttpSession session,  HttpServletResponse response) throws IOException{
 		User user = (User)userFacade.getUserByEmail(email);
-		if (user != null && user.getPassword().equals(password)) {
-			session.setAttribute(LOGGED_IN_USER_ATTR, user);
-			if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
-				return "redirect:/admin/panel.html";
-			} else {
-				return "redirect:/index.html";
-			}
+		String errorMessage = validateSignIn(user, password);
+		
+		if(errorMessage!=null) {
+			session.setAttribute("errorMessage", errorMessage);
+			response.sendRedirect("/sign-in.html");
+			return;
 		}
-		return "redirect:/sign-in.html";
+		
+		session.setAttribute(LOGGED_IN_USER_ATTR, user);
+		if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
+			response.sendRedirect("/admin/panel.html");
+			return;
+		} else {
+			session.setAttribute("errorMessage", "");
+			response.sendRedirect("/index.html");
+			return;
+		}
+	}
+	
+	private String validateSignIn(User user,String password) {
+		if(user == null) {
+			return "No existe un usuario con ese email";
+		}
+		if(!user.getPassword().equals(password)) {
+			return "La contraseña es incorrecta";
+		}
+		return null;
+	}
+	
+	@GetMapping("/errorMessage")
+	public String errorMessage(HttpSession session) {
+		return (String) session.getAttribute("errorMessage");
 	}
 }
