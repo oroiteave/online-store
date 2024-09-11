@@ -40,7 +40,7 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 		if (user != null && user.getPassword().equals(password)) {
 			session.setAttribute(LOGGED_IN_USER_ATTR, user);
 			if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
-				return "redirect:/admin/panel";
+				return "redirect:/admin/panel.html";
 			} else {
 				return "redirect:/index.html";
 			}

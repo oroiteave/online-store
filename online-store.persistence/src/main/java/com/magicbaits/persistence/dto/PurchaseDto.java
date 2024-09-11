@@ -3,13 +3,20 @@ package com.magicbaits.persistence.dto;
 import java.util.List;
 
 public class PurchaseDto {
-	private Integer id;
+	private int id;
 	private UserDto userDto;
 	private List<ProductDto> productDtos;
 	private AddressDto addressDto;
 	private String shippingCompany;
 	private String extraMessage;
+	private String status;
 	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getShippingCompany() {
 		return shippingCompany;
 	}

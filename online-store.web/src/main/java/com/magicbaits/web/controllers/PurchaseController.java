@@ -1,18 +1,25 @@
 package com.magicbaits.web.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.AddressFacade;
 import com.magicbaits.core.facades.ProductFacade;
 import com.magicbaits.core.facades.PurchaseFacade;
+import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.facades.impl.DefaultAddressFacade;
 import com.magicbaits.core.facades.impl.DefaultProductFacade;
 import com.magicbaits.core.facades.impl.DefaultPurchaseFacade;
+import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.Product;
 import com.magicbaits.persistence.enteties.Purchase;
@@ -21,24 +28,57 @@ import com.magicbaits.persistence.enteties.impl.DefaultAddress;
 import com.magicbaits.persistence.enteties.impl.DefaultPurchase;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class PurchaseController {
 
 	private String LOGGED_IN_USER_ATTR = "loggedInUser";
 	private PurchaseFacade purchaseFacade;
 	private ProductFacade productFacade;
 	private AddressFacade addressFacade;
+	private UserFacade userFacade;
+	private static final int PAGINATION_LIMIT = 6;
 	
 	{
 		purchaseFacade = DefaultPurchaseFacade.getInstance();
 		productFacade = DefaultProductFacade.getInstance();
 		addressFacade = DefaultAddressFacade.getInstance();
+		userFacade = DefaultUserFacade.getInstance();
+	}
+	
+	@GetMapping("/purchase")
+	public List<Purchase> getPurchases(){
+		return purchaseFacade.getPurchases();
+	}
+	
+	@GetMapping("purchase/pages")
+	public Map<String, Object> getPurchasesWithPagesLimit(@RequestParam String page) {
+		Map<String, Object> response = new HashMap<>();
+		response.put("purchases", purchaseFacade.getPurchasesForPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
+		response.put("numberOfPages",purchaseFacade.numberOfPagesForPurchases(PAGINATION_LIMIT));
+		response.put("userEmails", userFacade.getUserEmailsForPurchasesPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
+		return response; 
+	}
+	
+	@PutMapping("/purchase")
+	public String updateStatus(@RequestParam String purchaseId, @RequestParam String newStatus) {
+		String message="error al cambiar el status";
+		
+		Purchase purchase = purchaseFacade.getPurchaseById(Integer.parseInt(purchaseId));
+		purchase.setStatus(newStatus);
+		
+		if(purchaseFacade.updatePurchase(purchase)) {
+			message = "cambio del status exitoso";
+		}
+		
+		return message;
 	}
 	
 	@PostMapping("/purchase")
-	public String purchase(HttpSession session, @RequestParam String productId, @RequestParam String useSaveAddress, HttpServletRequest request) {
+	public void purchase(HttpSession session, @RequestParam String productId, @RequestParam String useSaveAddress, 
+			HttpServletRequest request,HttpServletResponse response) throws IOException{
 		User user = ((User) session.getAttribute(LOGGED_IN_USER_ATTR));
 		int userId = user.getId();
 		
@@ -51,6 +91,7 @@ public class PurchaseController {
 		purchase.setProducts(products);
 		purchase.setShippingCompany(request.getParameter("flexRadioDefault"));
 		purchase.setExtraMessage(request.getParameter("extraMessage"));
+		purchase.setStatus("CONFIRMADO");
 		
 		if(!purchase.getShippingCompany().equals("localPickup")) {
 			Address address = new DefaultAddress();
@@ -63,9 +104,9 @@ public class PurchaseController {
 		}
 		
 		if(purchaseFacade.addPurchase(purchase)) {
-			return "redirect:/transaction-approve.html";
+			response.sendRedirect("/transaction-approve.html");
 		}else {
-			return "redirect:/transaction-fail.html";
+			response.sendRedirect("/transaction-fail.html");
 		}
 	}
 	
@@ -88,5 +129,4 @@ public class PurchaseController {
 		}
 		return address;
 	}
-	
 }

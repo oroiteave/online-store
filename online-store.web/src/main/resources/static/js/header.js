@@ -13,7 +13,7 @@ function insertFunctions(){
 }
 
 function updateLoggedInUserHeader() {
-        fetch('/user')
+        fetch('/user/current')
             .then(response => {
 				if (response.ok) {
 		            return response.text().then(text => text ? JSON.parse(text) : null);
@@ -23,12 +23,21 @@ function updateLoggedInUserHeader() {
 			})
             .then(data => {
                 if (data && data.firstName) {
-                    document.getElementById("loggedInControllerUserName").innerHTML = `
-                    <li class="nav-item"><a class="nav-link" href="profile-page.html">Bienvenido ${data.firstName}</a></li>`;
-        			document.getElementById("loggedInControllerLogOut").innerHTML =`
-        			<li class="nav-item"><form action="logout" method="POST">
-                        <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
-                    </form></li>`;
+					if(data.roleName === "ROLE_ADMIN"){
+						document.getElementById("loggedInControllerUserName").innerHTML = `
+	                    <li class="nav-item"><a class="nav-link" href="/admin/panel.html">Bienvenido ${data.firstName}</a></li>`;
+	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
+	        			<li class="nav-item"><form action="logout" method="POST">
+	                    	<button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
+                    	</form></li>`;
+					}else{
+	                    document.getElementById("loggedInControllerUserName").innerHTML = `
+	                    <li class="nav-item"><a class="nav-link" href="/profile-page.html">Bienvenido ${data.firstName}</a></li>`;
+	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
+	        			<li class="nav-item"><form action="logout" method="POST">
+	                        <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
+	                    </form></li>`;
+					}
                 } else {
                     document.getElementById("loggedInControllerUserName").innerHTML = `
                     <li class="nav-item"><a class="nav-link" href="/sign-in.html">Iniciar sesión</a></li>`;
@@ -50,7 +59,6 @@ function searchQuery(){
         }
     });  
 	
-    
     function updateValue(e){
         const query = e.target.value;
 		if(query.length>0){
@@ -59,7 +67,7 @@ function searchQuery(){
 	        .then(products => {
 	            if (products.length > 0) {
 	                suggestions.innerHTML = products.map(product => 
-	                    `<a class="dropdown-item" href="product.html?id=${product.id}">${product.productName}</a>`
+	                    `<a class="dropdown-item" href="/product.html?id=${product.id}">${product.productName}</a>`
 	                ).join('');
 	                suggestions.classList.add('show');
 	            } else {

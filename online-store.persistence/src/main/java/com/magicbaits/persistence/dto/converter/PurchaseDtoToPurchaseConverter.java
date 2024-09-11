@@ -20,10 +20,12 @@ public class PurchaseDtoToPurchaseConverter {
 	
 	public Purchase convertPurchaseDtoToPurchase(PurchaseDto purchaseDto) {
 		Purchase purchase = new DefaultPurchase();
+		purchase.setId(purchaseDto.getId());
 		purchase.setCustomerId(purchaseDto.getUserDto().getId());
 		purchase.setProducts(productConverter.convertProductDtosToProducts(purchaseDto.getProductDtos()));
 		purchase.setAddress(addressConverter.convertAddressDtoToAddress(purchaseDto.getAddressDto()));
 		purchase.setShippingCompany(purchaseDto.getShippingCompany());
+		purchase.setStatus(purchaseDto.getStatus());
 		if(purchaseDto.getExtraMessage()!=null) {
 			purchase.setExtraMessage(purchaseDto.getExtraMessage());
 		}
@@ -33,10 +35,12 @@ public class PurchaseDtoToPurchaseConverter {
 	
 	public PurchaseDto convertPurchaseToPurchaseDto(Purchase purchase) {
 		PurchaseDto purchaseDto = new PurchaseDto();
+		purchaseDto.setId(purchase.getId());
 		purchaseDto.setProductDtos(productConverter.convertProductsToProductDtos(purchase.getProducts()));
 		purchaseDto.setUserDto(userConverter.convertUserIdToUserDtoWithOnlyId(purchase.getCustomerId()));
 		purchaseDto.setAddressDto(addressConverter.convertAddressToAddressDto(purchase.getAddress()));
 		purchaseDto.setShippingCompany(purchase.getShippingCompany());
+		purchaseDto.setStatus(purchase.getStatus());
 		if(purchase.getExtraMessage()!=null) {
 			purchaseDto.setExtraMessage(purchase.getExtraMessage());
 		}

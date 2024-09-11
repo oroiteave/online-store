@@ -11,4 +11,12 @@ public interface PurchaseDao {
 	List<PurchaseDto> getPurchaces();
 	
 	List<PurchaseDto> getPurchasesByUserId(int id);
+	
+	boolean updatePurchase(PurchaseDto purchase);
+	
+	PurchaseDto getPurchaseById(int id);
+	
+	List<PurchaseDto> getPurchasePaginationLimit(int page, int paginationLimit);
+	
+	int getPurchaseCount();
 }

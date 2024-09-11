@@ -201,4 +201,26 @@ public class MySqlJdbcUserDao implements UserDao{
 		}
 		return null;
 	}
+
+	@Override
+	public List<String> getUserEmailsForPurchasesPaginationLimit(int page, int paginationLimit) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT u.email FROM user u JOIN purchase p ON u.id = p.fk_purchase_user LIMIT ?,?;")){
+			
+			ps.setInt(1, ((paginationLimit * page) - paginationLimit));
+			ps.setInt(2, paginationLimit);
+			
+			try(var rs = ps.executeQuery()){
+				List<String> userEmails = new ArrayList<>();
+				while(rs.next()) {
+					userEmails.add(rs.getString("u.email"));
+				}
+				return userEmails;
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

@@ -30,10 +30,15 @@ public class UserController {
 		userFacade = DefaultUserFacade.getInstance();
 	}
 	
-	@GetMapping("/user")
+	@GetMapping("/user/current")
 	public ResponseEntity<User> getUser(HttpSession session) {
 		User user = (session != null) ? ((User) session.getAttribute(LOGGED_IN_USER_ATTR)) : null;
 		return ResponseEntity.ok(user);
+	}
+	
+	@GetMapping("/user")
+	public User getUserById(@RequestParam String id) {
+		return userFacade.getUserByid(Integer.parseInt(id));
 	}
 	
 	@PutMapping("/user")

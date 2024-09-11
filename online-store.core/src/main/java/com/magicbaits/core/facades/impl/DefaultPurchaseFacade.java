@@ -34,4 +34,29 @@ public class DefaultPurchaseFacade implements PurchaseFacade{
 	public List<Purchase> getPurchaseByUserId(int id) {
 		return converter.convertPurchaseDtosToPurchases(purchaseDao.getPurchasesByUserId(id));
 	}
+
+	@Override
+	public boolean updatePurchase(Purchase purchase) {
+		return purchaseDao.updatePurchase(converter.convertPurchaseToPurchaseDto(purchase));
+	}
+
+	@Override
+	public Purchase getPurchaseById(int id) {
+		return converter.convertPurchaseDtoToPurchase(purchaseDao.getPurchaseById(id));
+	}
+
+	@Override
+	public List<Purchase> getPurchasesForPageWithLimit(int page, int paginationLimit) {
+		return converter.convertPurchaseDtosToPurchases(purchaseDao.getPurchasePaginationLimit(page, paginationLimit));
+	}
+
+	@Override
+	public int numberOfPagesForPurchases(int paginationLimit) {
+		int totalPurchases = purchaseDao.getPurchaseCount();
+		int pages = totalPurchases / paginationLimit;
+		if((totalPurchases % paginationLimit) != 0) {
+			pages++;
+		}
+		return pages;
+	}
 }
