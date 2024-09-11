@@ -1,6 +1,8 @@
 package com.magicbaits.web.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,32 +37,10 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product/category")
-	public ProductResponse getProductsByCategory(@RequestParam String id,@RequestParam String page){
-		int intId = Integer.parseInt(id);
-		int intPage = Integer.parseInt(page);
-		List<Product> products = productFacade.getProductsByCategoryIdForPageWithLimit(intId, intPage, PAGINATION_LIMIT);
-		int numberOfPages =  productFacade.getNumberOfPagesForCategory(intId, PAGINATION_LIMIT);
-		return new ProductResponse(products, numberOfPages);
+	public Map<String,Object> getProductsByCategory(@RequestParam String id,@RequestParam String page){
+		Map<String,Object> response = new HashMap<>();
+		response.put("products", productFacade.getProductsByCategoryIdForPageWithLimit(Integer.parseInt(id), Integer.parseInt(page), PAGINATION_LIMIT));
+		response.put("numberOfPages", productFacade.getNumberOfPagesForCategory(Integer.parseInt(id), PAGINATION_LIMIT));
+		return response;
 	}
-	
-	private class ProductResponse {
-        private List<Product> products;
-        private int numberOfPages;
-
-        public ProductResponse(List<Product> products, int numberOfPages) {
-            this.products = products;
-            this.numberOfPages = numberOfPages;
-        }
-
-        @SuppressWarnings("unused")
-		public List<Product> getProducts() {
-            return products;
-        }
-
-        @SuppressWarnings("unused")
-		public int getNumberOfPages() {
-            return numberOfPages;
-        }
-    }
-	
 }

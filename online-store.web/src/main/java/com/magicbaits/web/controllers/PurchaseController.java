@@ -2,7 +2,9 @@ package com.magicbaits.web.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.magicbaits.core.facades.AddressFacade;
 import com.magicbaits.core.facades.ProductFacade;
 import com.magicbaits.core.facades.PurchaseFacade;
+import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.facades.impl.DefaultAddressFacade;
 import com.magicbaits.core.facades.impl.DefaultProductFacade;
 import com.magicbaits.core.facades.impl.DefaultPurchaseFacade;
+import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.Product;
 import com.magicbaits.persistence.enteties.Purchase;
@@ -34,12 +38,14 @@ public class PurchaseController {
 	private PurchaseFacade purchaseFacade;
 	private ProductFacade productFacade;
 	private AddressFacade addressFacade;
+	private UserFacade userFacade;
 	private static final int PAGINATION_LIMIT = 6;
 	
 	{
 		purchaseFacade = DefaultPurchaseFacade.getInstance();
 		productFacade = DefaultProductFacade.getInstance();
 		addressFacade = DefaultAddressFacade.getInstance();
+		userFacade = DefaultUserFacade.getInstance();
 	}
 	
 	@GetMapping("/purchase")
@@ -48,12 +54,12 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("purchase/pages")
-	public PurchaseResponse getPurchasesWithPagesLimit(@RequestParam String page) {
-		int pageInt = Integer.parseInt(page);
-		List<Purchase> purchases = purchaseFacade.getPurchasesForPageWithLimit(pageInt, PAGINATION_LIMIT);
-		int numberOfPages = purchaseFacade.numberOfPagesForPurchases(PAGINATION_LIMIT);
-		System.out.println(numberOfPages + " " + purchases.get(0).toString());
-		return new PurchaseResponse(purchases,numberOfPages);
+	public Map<String, Object> getPurchasesWithPagesLimit(@RequestParam String page) {
+		Map<String, Object> response = new HashMap<>();
+		response.put("purchases", purchaseFacade.getPurchasesForPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
+		response.put("numberOfPages",purchaseFacade.numberOfPagesForPurchases(PAGINATION_LIMIT));
+		response.put("userEmails", userFacade.getUserEmailsForPurchasesPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
+		return response; 
 	}
 	
 	@PutMapping("/purchase")
@@ -123,26 +129,4 @@ public class PurchaseController {
 		}
 		return address;
 	}
-	
-	private class PurchaseResponse {
-		private List<Purchase> purchases;
-		private int numberOfPages;
-		
-		public PurchaseResponse(List<Purchase> purchases, int numberOfPages) {
-            this.purchases = purchases;
-            this.numberOfPages = numberOfPages;
-        }
-
-        @SuppressWarnings("unused")
-		public List<Purchase> getPurchases() {
-            return purchases;
-        }
-
-        @SuppressWarnings("unused")
-		public int getNumberOfPages() {
-            return numberOfPages;
-        }
-		
-	}
-	
 }

@@ -11,4 +11,5 @@ public interface UserFacade {
 	User getUserByid(int userId);
 	void updateUser(User referrerUser);
 	List<User> getReferralsForUser(User loggedInUser);
+	List<String> getUserEmailsForPurchasesPageWithLimit(int page, int paginationLimit);
 }

@@ -32,7 +32,7 @@ function updateLoggedInUserHeader() {
                     	</form></li>`;
 					}else{
 	                    document.getElementById("loggedInControllerUserName").innerHTML = `
-	                    <li class="nav-item"><a class="nav-link" href="profile-page.html">Bienvenido ${data.firstName}</a></li>`;
+	                    <li class="nav-item"><a class="nav-link" href="/profile-page.html">Bienvenido ${data.firstName}</a></li>`;
 	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
 	        			<li class="nav-item"><form action="logout" method="POST">
 	                        <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
@@ -59,7 +59,6 @@ function searchQuery(){
         }
     });  
 	
-    
     function updateValue(e){
         const query = e.target.value;
 		if(query.length>0){
@@ -68,7 +67,7 @@ function searchQuery(){
 	        .then(products => {
 	            if (products.length > 0) {
 	                suggestions.innerHTML = products.map(product => 
-	                    `<a class="dropdown-item" href="product.html?id=${product.id}">${product.productName}</a>`
+	                    `<a class="dropdown-item" href="/product.html?id=${product.id}">${product.productName}</a>`
 	                ).join('');
 	                suggestions.classList.add('show');
 	            } else {

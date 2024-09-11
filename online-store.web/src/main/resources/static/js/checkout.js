@@ -21,34 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
             
             addressFormSave();
             paypalButton(product);
-            radioButtonsCheck();
             })
             .catch(error => console.error('Error fetching product details:', error));
     }
 });
 
-function radioButtonsCheck() {
-    const radioInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
-    const addressForm = document.querySelector('#addressForm');
-	const savedAddressContainer = document.getElementById('saved-address');
-	const useSaveAddressConteiner = document.getElementById('use-address-container');
-	
-    function handleRadioChange() {
-        if ( !(document.getElementById("flexRadioDefault3").checked) && savedAddressContainer.style.display === 'none') {
-            addressForm.style.display = "block";
-            useSaveAddressConteiner.style.display = 'block';
-        } else {
-            addressForm.style.display = "none";
-            useSaveAddressConteiner.style.display = 'none';
-        }
-    }
-
-    radioInputs.forEach(radio => {
-        radio.addEventListener('change', handleRadioChange);
-    });
-
-    handleRadioChange();
-};
 
 function paypalButton(product) {
     //client account credentials:
@@ -77,7 +54,6 @@ function paypalButton(product) {
                 .then(function (details) {
                 const formElement = document.querySelector('#checkoutForm');
                 const addressForm = document.querySelector('#addressForm');
-                const extraMessage = document.getElementById('extraMessage');
 				const params = new URLSearchParams();
 				
 				if(addressForm.style.display ==='none'){
@@ -153,6 +129,30 @@ function addressFormSave(){
 				}
 		})
 	.then(address =>{
+	function radioButtonsCheck() {
+	    const radioInputs = document.querySelectorAll('input[name="flexRadioDefault"]');
+	    const addressForm = document.querySelector('#addressForm');
+		const savedAddressContainer = document.getElementById('saved-address');
+		const useSaveAddressConteiner = document.getElementById('use-address-container');
+		
+	    function handleRadioChange() {
+	        if ( !(document.getElementById("flexRadioDefault3").checked) && savedAddressContainer.style.display === 'none') {
+	            addressForm.style.display = "block";
+	            if(address){
+	            	useSaveAddressConteiner.style.display = 'block';
+				}
+	        } else {
+	            addressForm.style.display = "none";
+	            useSaveAddressConteiner.style.display = 'none';
+	        }
+	    }
+	
+	    radioInputs.forEach(radio => {
+	        radio.addEventListener('change', handleRadioChange);
+	    });
+	
+	    handleRadioChange();
+	}
 	    if (address) {
 	        addressDetailsElement.innerHTML = `
 	            ${address.phoneNumber}<br>
@@ -162,7 +162,6 @@ function addressFormSave(){
 	        `;
 	        savedAddressContainer.style.display = 'block';
 	        addressForm.style.display = 'none';
-	        useSaveAddressConteiner.style.display = 'none';
 	    }
 	
 	    formInputs.forEach(input => {
@@ -190,5 +189,6 @@ function addressFormSave(){
 		    checkFormValidity();
 	    });
 	    checkFormValidity();
+	    radioButtonsCheck();
 	}).catch(error => console.error('Error fetching address details:', error));
 }

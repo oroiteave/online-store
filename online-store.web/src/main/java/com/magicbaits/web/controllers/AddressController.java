@@ -27,8 +27,12 @@ public class AddressController {
 	public Address getUserAddress(HttpSession session) {
 		User user = (session != null) ? ((User) session.getAttribute(LOGGED_IN_USER_ATTR)) : null;
 		Address address = (user!=null) ? addressFacade.getAddressByUserId(user.getId()) : null;
-		System.out.println(address.toString());
 		return address;
+	}
+	
+	@GetMapping("/address/purchase")
+	public Address getAddressByPurchaseId(@RequestParam String purchaseId) {
+		return addressFacade.getAddresByPurchaseId(Integer.parseInt(purchaseId));
 	}
 	
 	@PutMapping("/address")

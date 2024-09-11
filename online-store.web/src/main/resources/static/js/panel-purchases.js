@@ -3,7 +3,7 @@ function fetchPurchases(currentPage){
 	fetch(`/purchase/pages?page=${encodeURIComponent(currentPage)}`)
 	.then(response => response.json())
 	.then(data => {
-	    loadPurchases(data.purchases);
+	    loadPurchases(data.purchases,data.userEmails);
 	    renderPagination(currentPage, data.numberOfPages);
 	}).catch(error => console.error('Error fetching purchases:', error));
 }
@@ -28,33 +28,80 @@ function updateStatus(purchaseId) {
     
 }
 
-function loadPurchases(purchases) {
+function loadPurchases(purchases,userEmails) {
     const tbody = document.getElementById('purchase-table-body');
     tbody.innerHTML = '';
+    let i =0;
     for (const purchase of purchases) {
-		fetch(`/user?id=${encodeURIComponent(purchase.customerId)}`)
-		.then(response => response.json())
-		.then(user => {
             const row = document.createElement('tr');
+            const addressRow = document.createElement('tr');
             row.innerHTML = `
                 <td>${purchase.id}</td>
-                <td>${user.email}</td>
+                <td>${userEmails[i++]}</td>
                 <td>${purchase.products[0].productName}</td>
                 <td>${purchase.shippingCompany}</td>
                 <td>
-                    <select class="form-select" id="status-${purchase.id}" name="status")">
+                    <select class="form-select" id="status-${purchase.id}" name="status" onClick="event.stopPropagation()">
                         <option value="CONFIRMADO" ${purchase.status === 'CONFIRMADO' ? 'selected' : ''}>Confirmado</option>
                         <option value="PREPARANDO" ${purchase.status === 'PREPARANDO' ? 'selected' : ''}>Preparando</option>
                         <option value="ENVIADO" ${purchase.status === 'ENVIADO' ? 'selected' : ''}>Enviado</option>
                         <option value="ENTREGADO" ${purchase.status === 'ENTREGADO' ? 'selected' : ''}>Entregado</option>
                     </select>
                 </td>
-                <td><button class="btn btn-sm btn-primary" onClick = "updateStatus(${purchase.id}, status.value)">Actualizar</button></td>
+                <td><button class="btn btn-sm btn-primary" onClick = "event.stopPropagation();  updateStatus(${purchase.id}, status.value)">Actualizar</button></td>
             `;
+            addressRow.id = `address-info-${purchase.id}`;
+        	addressRow.style.display = 'none'; // Ocultar por defecto
+        	addressRow.innerHTML = `
+            <td colspan="6">
+                <div id="address-details-${purchase.id}"></div>
+            </td>
+        `;
+            row.addEventListener('click', () => showAddress(purchase.id));
             tbody.appendChild(row);
-		})
-		.catch(error => console.error('Error fetching user data:', error));
+            tbody.appendChild(addressRow);
     }
+}
+
+function showAddress(purchaseId) {
+    fetch(`/address/purchase?purchaseId=${encodeURIComponent(purchaseId)}`)
+    .then(response => {
+		if (response.ok) {
+            return response.text().then(text => text ? JSON.parse(text) : null);
+        } else {
+            throw new Error('Error inesperado');
+		}
+	})
+    .then(data => {
+		if(data){
+	        const addressInfoDiv = document.getElementById(`address-info-${purchaseId}`);
+	        const addressDetails = document.getElementById(`address-details-${purchaseId}`);
+			
+			
+	        addressDetails.innerHTML = `
+	    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+	        <div style="display: flex; justify-content: space-between; width: 50%;">
+	            <span><strong>Dirección 1:</strong> ${data.firstDirection}</span>
+	            <span><strong>Dirección 2:</strong> ${data.secondDirection || 'N/A'}</span>
+	        </div>
+	        <div style="display: flex; justify-content: space-between; width: 50%;">
+	            <span><strong>Ciudad:</strong> ${data.city}</span>
+	            <span><strong>Teléfono:</strong> ${data.phoneNumber}</span>
+	        </div>
+	        <div style="display: flex; justify-content: space-between; width: 50%;">
+	            <span><strong>Número de casa:</strong> ${data.houseNumber}</span>
+	            <span><strong>Código postal:</strong> ${data.postalCode}</span>
+	        </div>
+    	</div>
+	        `;
+	        if(addressInfoDiv.style.display === 'table-row' ){
+				addressInfoDiv.style.display = 'none';
+			}else{
+		        addressInfoDiv.style.display = 'table-row'; 
+			}
+		}
+    })
+    .catch(error => console.error('Error fetching address:', error));
 }
 
 function renderPagination(currentPage, totalPages) {

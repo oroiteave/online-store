@@ -20,4 +20,5 @@ public interface UserDao {
 	
 	List<UserDto> getReferralsByUserId(int id);
 
+	List <String> getUserEmailsForPurchasesPaginationLimit(int page,int paginationLimit);
 }

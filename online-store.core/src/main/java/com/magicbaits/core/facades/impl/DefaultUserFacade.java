@@ -61,4 +61,9 @@ public class DefaultUserFacade implements UserFacade{
 	public List<User> getReferralsForUser(User loggedInUser) {
 		return userConverter.convertUserDtosToUsers(userDao.getReferralsByUserId(loggedInUser.getId()));
 	}
+
+	@Override
+	public List<String> getUserEmailsForPurchasesPageWithLimit(int page, int paginationLimit) {
+		return userDao.getUserEmailsForPurchasesPaginationLimit(page, paginationLimit);
+	}
 }
