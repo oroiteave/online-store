@@ -36,7 +36,6 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	@PostMapping("/login")
 	public String signIn(@RequestParam String email,@RequestParam String password, HttpSession session,  HttpServletResponse response) throws IOException{
 		User user = (User)userFacade.getUserByEmail(email);
-		System.out.println(user.toString());
 		if (user != null && user.getPassword().equals(password)) {
 			session.setAttribute(LOGGED_IN_USER_ATTR, user);
 			if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
