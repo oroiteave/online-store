@@ -232,6 +232,57 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 		return 0;
 	}
 	
+	@Override
+	public int getPurchaseCountByUserId(int id) {
+		try(var conn =DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT COUNT(id) as amount FROM purchase WHERE fk_purchase_user = ?;")){
+			ps.setInt(1, id);
+			try(var rs = ps.executeQuery()){
+				if(rs.next()) {
+					return rs.getInt("amount");
+				}
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public List<PurchaseDto> getPurchasePaginationLimitByUserId(int page, int paginationLimit, int userId) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT * FROM purchase WHERE fk_purchase_user = ? LIMIT ?,?;")){
+			ps.setInt(1, userId);
+			ps.setInt(2, ((paginationLimit * page) - paginationLimit));
+			ps.setInt(3, paginationLimit);
+			try(var rs = ps.executeQuery()){
+				List<PurchaseDto> purchases = new ArrayList<>();
+				while(rs.next()) {
+					
+					PurchaseDto purchase = parsePurchaseDtoFromResultSet(rs);
+					
+					try(var psProducts = conn.prepareStatement("SELECT product_id FROM purchase_product WHERE purchase_id = " + purchase.getId());
+							var rsProducts = psProducts.executeQuery()){
+						
+						List<ProductDto> products = new ArrayList<>();
+						while(rsProducts.next()) {
+							
+							ProductDto productDto = new ProductDto();
+							productDto = product.getProductByProductId(rsProducts.getInt("product_id"));
+							products.add(productDto);
+						}
+						purchase.setProductDtos(products);
+					}
+					purchases.add(purchase);
+				}
+				return purchases;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	private PurchaseDto parsePurchaseDtoFromResultSet(ResultSet rs) throws SQLException{
 		PurchaseDto purchase = new PurchaseDto();
 		purchase.setId(rs.getInt("id"));
@@ -242,4 +293,5 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 		purchase.setStatus(rs.getString("status"));
 		return purchase;
 	}
+
 }

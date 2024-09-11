@@ -18,5 +18,9 @@ public interface PurchaseDao {
 	
 	List<PurchaseDto> getPurchasePaginationLimit(int page, int paginationLimit);
 	
+	List<PurchaseDto> getPurchasePaginationLimitByUserId(int page, int paginationLimit, int userId);
+	
 	int getPurchaseCount();
+	
+	int getPurchaseCountByUserId(int id);
 }

@@ -61,6 +61,15 @@ public class PurchaseController {
 		response.put("userEmails", userFacade.getUserEmailsForPurchasesPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
 		return response; 
 	}
+	@GetMapping("/purchase/user")
+	public Map<String,Object> getPurchasesByUserWithPagesLimit(@RequestParam String page, HttpSession session){
+		Map<String, Object> response = new HashMap<>();
+		int userId = ((User)session.getAttribute(LOGGED_IN_USER_ATTR)).getId();
+		response.put("purchases", purchaseFacade.getPurchasesForPageWithLimitByUserId(Integer.parseInt(page),PAGINATION_LIMIT,userId));
+		response.put("numberOfPages", purchaseFacade.numberOfPagesForPurchasesByUserId(PAGINATION_LIMIT, userId));
+		
+		return response;
+	}
 	
 	@PutMapping("/purchase")
 	public String updateStatus(@RequestParam String purchaseId, @RequestParam String newStatus) {
