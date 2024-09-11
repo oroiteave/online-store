@@ -13,6 +13,10 @@ public interface PurchaseFacade {
 	
 	List<Purchase> getPurchasesForPageWithLimit(int page, int paginationLimit);
 	
+	List<Purchase> getPurchasesForPageWithLimitByUserId(int page, int paginationLimit, int userId);
+	
+	int numberOfPagesForPurchasesByUserId(int paginationLimit, int userId);
+	
 	int numberOfPagesForPurchases(int paginationLimit);
 	
 	boolean updatePurchase(Purchase purchase);
