@@ -74,4 +74,9 @@ public class DefaultPurchaseFacade implements PurchaseFacade{
 		}
 		return pages;
 	}
+
+	@Override
+	public boolean deletePurchase(int id) {
+		return purchaseDao.deletePurchaseById(id);
+	}
 }

@@ -294,4 +294,18 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 		return purchase;
 	}
 
+	@Override
+	public boolean deletePurchaseById(int id) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("DELETE FROM purchase WHERE id = ?")){
+			
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

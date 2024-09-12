@@ -22,4 +22,6 @@ public interface PurchaseFacade {
 	boolean updatePurchase(Purchase purchase);
 	
 	Purchase getPurchaseById(int id);
+	
+	boolean deletePurchase(int id);
 }

@@ -23,4 +23,6 @@ public interface PurchaseDao {
 	int getPurchaseCount();
 	
 	int getPurchaseCountByUserId(int id);
+	
+	boolean deletePurchaseById(int id);
 }

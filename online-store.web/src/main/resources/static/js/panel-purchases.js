@@ -34,6 +34,7 @@ function loadPurchases(purchases,userEmails) {
     let i =0;
     for (const purchase of purchases) {
             const row = document.createElement('tr');
+            row.id = `purchase-row-${purchase.id}`;
             const addressRow = document.createElement('tr');
             row.innerHTML = `
                 <td>${purchase.id}</td>
@@ -49,6 +50,7 @@ function loadPurchases(purchases,userEmails) {
                     </select>
                 </td>
                 <td><button class="btn btn-sm btn-primary" onClick = "event.stopPropagation();  updateStatus(${purchase.id}, status.value)">Actualizar</button></td>
+                <td><button class="btn btn-sm btn-danger" onClick="event.stopPropagation(); deletePurchase(${purchase.id})">Eliminar</button></td>
             `;
             addressRow.id = `address-info-${purchase.id}`;
         	addressRow.style.display = 'none'; // Ocultar por defecto
@@ -61,6 +63,20 @@ function loadPurchases(purchases,userEmails) {
             tbody.appendChild(row);
             tbody.appendChild(addressRow);
     }
+}
+function deletePurchase(purchaseId){
+	fetch(`/purchase?id=${purchaseId}`,{
+		method: 'DELETE',
+	})
+	.then(response => response.text())
+	.then(data =>{
+		const row = document.getElementById(`purchase-row-${purchaseId}`);
+        if (row) {
+            row.remove();  // Elimina la fila correspondiente al purchase
+        }
+		alert(data);
+	})
+	.catch(error => console.error('Error fetching purchase:', error));
 }
 
 function showAddress(purchaseId) {
