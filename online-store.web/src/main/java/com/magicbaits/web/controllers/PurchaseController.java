@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -137,5 +138,17 @@ public class PurchaseController {
 			address.setId(addressFacade.saveAddress(address));
 		}
 		return address;
+	}
+	
+	@DeleteMapping("/purchase")
+	public String deletePurchase(@RequestParam String id) {
+		String message = "Error al borrar la compra";
+		boolean deleteStatus = purchaseFacade.deletePurchase(Integer.parseInt(id));
+		
+		if(deleteStatus) {
+			message = "Compra eliminada";
+		}
+		
+		return message;
 	}
 }

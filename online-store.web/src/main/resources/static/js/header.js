@@ -27,14 +27,14 @@ function updateLoggedInUserHeader() {
 						document.getElementById("loggedInControllerUserName").innerHTML = `
 	                    <li class="nav-item"><a class="nav-link" href="/admin/panel.html">Bienvenido ${data.firstName}</a></li>`;
 	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
-	        			<li class="nav-item"><form action="logout" method="POST">
+	        			<li class="nav-item"><form action="/logout" method="POST">
 	                    	<button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
                     	</form></li>`;
 					}else{
 	                    document.getElementById("loggedInControllerUserName").innerHTML = `
 	                    <li class="nav-item"><a class="nav-link" href="/panel.html">Bienvenido ${data.firstName}</a></li>`;
 	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
-	        			<li class="nav-item"><form action="logout" method="POST">
+	        			<li class="nav-item"><form action="/logout" method="POST">
 	                        <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
 	                    </form></li>`;
 					}
