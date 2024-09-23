@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +16,7 @@ import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.User;
 import com.magicbaits.persistence.enteties.impl.DefaultUser;
+import com.magicbaits.web.utils.PasswordSecurityEncode;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +27,10 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
 	private UserFacade userFacade;
+	
+	@Autowired
+	private PasswordSecurityEncode passwordSecurityEncode;
 	
 	{
 		userFacade = DefaultUserFacade.getInstance();
@@ -67,9 +67,8 @@ public class UserController {
 		String message="Error cambiar la contraseña";
 		User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
 				
-		if(checkPassword(password, user.getPassword()) && validatePassword(newPassword)) {
-			String encodedPassword = passwordEncoder.encode(newPassword);
-			user.setPassword(encodedPassword);
+		if(passwordSecurityEncode.checkPassword(password, user.getPassword()) && validatePassword(newPassword)) {
+			user.setPassword(passwordSecurityEncode.encoder(newPassword));
 			userFacade.updateUser(user);
 			message = "Contraseña cambiada con exito";
 		}
@@ -118,8 +117,7 @@ public class UserController {
         	}
         }
         
-        String encodedPassword = passwordEncoder.encode(password);
-        user.setPassword(encodedPassword);
+        user.setPassword(passwordSecurityEncode.encoder(password));
         userFacade.registerUser(user,partnerCode);
         response.sendRedirect("/sign-in.html");
 	}
@@ -155,8 +153,5 @@ public class UserController {
             }
         }
 		return false;
-	}
-	private boolean checkPassword(String rawPassword, String encodedPassword) {
-		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 }
