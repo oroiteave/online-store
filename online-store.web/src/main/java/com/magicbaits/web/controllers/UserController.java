@@ -4,7 +4,9 @@ import static com.magicbaits.web.filters.PartnerCodeFilter.PARTNER_CODE_COOKIE_N
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +26,9 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class UserController {
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	private UserFacade userFacade;
 	{
@@ -93,8 +98,8 @@ public class UserController {
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setPassword(password);
-		
 		String validateMessage = validateSignUp(user, confirmPassword);
+		
         
         if(validateMessage!=null) {
         	session.setAttribute("errorMessage", validateMessage);
@@ -111,6 +116,8 @@ public class UserController {
         	}
         }
         
+        String encodedPassword = passwordEncoder.encode(password);
+        user.setPassword(encodedPassword);
         userFacade.registerUser(user,partnerCode);
         response.sendRedirect("/sign-in.html");
 	}

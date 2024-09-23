@@ -4,6 +4,8 @@ import static com.magicbaits.persistence.dto.RoleDto.ADMIN_ROLE_NAME;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,10 @@ public class SessionController {
 private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
 	private UserFacade userFacade;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	{
 		userFacade = DefaultUserFacade.getInstance();
 	}
@@ -60,10 +66,14 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 		if(user == null) {
 			return "No existe un usuario con ese email";
 		}
-		if(!user.getPassword().equals(password)) {
+		if(!checkPassword(password, user.getPassword())) {
 			return "La contraseña es incorrecta";
 		}
 		return null;
+	}
+	
+	private boolean checkPassword(String rawPassword, String encodedPassword) {
+		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 	
 	@GetMapping("/errorMessage")
