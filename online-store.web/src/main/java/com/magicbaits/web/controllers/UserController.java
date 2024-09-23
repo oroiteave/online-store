@@ -31,6 +31,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 	
 	private UserFacade userFacade;
+	
 	{
 		userFacade = DefaultUserFacade.getInstance();
 	}
@@ -66,8 +67,9 @@ public class UserController {
 		String message="Error cambiar la contraseña";
 		User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
 				
-		if(user.getPassword().equals(password) && validatePassword(newPassword)) {
-			user.setPassword(newPassword);
+		if(checkPassword(password, user.getPassword()) && validatePassword(newPassword)) {
+			String encodedPassword = passwordEncoder.encode(newPassword);
+			user.setPassword(encodedPassword);
 			userFacade.updateUser(user);
 			message = "Contraseña cambiada con exito";
 		}
@@ -153,5 +155,8 @@ public class UserController {
             }
         }
 		return false;
+	}
+	private boolean checkPassword(String rawPassword, String encodedPassword) {
+		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 }
