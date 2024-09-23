@@ -5,20 +5,22 @@ import static com.magicbaits.persistence.dto.RoleDto.ADMIN_ROLE_NAME;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.User;
+import com.magicbaits.web.utils.PasswordSecurityEncode;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
+@RequestMapping("/session")
 public class SessionController {
 	
 private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
@@ -26,7 +28,7 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	private UserFacade userFacade;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private PasswordSecurityEncode passwordSecurityEncode;
 	
 	{
 		userFacade = DefaultUserFacade.getInstance();
@@ -66,14 +68,10 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 		if(user == null) {
 			return "No existe un usuario con ese email";
 		}
-		if(!checkPassword(password, user.getPassword())) {
+		if(!passwordSecurityEncode.checkPassword(password, user.getPassword())) {
 			return "La contraseña es incorrecta";
 		}
 		return null;
-	}
-	
-	private boolean checkPassword(String rawPassword, String encodedPassword) {
-		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 	
 	@GetMapping("/errorMessage")
