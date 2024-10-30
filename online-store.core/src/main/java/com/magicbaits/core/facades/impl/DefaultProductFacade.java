@@ -21,6 +21,11 @@ public class DefaultProductFacade implements ProductFacade {
 	}
 
 	@Override
+	public boolean addProduct(Product product) {
+		return productDao.saveProduct(productConverter.convertProductToProductDto(product));
+	}
+	
+	@Override
 	public List<Product> getProductsLikeName(String searchQuery) {
 		return productConverter.convertProductDtosToProducts(productDao.getProductsLikeName(searchQuery));
 	}
@@ -65,5 +70,6 @@ public class DefaultProductFacade implements ProductFacade {
 	public Product getProductById(int productId) {
 		return productConverter.convertProductDtoToProduct(productDao.getProductByProductId(productId));
 	}
+
 
 }
