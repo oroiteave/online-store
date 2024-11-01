@@ -6,7 +6,7 @@ import com.magicbaits.persistence.dto.ProductDto;
 
 public interface ProductDao {
 	
-	boolean saveProduct(ProductDto product);
+	boolean saveProduct(ProductDto product, int categoryId);
 	
 	List<ProductDto> getProducts();
 

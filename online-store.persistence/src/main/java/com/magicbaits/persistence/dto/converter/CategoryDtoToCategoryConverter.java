@@ -23,7 +23,7 @@ public class CategoryDtoToCategoryConverter {
 		return categories;
 	}
 
-	private Category convertCategoryDtoToCategory(CategoryDto categoryDto) {
+	public Category convertCategoryDtoToCategory(CategoryDto categoryDto) {
 		DefaultCategory newCategory = new DefaultCategory();
 		newCategory.setId(categoryDto.getId());
 		newCategory.setCategoryName(categoryDto.getCategoryName());

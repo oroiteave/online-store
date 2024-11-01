@@ -20,12 +20,12 @@ private CategoryDao categoryDao;
 	}
 	
 	@Override
-	public boolean saveProduct(ProductDto product) {
+	public boolean saveProduct(ProductDto product,int categoryId) {
 		try(var conn = DBUtils.getConnection();
 				var ps = conn.prepareStatement("INSERT INTO product (product_name, price, category_id, image_name, description) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
 			ps.setString(1, product.getProductName());
 			ps.setBigDecimal(2, product.getPrice());
-			ps.setInt(3,product.getCategoryDto().getId());
+			ps.setInt(3,categoryId);
 			ps.setString(4, product.getImgName());
 			ps.setString(5, product.getDescription());
 			

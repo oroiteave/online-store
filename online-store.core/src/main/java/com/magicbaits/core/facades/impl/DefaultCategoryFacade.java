@@ -26,4 +26,9 @@ public class DefaultCategoryFacade implements CategoryFacade{
 		return categoryConverter.convertCategoryDtosToCategories(categoryDao.getCategories());
 	}
 
+	@Override
+	public Category getCategoryById(int id) {
+		return categoryConverter.convertCategoryDtoToCategory(categoryDao.getCategoryByCategoryId(id));
+	}
+
 }

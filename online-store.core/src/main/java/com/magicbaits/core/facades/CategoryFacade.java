@@ -6,4 +6,5 @@ import com.magicbaits.persistence.enteties.Category;
 
 public interface CategoryFacade {
 	List<Category> getCategories();
+	Category getCategoryById(int id);
 }

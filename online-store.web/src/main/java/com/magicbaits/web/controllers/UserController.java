@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
@@ -36,18 +38,18 @@ public class UserController {
 		userFacade = DefaultUserFacade.getInstance();
 	}
 	
-	@GetMapping("/user/current")
+	@GetMapping("/current")
 	public ResponseEntity<User> getUser(HttpSession session) {
 		User user = (session != null) ? ((User) session.getAttribute(LOGGED_IN_USER_ATTR)) : null;
 		return ResponseEntity.ok(user);
 	}
 	
-	@GetMapping("/user")
+	@GetMapping
 	public User getUserById(@RequestParam String id) {
 		return userFacade.getUserByid(Integer.parseInt(id));
 	}
 	
-	@PutMapping("/user")
+	@PutMapping
 	public String updateuser(HttpSession session,@RequestParam String firstName, @RequestParam String lastName) {
 		String message="Error al enviar los nuevos datos de usuario";
 		User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
@@ -62,7 +64,7 @@ public class UserController {
 		return message;
 	}
 	
-	@PutMapping("/user/password")
+	@PutMapping("/password")
 	public String updatePassword(HttpSession session, @RequestParam String password, @RequestParam String newPassword) {
 		String message="Error cambiar la contraseña";
 		User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
@@ -76,7 +78,7 @@ public class UserController {
 		return message;
 	}
 	
-	@PutMapping("/user/email")
+	@PutMapping("/email")
 	public String updateEmail(HttpSession session, @RequestParam String email) {
 		String message ="Error al cambiar el email";
 		User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
@@ -92,7 +94,7 @@ public class UserController {
 		return message;
 	}
 	
-	@PostMapping("/user")
+	@PostMapping
 	public void signUp(HttpServletRequest request,HttpServletResponse response, HttpSession session,@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword) throws IOException {
 		User user = new DefaultUser();
 		user.setFirstName(firstName);

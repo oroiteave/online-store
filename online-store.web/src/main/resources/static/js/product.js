@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('product-name').innerText = product.productName;
                     document.getElementById('product-price').innerText = `${product.price} $`;
                     document.getElementById('product-description').innerText = product.description;
-                    document.getElementById('product-img').src = `images/${product.imgName}`;
+                    document.getElementById('product-img').src = `/product-images/${product.imgName}`;
                     document.getElementById('product-img').alt = product.productName;
                 } else {
                     document.getElementById('product-name').innerText = 'Producto no encontrado';

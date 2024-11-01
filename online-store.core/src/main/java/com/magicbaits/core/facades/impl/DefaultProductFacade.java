@@ -21,8 +21,8 @@ public class DefaultProductFacade implements ProductFacade {
 	}
 
 	@Override
-	public boolean addProduct(Product product) {
-		return productDao.saveProduct(productConverter.convertProductToProductDto(product));
+	public boolean addProduct(Product product,int categoryId) {
+		return productDao.saveProduct(productConverter.convertProductToProductDto(product),categoryId);
 	}
 	
 	@Override
