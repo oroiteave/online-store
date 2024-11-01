@@ -5,6 +5,9 @@ import java.util.List;
 import com.magicbaits.persistence.enteties.Product;
 
 public interface ProductFacade {
+	
+	boolean addProduct(Product product,int categoryId);
+	
 	List<Product> getProductsLikeName(String searchQuery);
 
 	List<Product> getProductsByCategoryId(int id);

@@ -56,7 +56,7 @@ private CategoryDtoToCategoryConverter categoryConverter;
 		return productDtos;
 	}
 
-	private ProductDto convertProductToProductDto(Product product) {
+	public ProductDto convertProductToProductDto(Product product) {
 		ProductDto productDto = new ProductDto();
 		productDto.setId(product.getId());
 		productDto.setPrice(BigDecimal.valueOf(product.getPrice()));

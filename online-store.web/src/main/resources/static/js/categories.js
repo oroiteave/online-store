@@ -17,7 +17,7 @@ function fetchCategories() {
                 categoryElement.innerHTML = `
                     <div class="card mb-4 shadow-sm">
                     	<a href="category.html?id=${category.id}" class="text-decoration-none text-dark">
-                    	<img src="/images/${category.imgName}" class="card-img-top" alt="${category.categoryName}">
+                    	<img src="/product-images/${category.imgName}" class="card-img-top" alt="${category.categoryName}">
                         <div class="card-body">
                             <h5 class="card-title">${category.categoryName}</h5>
                         </div>

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(product => {
                 document.getElementById('product-details').innerHTML = `
             <div class="me-3 position-relative">
-            	<img src="images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+            	<img src="/product-images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
             </div>
             <div class="">
             	<a href="#" class="nav-link">${product.productName}</a>

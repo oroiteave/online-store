@@ -2,6 +2,7 @@ package com.magicbaits.persistence.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,25 @@ private CategoryDao categoryDao;
 	
 	{
 		categoryDao = new MySqlJdbcCategoryDao();
+	}
+	
+	@Override
+	public boolean saveProduct(ProductDto product,int categoryId) {
+		try(var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("INSERT INTO product (product_name, price, category_id, image_name, description) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
+			ps.setString(1, product.getProductName());
+			ps.setBigDecimal(2, product.getPrice());
+			ps.setInt(3,categoryId);
+			ps.setString(4, product.getImgName());
+			ps.setString(5, product.getDescription());
+			
+			ps.executeUpdate();
+			
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	@Override
@@ -196,4 +216,5 @@ private CategoryDao categoryDao;
 		
 		return product;
 	}
+
 }

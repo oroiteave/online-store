@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <a href="product.html?id=${product.id}" class="text-decoration-none text-dark">
                     <div class="card mb-4 product-card">
                         <div class="image-container">
-                            <img src="images/${product.imgName}" alt="${product.productName}">
+                            <img src="/product-images/${product.imgName}" alt="${product.productName}">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${product.productName}</h5>
