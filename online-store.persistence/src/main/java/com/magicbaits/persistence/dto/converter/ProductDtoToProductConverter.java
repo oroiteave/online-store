@@ -42,6 +42,7 @@ private CategoryDtoToCategoryConverter categoryConverter;
 			
 			product.setImgName(productDto.getImgName());
 			product.setDescription(productDto.getDescription());
+			product.setStock(productDto.getStock());
 		}
 		return product;
 	}
@@ -64,6 +65,7 @@ private CategoryDtoToCategoryConverter categoryConverter;
 		productDto.setProductName(product.getProductName());
 		productDto.setImgName(product.getImgName());
 		productDto.setDescription(product.getDescription());
+		productDto.setStock(product.getStock());
 		return productDto;
 	}
 }

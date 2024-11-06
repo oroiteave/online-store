@@ -71,5 +71,29 @@ public class DefaultProductFacade implements ProductFacade {
 		return productConverter.convertProductDtoToProduct(productDao.getProductByProductId(productId));
 	}
 
+	@Override
+	public int getNumberOfPagesForAllProducts(int paginationLimit) {
+		int totalProducts = productDao.getProductCount();
+		int pages = totalProducts / paginationLimit;
+		if((totalProducts % paginationLimit) != 0) {
+			pages++;
+		}
+		return pages;
+	}
+
+	@Override
+	public boolean updateProduct(Product product) {
+		return productDao.updateProduct(productConverter.convertProductToProductDto(product));
+	}
+
+	@Override
+	public List<Product> getProductsForPageWithLimit(int page, int paginationLimit) {
+		return productConverter.convertProductDtosToProducts(productDao.getProductsByPaginationLimit(page, paginationLimit));
+	}
+
+	@Override
+	public boolean deleteProduct(int productId) {
+		return productDao.deleteProduct(productId);
+	}
 
 }

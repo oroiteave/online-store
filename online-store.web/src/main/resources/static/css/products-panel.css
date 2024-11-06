@@ -1,0 +1,56 @@
+@charset "ISO-8859-1";
+ .pagination {
+    justify-content: center;
+ }
+ .table td, .table th {
+	vertical-align: middle;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+ }
+ .form-control {
+     width: 100%;
+ }
+ 
+ .product-image {
+	width: 60px;
+    height: auto;
+    object-fit: contain;
+}
+
+.actions-column {
+	width: 175px;
+}
+
+.stock-column {
+	width: 100px;
+}
+
+/* Evitar que las celdas se ajusten automáticamente */
+table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+.name-column {
+	width: 150px;
+}
+
+.description-column {
+	width: 250px;
+}
+
+.category-column {
+	width: 130px;
+}
+
+.price-column {
+	width: 120px;
+}
+
+.id-column {
+	width: 60px;
+}
+.image-column {
+	width: 85px;
+}

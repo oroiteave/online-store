@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Productos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/products-panel.css">
+	<link rel="icon" href="/images/gengar_logo.svg" type="image/x-icon">
+</head>
+<body>
+	<div id="header-placeholder"></div>
+	<div class="container">
+	    <div class="container d-flex justify-content-between align-items-center my-4">
+		    <h2>Administrar Productos</h2>
+		    <a href="add-product.html" class="btn btn-primary">Agregar Producto</a>
+		</div>
+	    <table class="table table-bordered table-hover" id="products-table">
+	        <thead class="thead-dark">
+	            <tr>
+	                <th class="id-column">ID</th>
+	                <th class="image-column">Imagen</th>
+	                <th class="name-column">Nombre</th>
+	                <th class ="price-column">Precio</th>
+	                <th class="description-column">Descripción</th>
+	                <th class="category-column">Categoría</th>
+	                <th class="stock-column">Stock</th>
+	                <th class="actions-column">Acciones</th>
+	            </tr>
+	        </thead>
+	        <tbody id="products-table-body"></tbody>
+	    </table>
+	
+	    <nav aria-label="Page navigation">
+	        <ul class="pagination">
+	            <li class="page-item" id="prev-page"><a class="page-link" href="#">Anterior</a></li>
+	            <li class="page-item" id="next-page"><a class="page-link" href="#">Siguiente</a></li>
+	        </ul>
+	    </nav>
+	</div>
+	<div id="footer-placeholder"></div>
+	
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/header.js"></script>
+	<script src="/js/footer.js"></script>
+	<script src="/js/products-panel.js"></script>
+</body>
+</html>	

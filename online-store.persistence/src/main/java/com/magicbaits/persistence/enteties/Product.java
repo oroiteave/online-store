@@ -7,6 +7,7 @@ public interface Product{
 	double getPrice();
 	String getImgName();
 	String getDescription();
+	int getStock();
 	
 	void setImgName(String imgName);
 	void setDescription(String description);
@@ -14,4 +15,5 @@ public interface Product{
 	void setProductName(String newProductName);
 	void setCategoryName(String newCategoryName);
 	void setPrice(double price);
+	void setStock(int stock);
 }

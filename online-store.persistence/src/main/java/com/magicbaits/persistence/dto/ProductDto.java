@@ -9,6 +9,7 @@ public class ProductDto {
 	private CategoryDto categoryDto;
 	private String imgName;
 	private String description;
+	private int stock;
 	
 	public int getId() {
 		return id;
@@ -45,5 +46,11 @@ public class ProductDto {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public int getStock() {
+		return this.stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 }
