@@ -9,7 +9,8 @@ public class DefaultProduct implements Product{
 	private double price;
 	private String imgName;
 	private String description;
-
+	private int stock;
+	
 	public DefaultProduct() {
 	}
 	public DefaultProduct(int id, String productName, String categoryName, double price) {
@@ -77,5 +78,13 @@ public class DefaultProduct implements Product{
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	@Override
+	public int getStock() {
+		return this.stock;
+	}
+	@Override
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 }

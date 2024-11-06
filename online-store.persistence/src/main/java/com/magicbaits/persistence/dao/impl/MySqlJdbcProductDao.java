@@ -1,5 +1,6 @@
 package com.magicbaits.persistence.dao.impl;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,14 +23,32 @@ private CategoryDao categoryDao;
 	@Override
 	public boolean saveProduct(ProductDto product,int categoryId) {
 		try(var conn = DBUtils.getConnection();
-				var ps = conn.prepareStatement("INSERT INTO product (product_name, price, category_id, image_name, description) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
-			ps.setString(1, product.getProductName());
-			ps.setBigDecimal(2, product.getPrice());
-			ps.setInt(3,categoryId);
-			ps.setString(4, product.getImgName());
-			ps.setString(5, product.getDescription());
+				var psProduct = conn.prepareStatement("INSERT INTO product (product_name, price, category_id, image_name, description) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
+			psProduct.setString(1, product.getProductName());
+			psProduct.setBigDecimal(2, product.getPrice());
+			psProduct.setInt(3,categoryId);
+			psProduct.setString(4, product.getImgName());
+			psProduct.setString(5, product.getDescription());
 			
-			ps.executeUpdate();
+			int rowsAffected = psProduct.executeUpdate();
+	        if (rowsAffected == 0) {
+	            throw new SQLException("Failed to insert product, no rows affected.");
+	        }
+
+	        try (var generatedKeys = psProduct.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                int productId = generatedKeys.getInt(1);
+
+	                var psInventory = conn.prepareStatement(
+	                    "INSERT INTO inventory (product_id, stock) VALUES (?, ?);"
+	                );
+	                psInventory.setInt(1, productId);
+	                psInventory.setInt(2, product.getStock());
+	                psInventory.executeUpdate();
+	            } else {
+	                throw new SQLException("Failed to retrieve product ID.");
+	            }
+	        }
 			
 			return true;
 		}catch(SQLException e) {
@@ -125,8 +144,7 @@ private CategoryDao categoryDao;
 				List<ProductDto> products = new ArrayList<>();
 
 				while (rs.next()) {
-					ProductDto product = parseProductDtoFromResultSet(rs);
-					products.add(product);
+					products.add(parseProductDtoFromResultSet(rs));
 				}
 
 				return products;
@@ -191,8 +209,7 @@ private CategoryDao categoryDao;
 				List<ProductDto> products = new ArrayList<>();
 
 				while (rs.next()) {
-					ProductDto product = parseProductDtoFromResultSet(rs);
-					products.add(product);
+					products.add(parseProductDtoFromResultSet(rs));
 				}
 
 				return products;
@@ -213,8 +230,148 @@ private CategoryDao categoryDao;
 		product.setPrice(rs.getBigDecimal("price"));
 		product.setImgName(rs.getString("image_name"));
 		product.setDescription(rs.getString("description"));
-		
+		try (var conn = DBUtils.getConnection();
+		         var psInventory = conn.prepareStatement(
+		                 "SELECT i.stock FROM inventory i WHERE i.product_id = ?")) {
+		        psInventory.setInt(1, product.getId());
+
+		        try (var rsInventory = psInventory.executeQuery()) {
+		            if (rsInventory.next()) {
+		                product.setStock(rsInventory.getInt("stock"));
+		            }
+		        }
+		    }
 		return product;
 	}
 
+	@Override
+	public List<ProductDto> getProductsByPaginationLimit(int page, int paginationLimit) {
+		try (var conn = DBUtils.getConnection();
+				var ps = conn.prepareStatement("SELECT * FROM product LIMIT ?, ?")) {
+
+			ps.setInt(1, ((paginationLimit * page) - paginationLimit)); // offset - number of pages multiplied by limit and minus items on the page to show products from current page
+			ps.setInt(2, paginationLimit);
+
+			try (var rs = ps.executeQuery()) {
+				List<ProductDto> products = new ArrayList<>();
+
+				while (rs.next()) {
+					products.add(parseProductDtoFromResultSet(rs));
+				}
+
+				return products;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public int getProductCount() {
+		try (var conn = DBUtils.getConnection();
+				var ps = conn
+						.prepareStatement("SELECT  COUNT(id) as amount FROM product");) {
+
+			try (var rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt("amount");
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean updateProduct(ProductDto product) {
+		Connection conn = null;
+	    try {
+	        conn = DBUtils.getConnection();
+	        conn.setAutoCommit(false);
+
+	        try (var psProduct = conn.prepareStatement(
+	                "UPDATE product SET product_name = ?, price = ?, description = ? WHERE id = ?")) {
+	            psProduct.setString(1, product.getProductName());
+	            psProduct.setBigDecimal(2, product.getPrice());
+	            psProduct.setString(3, product.getDescription());
+	            psProduct.setInt(4, product.getId());
+	            psProduct.executeUpdate();
+	        }
+
+	        try (var psInventory = conn.prepareStatement(
+	                "UPDATE inventory SET stock = ? WHERE product_id = ?")) {
+	            psInventory.setInt(1, product.getStock());
+	            psInventory.setInt(2, product.getId());
+	            psInventory.executeUpdate();
+	        }
+
+	        conn.commit();
+	        return true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                conn.rollback();
+	            } catch (SQLException rollbackEx) {
+	                rollbackEx.printStackTrace();
+	            }
+	        }
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException closeEx) {
+	                closeEx.printStackTrace();
+	            }
+	        }
+	    }
+	    return false;
+	}
+
+	@Override
+	public boolean deleteProduct(int productId) {
+		Connection conn = null;
+	    try {
+	        conn = DBUtils.getConnection();
+	        conn.setAutoCommit(false);
+
+	        try (var psInventory = conn.prepareStatement("DELETE FROM inventory WHERE product_id = ?")) {
+	        	psInventory.setInt(1, productId);
+	        	psInventory.executeUpdate();
+	        }
+	        
+	        try (var psProduct = conn.prepareStatement("DELETE FROM product WHERE id = ?")) {
+	            psProduct.setInt(1, productId);
+	            psProduct.executeUpdate();
+	        }
+
+
+	        conn.commit();
+	        return true;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                conn.rollback();
+	            } catch (SQLException rollbackEx) {
+	                rollbackEx.printStackTrace();
+	            }
+	        }
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException closeEx) {
+	                closeEx.printStackTrace();
+	            }
+	        }
+	    }
+	    return false;
+	}
 }

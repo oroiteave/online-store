@@ -12,8 +12,11 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,6 +56,14 @@ public class ProductController {
 		return products;
 	}
 	
+	@GetMapping("/products")
+	public Map<String,Object> getProductsByPage(@RequestParam String page){
+		Map<String,Object> response = new HashMap<>();
+		response.put("products", productFacade.getProductsForPageWithLimit(Integer.parseInt(page), PAGINATION_LIMIT));
+		response.put("numberOfPages", productFacade.getNumberOfPagesForAllProducts(PAGINATION_LIMIT));
+		return response;
+	}
+	
 	@GetMapping("/category")
 	public Map<String,Object> getProductsByCategory(@RequestParam String id,@RequestParam String page){
 		Map<String,Object> response = new HashMap<>();
@@ -63,7 +74,7 @@ public class ProductController {
 	
 	@PostMapping("/add")
 	public ResponseEntity<String> addProduct(@RequestParam String productName, @RequestParam String price, @RequestParam MultipartFile productImage,
-			@RequestParam String description, @RequestParam String category) {
+			@RequestParam String description, @RequestParam String category, @RequestParam String productStock) {
 		
 		try {
 			Product product = new DefaultProduct();
@@ -75,6 +86,7 @@ public class ProductController {
 			product.setCategoryName(categoryFacade.getCategoryById(Integer.parseInt(category)).getCategoryName());
 			product.setDescription(description);
 			product.setImgName(imageName);
+			product.setStock(Integer.parseInt(productStock));
 			System.out.println(product.toString());
 			
 			productFacade.addProduct(product,Integer.parseInt(category));
@@ -86,26 +98,36 @@ public class ProductController {
 		}
 	}
 	
+	@PutMapping("/update")
+	public ResponseEntity<?> updateProduct(@RequestBody DefaultProduct product) {
+		try {
+	        productFacade.updateProduct(product);
+	        return ResponseEntity.ok("Producto actualizado con éxito");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el producto");
+	    }
+	}
+	
+	@DeleteMapping("/delete")
+	public String deleteProduct(@RequestParam int id) {
+		return (productFacade.deleteProduct(id)) ? "Producto eliminado con exito":"Error al eliminar el producto" ;
+	}
+	
 	private String saveImage(MultipartFile imageFile)throws IOException {
 		String folder = "C:/Users/oroi/proyectos/webs/backend/product-images/";
 		
-		 // Obtener el nombre original del archivo
         String originalFilename = imageFile.getOriginalFilename();
 
-        // Generar un nombre de archivo único para evitar colisiones
         String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String uniqueFilename = UUID.randomUUID().toString() + extension;
 
-        // Ruta completa al archivo
         Path path = Paths.get(folder + uniqueFilename);
 
-        // Crear el directorio si no existe
         Files.createDirectories(path.getParent());
 
-        // Guardar el archivo en el sistema de archivos
         Files.copy(imageFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-        // Retornar el nombre del archivo para guardarlo en el producto
         return uniqueFilename;
 	}
 }
