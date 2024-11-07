@@ -6,23 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.magicbaits.persistence.dao.RoleDao;
 import com.magicbaits.persistence.dao.UserDao;
 import com.magicbaits.persistence.dto.UserDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
+@Repository
 public class MySqlJdbcUserDao implements UserDao{
 	
 	@Autowired
     private DBUtils dbUtils;
 	
+	@Autowired
 	private RoleDao role;
 	
-	{
-		role = new MySqlJdbcRoleDao();
-	}
-
 	@Override
 	public boolean saveUser(UserDto user) {
 		try(var conn = dbUtils.getConnection();

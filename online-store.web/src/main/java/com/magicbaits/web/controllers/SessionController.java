@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.UserFacade;
-import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.User;
 import com.magicbaits.web.utils.PasswordSecurityEncode;
 
@@ -25,14 +24,12 @@ public class SessionController {
 	
 private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
+	@Autowired
 	private UserFacade userFacade;
 	
 	@Autowired
 	private PasswordSecurityEncode passwordSecurityEncode;
 	
-	{
-		userFacade = DefaultUserFacade.getInstance();
-	}
 
 	@PostMapping("/logout")
 	public void logOut(HttpSession session, HttpServletResponse response) throws IOException{

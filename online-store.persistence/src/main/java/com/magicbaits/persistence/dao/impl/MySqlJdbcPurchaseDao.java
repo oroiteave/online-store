@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.ProductDao;
@@ -16,21 +17,20 @@ import com.magicbaits.persistence.dto.ProductDto;
 import com.magicbaits.persistence.dto.PurchaseDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
+@Repository
 public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	@Autowired
     private DBUtils dbUtils;
 
-	
+	@Autowired
 	private ProductDao product;
-	private UserDao user;
-	private AddressDao address;
 	
-	{
-		product = new MySqlJdbcProductDao();
-		user = new MySqlJdbcUserDao();
-		address = new MySqlJdbcAddressDao();
-	}
+	@Autowired
+	private UserDao user;
+	
+	@Autowired
+	private AddressDao address;
 
 	@Override
 	public boolean savePurchase(PurchaseDto purchase) {

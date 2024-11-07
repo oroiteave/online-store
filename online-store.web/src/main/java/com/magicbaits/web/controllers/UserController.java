@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.UserFacade;
-import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.persistence.enteties.User;
 import com.magicbaits.persistence.enteties.impl.DefaultUser;
 import com.magicbaits.web.utils.PasswordSecurityEncode;
@@ -29,14 +28,11 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
+	@Autowired
 	private UserFacade userFacade;
 	
 	@Autowired
 	private PasswordSecurityEncode passwordSecurityEncode;
-	
-	{
-		userFacade = DefaultUserFacade.getInstance();
-	}
 	
 	@GetMapping("/current")
 	public ResponseEntity<User> getUser(HttpSession session) {

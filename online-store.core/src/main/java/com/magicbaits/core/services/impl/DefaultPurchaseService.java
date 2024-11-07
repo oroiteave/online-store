@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.magicbaits.core.exceptions.InsufficientStockException;
 import com.magicbaits.core.facades.ProductFacade;
 import com.magicbaits.core.facades.PurchaseFacade;
-import com.magicbaits.core.facades.impl.DefaultPurchaseFacade;
 import com.magicbaits.core.services.PurchaseService;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.Product;
@@ -22,12 +21,9 @@ public class DefaultPurchaseService implements PurchaseService{
 	@Autowired
     private ProductFacade productFacade;
 
+	@Autowired
     private PurchaseFacade purchaseFacade;
     
-    {
-    	purchaseFacade = DefaultPurchaseFacade.getInstance();
-    }
-	
     @Transactional(rollbackFor = Exception.class)
 	@Override
 	public void purchaseProduct(int userId, int productId, Address address, String shippingCompany,

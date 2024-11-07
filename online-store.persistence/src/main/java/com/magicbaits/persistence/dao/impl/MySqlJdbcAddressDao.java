@@ -5,21 +5,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.UserDao;
 import com.magicbaits.persistence.dto.AddressDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
+@Repository
 public class MySqlJdbcAddressDao implements AddressDao{
 	@Autowired
     private DBUtils dbUtils;
 	
-	UserDao userDao;
-	
-	{
-		userDao = new MySqlJdbcUserDao();
-	}
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	public int saveAddress(AddressDto address) {

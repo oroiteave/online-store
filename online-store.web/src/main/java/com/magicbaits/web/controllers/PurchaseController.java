@@ -17,9 +17,6 @@ import com.magicbaits.core.exceptions.InsufficientStockException;
 import com.magicbaits.core.facades.AddressFacade;
 import com.magicbaits.core.facades.PurchaseFacade;
 import com.magicbaits.core.facades.UserFacade;
-import com.magicbaits.core.facades.impl.DefaultAddressFacade;
-import com.magicbaits.core.facades.impl.DefaultPurchaseFacade;
-import com.magicbaits.core.facades.impl.DefaultUserFacade;
 import com.magicbaits.core.services.PurchaseService;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.Purchase;
@@ -38,19 +35,16 @@ public class PurchaseController {
 	@Autowired
 	private PurchaseService purchaseService;
 	
+	@Autowired
 	private PurchaseFacade purchaseFacade;
 	
+	@Autowired
 	private AddressFacade addressFacade;
 	
+	@Autowired
 	private UserFacade userFacade;
 	
 	private static final int PAGINATION_LIMIT = 6;
-	
-	{
-		purchaseFacade = DefaultPurchaseFacade.getInstance();
-		addressFacade = DefaultAddressFacade.getInstance();
-		userFacade = DefaultUserFacade.getInstance();
-	}
 	
 	@GetMapping("/purchase")
 	public List<Purchase> getPurchases(){

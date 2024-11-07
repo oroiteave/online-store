@@ -1,24 +1,23 @@
 package com.magicbaits.core.facades.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.magicbaits.core.facades.AddressFacade;
 import com.magicbaits.persistence.dao.AddressDao;
-import com.magicbaits.persistence.dao.impl.MySqlJdbcAddressDao;
 import com.magicbaits.persistence.dto.converter.AddressDtoToAddressConverter;
 import com.magicbaits.persistence.enteties.Address;
 
+@Service
 public class DefaultAddressFacade implements AddressFacade{
 	
-	private static DefaultAddressFacade instance;
-	private AddressDao addressDao = new MySqlJdbcAddressDao();
-	private AddressDtoToAddressConverter addressConverter = new AddressDtoToAddressConverter(); 
-
-	public static synchronized DefaultAddressFacade getInstance() {
-		if(instance==null) {
-			instance = new DefaultAddressFacade();
-		}
-		return instance;
-	}
+	private final AddressDao addressDao;
+	private final AddressDtoToAddressConverter addressConverter; 
 	
+	public DefaultAddressFacade(AddressDao addressDao, AddressDtoToAddressConverter addressConverter) {
+		this.addressDao = addressDao;
+		this.addressConverter = addressConverter;
+	}
+
 	@Override
 	public int saveAddress(Address address) {
 		return addressDao.saveAddress(addressConverter.convertAddressToAddressDto(address));
