@@ -4,16 +4,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.magicbaits.persistence.dao.CategoryDao;
 import com.magicbaits.persistence.dto.CategoryDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
-
+@Repository
 public class MySqlJdbcCategoryDao implements CategoryDao{
+	
+	@Autowired
+    private DBUtils dbUtils;
 	
 	@Override
 	public CategoryDto getCategoryByCategoryId(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM category WHERE id = ?")){
 				
 			ps.setInt(1, id);
@@ -35,7 +41,7 @@ public class MySqlJdbcCategoryDao implements CategoryDao{
 
 	@Override
 	public List<CategoryDto> getCategories() {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM category");
 				var rs = ps.executeQuery()){
 			

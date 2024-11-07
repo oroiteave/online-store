@@ -31,4 +31,6 @@ public interface ProductDao {
 	List<ProductDto> getProductsLikeNameForPageWithLimit(String searchQuery, int page, int paginationLimit);
 	
 	boolean deleteProduct(int productId);
+	
+	boolean decrementStock(int productId);
 }

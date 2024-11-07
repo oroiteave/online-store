@@ -2,24 +2,23 @@ package com.magicbaits.core.facades.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.magicbaits.core.facades.CategoryFacade;
 import com.magicbaits.persistence.dao.CategoryDao;
-import com.magicbaits.persistence.dao.impl.MySqlJdbcCategoryDao;
 import com.magicbaits.persistence.dto.converter.CategoryDtoToCategoryConverter;
 import com.magicbaits.persistence.enteties.Category;
 
+@Service
 public class DefaultCategoryFacade implements CategoryFacade{
 	
-	private static DefaultCategoryFacade instance;
-	private CategoryDao categoryDao = new MySqlJdbcCategoryDao();
-	private CategoryDtoToCategoryConverter categoryConverter = new CategoryDtoToCategoryConverter();
+	private final CategoryDao categoryDao;
+	private final CategoryDtoToCategoryConverter categoryConverter;
 	
-	public static synchronized DefaultCategoryFacade getInstance() {
-		if(instance==null) {
-			instance = new DefaultCategoryFacade();
-		}
-		return instance;
-	}
+    public DefaultCategoryFacade(CategoryDao categoryDao, CategoryDtoToCategoryConverter categoryConverter) {
+        this.categoryDao = categoryDao;
+        this.categoryConverter = categoryConverter;
+    }
 	
 	@Override
 	public List<Category> getCategories() {

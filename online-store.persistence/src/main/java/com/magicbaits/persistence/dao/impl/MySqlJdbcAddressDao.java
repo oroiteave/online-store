@@ -4,12 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.UserDao;
 import com.magicbaits.persistence.dto.AddressDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
 public class MySqlJdbcAddressDao implements AddressDao{
+	@Autowired
+    private DBUtils dbUtils;
+	
 	UserDao userDao;
 	
 	{
@@ -18,7 +23,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 
 	@Override
 	public int saveAddress(AddressDto address) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("INSERT INTO address (fk_adress_user,  direction_1, direction_2, city, number, postal_code,"
 						+ " phone_number) VALUES(?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
 			
@@ -57,7 +62,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 
 	@Override
 	public AddressDto getAddressByPurchaseId(int purchaseId) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT a.* FROM address a JOIN purchase p ON p.fk_purchase_address = a.id WHERE p.id = ? ;")){
 			
 			ps.setInt(1, purchaseId);
@@ -76,7 +81,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 
 	@Override
 	public AddressDto getAddressByUserId(int userId) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM address WHERE fk_adress_user = ?;")){
 			
 			ps.setInt(1, userId);
@@ -94,7 +99,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	}
 	@Override
 	public boolean updateAddress(AddressDto address) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("UPDATE address SET direction_1 = ?, direction_2 = ?,"
 						+ "city = ?, number = ?, postal_code = ?, phone_number = ? WHERE id = ?")){
 			
@@ -127,7 +132,7 @@ public class MySqlJdbcAddressDao implements AddressDao{
 	@Override
 	public boolean existAddressByUserId(int userId) {
 		int result = 0;
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT COUNT(*) AS address_amount FROM address WHERE fk_adress_user = ?")){
 			ps.setInt(1, userId);
 			try(var rs = ps.executeQuery()){

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.magicbaits.core.facades.CategoryFacade;
 import com.magicbaits.core.facades.ProductFacade;
-import com.magicbaits.core.facades.impl.DefaultCategoryFacade;
-import com.magicbaits.core.facades.impl.DefaultProductFacade;
 import com.magicbaits.persistence.enteties.Product;
 import com.magicbaits.persistence.enteties.impl.DefaultProduct;
 
@@ -33,13 +32,12 @@ import com.magicbaits.persistence.enteties.impl.DefaultProduct;
 @RequestMapping("/product")
 public class ProductController {
 	private final int PAGINATION_LIMIT = 6;
-	private ProductFacade productFacade;
-	private CategoryFacade categoryFacade;
 	
-	{
-		productFacade = DefaultProductFacade.getInstance();
-		categoryFacade = DefaultCategoryFacade.getInstance();
-	}
+	@Autowired
+	private ProductFacade productFacade;
+	
+	@Autowired
+	private CategoryFacade categoryFacade;
 	
 	@GetMapping
 	public Product getProduct(@RequestParam String id) {

@@ -6,6 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.magicbaits.persistence.dao.AddressDao;
 import com.magicbaits.persistence.dao.ProductDao;
 import com.magicbaits.persistence.dao.PurchaseDao;
@@ -15,6 +17,10 @@ import com.magicbaits.persistence.dto.PurchaseDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
 public class MySqlJdbcPurchaseDao implements PurchaseDao{
+	
+	@Autowired
+    private DBUtils dbUtils;
+
 	
 	private ProductDao product;
 	private UserDao user;
@@ -28,7 +34,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public boolean savePurchase(PurchaseDto purchase) {
-		try (var conn = DBUtils.getConnection(); 
+		try (var conn = dbUtils.getConnection(); 
 				var ps = conn.prepareStatement("INSERT INTO purchase (fk_purchase_user,fk_purchase_address,shipping_company,extra_message,status) VALUES (?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 				var psPurchaseProduct = conn.prepareStatement("INSERT INTO purchase_product (purchase_id, product_id) VALUES (?, ?)")) {
 			
@@ -72,7 +78,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public List<PurchaseDto> getPurchaces() {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM purchase")){
 			
 			List<PurchaseDto> purchases = new ArrayList<>();
@@ -102,7 +108,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public List<PurchaseDto> getPurchasesByUserId(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM purchase WHERE fk_purchase_user = ?")){
 			
 			ps.setInt(1, id);
@@ -138,7 +144,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public boolean updatePurchase(PurchaseDto purchase) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("UPDATE purchase SET status = ? WHERE id = ?")){
 			
 			ps.setString(1, purchase.getStatus());
@@ -156,7 +162,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public PurchaseDto getPurchaseById(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM purchase WHERE id = ?")){
 			ps.setInt(1, id);
 			try(var rs = ps.executeQuery()){
@@ -185,7 +191,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	@Override
 	public List<PurchaseDto> getPurchasePaginationLimit(int page, int paginationLimit) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM purchase LIMIT ?,?;")){
 			ps.setInt(1, ((paginationLimit * page) - paginationLimit));
 			ps.setInt(2, paginationLimit);
@@ -219,7 +225,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	@Override
 	public int getPurchaseCount() {
-		try(var conn =DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT COUNT(id) as amount FROM purchase;")){
 			try(var rs = ps.executeQuery()){
 				if(rs.next()) {
@@ -234,7 +240,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	@Override
 	public int getPurchaseCountByUserId(int id) {
-		try(var conn =DBUtils.getConnection();
+		try(var conn =dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT COUNT(id) as amount FROM purchase WHERE fk_purchase_user = ?;")){
 			ps.setInt(1, id);
 			try(var rs = ps.executeQuery()){
@@ -250,7 +256,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 	
 	@Override
 	public List<PurchaseDto> getPurchasePaginationLimitByUserId(int page, int paginationLimit, int userId) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM purchase WHERE fk_purchase_user = ? LIMIT ?,?;")){
 			ps.setInt(1, userId);
 			ps.setInt(2, ((paginationLimit * page) - paginationLimit));
@@ -296,7 +302,7 @@ public class MySqlJdbcPurchaseDao implements PurchaseDao{
 
 	@Override
 	public boolean deletePurchaseById(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("DELETE FROM purchase WHERE id = ?")){
 			
 			ps.setInt(1, id);

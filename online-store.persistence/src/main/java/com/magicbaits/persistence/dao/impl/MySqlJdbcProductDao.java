@@ -7,22 +7,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.magicbaits.persistence.dao.CategoryDao;
 import com.magicbaits.persistence.dao.ProductDao;
 import com.magicbaits.persistence.dto.ProductDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
+@Repository
 public class MySqlJdbcProductDao implements ProductDao{
 	
-private CategoryDao categoryDao;
+	@Autowired
+    private DBUtils dbUtils;
 	
-	{
-		categoryDao = new MySqlJdbcCategoryDao();
-	}
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	@Override
 	public boolean saveProduct(ProductDto product,int categoryId) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var psProduct = conn.prepareStatement("INSERT INTO product (product_name, price, category_id, image_name, description) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS)){
 			psProduct.setString(1, product.getProductName());
 			psProduct.setBigDecimal(2, product.getPrice());
@@ -59,7 +63,7 @@ private CategoryDao categoryDao;
 	
 	@Override
 	public ProductDto getProductByProductId(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product WHERE id = ?")){
 			ps.setInt(1, id);
 			
@@ -76,7 +80,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProducts() {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product")){
 				List<ProductDto> products = new ArrayList<ProductDto>();
 			try(var rs = ps.executeQuery()){
@@ -93,7 +97,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProductsLikeName(String searchQuery) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product WHERE UPPER(product_name) LIKE UPPER(CONCAT('%',?,'%'))")){
 			List<ProductDto> products = new ArrayList<>();
 			ps.setString(1,searchQuery);
@@ -113,7 +117,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProductsByCategoryId(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product WHERE category_id = ?")){
 			List<ProductDto> products = new ArrayList<>();
 			ps.setInt(1, id);
@@ -133,7 +137,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProductsByCategoryIdPaginationLimit(int categoryId, int page, int paginationLimit) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product WHERE category_id = ? LIMIT ?, ?")) {
 
 			ps.setInt(1, categoryId);
@@ -158,7 +162,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public int getProductCountForCategory(int categoryId) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn
 						.prepareStatement("SELECT  COUNT(id) as amount FROM product WHERE category_id=?");) {
 
@@ -178,7 +182,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public int getProductCountForSearch(String searchQuery) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn
 						.prepareStatement("SELECT COUNT(id) as amount FROM product WHERE UPPER(product_name) LIKE UPPER(CONCAT('%',?,'%'));");) {
 
@@ -198,7 +202,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProductsLikeNameForPageWithLimit(String searchQuery, int page, int paginationLimit) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product WHERE UPPER(product_name) LIKE UPPER(CONCAT('%',?,'%')) LIMIT ?, ?");) {
 
 			ps.setString(1, searchQuery);
@@ -230,7 +234,7 @@ private CategoryDao categoryDao;
 		product.setPrice(rs.getBigDecimal("price"));
 		product.setImgName(rs.getString("image_name"));
 		product.setDescription(rs.getString("description"));
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 		         var psInventory = conn.prepareStatement(
 		                 "SELECT i.stock FROM inventory i WHERE i.product_id = ?")) {
 		        psInventory.setInt(1, product.getId());
@@ -246,7 +250,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public List<ProductDto> getProductsByPaginationLimit(int page, int paginationLimit) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM product LIMIT ?, ?")) {
 
 			ps.setInt(1, ((paginationLimit * page) - paginationLimit)); // offset - number of pages multiplied by limit and minus items on the page to show products from current page
@@ -270,7 +274,7 @@ private CategoryDao categoryDao;
 
 	@Override
 	public int getProductCount() {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn
 						.prepareStatement("SELECT  COUNT(id) as amount FROM product");) {
 
@@ -290,7 +294,7 @@ private CategoryDao categoryDao;
 	public boolean updateProduct(ProductDto product) {
 		Connection conn = null;
 	    try {
-	        conn = DBUtils.getConnection();
+	        conn = dbUtils.getConnection();
 	        conn.setAutoCommit(false);
 
 	        try (var psProduct = conn.prepareStatement(
@@ -337,7 +341,7 @@ private CategoryDao categoryDao;
 	public boolean deleteProduct(int productId) {
 		Connection conn = null;
 	    try {
-	        conn = DBUtils.getConnection();
+	        conn = dbUtils.getConnection();
 	        conn.setAutoCommit(false);
 
 	        try (var psInventory = conn.prepareStatement("DELETE FROM inventory WHERE product_id = ?")) {
@@ -374,4 +378,17 @@ private CategoryDao categoryDao;
 	    }
 	    return false;
 	}
+	
+	@Override
+    public boolean decrementStock(int productId) {
+        try (var conn = dbUtils.getConnection();
+             var ps = conn.prepareStatement("UPDATE inventory SET stock = stock - 1 WHERE product_id = ? AND stock > 0")) {
+            ps.setInt(1, productId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

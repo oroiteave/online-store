@@ -2,22 +2,22 @@ package com.magicbaits.core.facades.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.magicbaits.core.facades.ProductFacade;
 import com.magicbaits.persistence.dao.ProductDao;
-import com.magicbaits.persistence.dao.impl.MySqlJdbcProductDao;
 import com.magicbaits.persistence.dto.converter.ProductDtoToProductConverter;
 import com.magicbaits.persistence.enteties.Product;
 
+@Service
 public class DefaultProductFacade implements ProductFacade {
-	ProductDao productDao = new MySqlJdbcProductDao();
-	ProductDtoToProductConverter productConverter = new ProductDtoToProductConverter();
-	private static DefaultProductFacade instance;
 	
-	public static synchronized DefaultProductFacade getInstance() {
-		if (instance == null) {
-			instance = new DefaultProductFacade();
-		}
-		return instance;
+	private final ProductDao productDao;
+	private final ProductDtoToProductConverter productConverter;
+	
+	public DefaultProductFacade(ProductDao productDao, ProductDtoToProductConverter productConverter) {
+		this.productDao = productDao;
+		this.productConverter = productConverter;
 	}
 
 	@Override
@@ -95,5 +95,10 @@ public class DefaultProductFacade implements ProductFacade {
 	public boolean deleteProduct(int productId) {
 		return productDao.deleteProduct(productId);
 	}
+	
+	@Override
+    public boolean decrementStock(int productId) {
+        return productDao.decrementStock(productId);
+    }
 
 }

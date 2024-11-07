@@ -29,4 +29,6 @@ public interface ProductFacade {
 	List<Product> getProductsForPageWithLimit(int page, int paginationLimit);
 	
 	boolean deleteProduct(int productId);
+	
+	boolean decrementStock(int productId);
 }
