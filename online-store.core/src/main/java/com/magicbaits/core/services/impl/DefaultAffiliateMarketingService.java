@@ -2,14 +2,18 @@ package com.magicbaits.core.services.impl;
 
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.magicbaits.core.services.AffiliateMarketingService;
 import com.magicbaits.persistence.dao.UserDao;
-import com.magicbaits.persistence.dao.impl.MySqlJdbcUserDao;
 
+@Service
 public class DefaultAffiliateMarketingService implements AffiliateMarketingService{
 	private static final int MAX_CHARS_IN_PARTNER_CODE = 6; 
 	
-	private UserDao userDao = new MySqlJdbcUserDao(); 
+	@Autowired
+	private UserDao userDao; 
 	
 	@Override
 	public String generateUniquePartnerCode() {

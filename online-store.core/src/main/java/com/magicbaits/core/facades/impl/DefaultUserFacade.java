@@ -4,28 +4,26 @@ import static com.magicbaits.persistence.dto.RoleDto.CUSTOMER_ROLE_NAME;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.magicbaits.core.facades.UserFacade;
 import com.magicbaits.core.services.AffiliateMarketingService;
-import com.magicbaits.core.services.impl.DefaultAffiliateMarketingService;
 import com.magicbaits.persistence.dao.UserDao;
-import com.magicbaits.persistence.dao.impl.MySqlJdbcUserDao;
 import com.magicbaits.persistence.dto.converter.UserDtoToUserConverter;
 import com.magicbaits.persistence.enteties.User;
 
-
-
+@Service
 public class DefaultUserFacade implements UserFacade{
 	
-	private static DefaultUserFacade instance;
-	private UserDao userDao = new MySqlJdbcUserDao();
-	private UserDtoToUserConverter userConverter = new UserDtoToUserConverter();
-	private AffiliateMarketingService marketingService = new DefaultAffiliateMarketingService();
+	private final UserDao userDao;
+	private final UserDtoToUserConverter userConverter;
+	private final AffiliateMarketingService marketingService;
 	
-	public static synchronized DefaultUserFacade getInstance() {
-		if(instance ==null) {
-			instance = new DefaultUserFacade();
-		}
-		return instance;
+	public DefaultUserFacade(UserDao userDao, UserDtoToUserConverter userConverter,
+			AffiliateMarketingService marketingService) {
+		this.userDao = userDao;
+		this.userConverter = userConverter;
+		this.marketingService = marketingService;
 	}
 
 	@Override

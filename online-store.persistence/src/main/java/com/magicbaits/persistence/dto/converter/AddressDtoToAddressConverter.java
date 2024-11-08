@@ -1,14 +1,16 @@
 package com.magicbaits.persistence.dto.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.magicbaits.persistence.dto.AddressDto;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.impl.DefaultAddress;
 
+@Component
 public class AddressDtoToAddressConverter {
+	@Autowired
 	private UserDtoToUserConverter userConverter;
-	{
-		userConverter = new UserDtoToUserConverter();
-	}
 	
 	public Address convertAddressDtoToAddress(AddressDto addressDto){
 		if(addressDto == null) {

@@ -1,11 +1,11 @@
 package com.magicbaits.web.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,20 +13,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.magicbaits.core.exceptions.InsufficientStockException;
 import com.magicbaits.core.facades.AddressFacade;
-import com.magicbaits.core.facades.ProductFacade;
 import com.magicbaits.core.facades.PurchaseFacade;
 import com.magicbaits.core.facades.UserFacade;
-import com.magicbaits.core.facades.impl.DefaultAddressFacade;
-import com.magicbaits.core.facades.impl.DefaultProductFacade;
-import com.magicbaits.core.facades.impl.DefaultPurchaseFacade;
-import com.magicbaits.core.facades.impl.DefaultUserFacade;
+import com.magicbaits.core.services.PurchaseService;
 import com.magicbaits.persistence.enteties.Address;
-import com.magicbaits.persistence.enteties.Product;
 import com.magicbaits.persistence.enteties.Purchase;
 import com.magicbaits.persistence.enteties.User;
 import com.magicbaits.persistence.enteties.impl.DefaultAddress;
-import com.magicbaits.persistence.enteties.impl.DefaultPurchase;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,18 +31,20 @@ import jakarta.servlet.http.HttpSession;
 public class PurchaseController {
 
 	private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
-	private PurchaseFacade purchaseFacade;
-	private ProductFacade productFacade;
-	private AddressFacade addressFacade;
-	private UserFacade userFacade;
-	private static final int PAGINATION_LIMIT = 6;
 	
-	{
-		purchaseFacade = DefaultPurchaseFacade.getInstance();
-		productFacade = DefaultProductFacade.getInstance();
-		addressFacade = DefaultAddressFacade.getInstance();
-		userFacade = DefaultUserFacade.getInstance();
-	}
+	@Autowired
+	private PurchaseService purchaseService;
+	
+	@Autowired
+	private PurchaseFacade purchaseFacade;
+	
+	@Autowired
+	private AddressFacade addressFacade;
+	
+	@Autowired
+	private UserFacade userFacade;
+	
+	private static final int PAGINATION_LIMIT = 6;
 	
 	@GetMapping("/purchase")
 	public List<Purchase> getPurchases(){
@@ -89,35 +86,31 @@ public class PurchaseController {
 	@PostMapping("/purchase")
 	public void purchase(HttpSession session, @RequestParam String productId, @RequestParam String useSaveAddress, 
 			HttpServletRequest request,HttpServletResponse response) throws IOException{
-		User user = ((User) session.getAttribute(LOGGED_IN_USER_ATTR));
-		int userId = user.getId();
-		
-		Product product = productFacade.getProductById(Integer.parseInt(productId));
-		List<Product> products = new ArrayList<>();
-		products.add(product);
-		
-		Purchase purchase = new DefaultPurchase();
-		purchase.setCustomerId(userId);
-		purchase.setProducts(products);
-		purchase.setShippingCompany(request.getParameter("flexRadioDefault"));
-		purchase.setExtraMessage(request.getParameter("extraMessage"));
-		purchase.setStatus("CONFIRMADO");
-		
-		if(!purchase.getShippingCompany().equals("localPickup")) {
-			Address address = new DefaultAddress();
-			if(useSaveAddress!=null && useSaveAddress.equals("true")) {
-				address = addressFacade.getAddressByUserId(userId);
-			}else {
-				address = createAddress(request,user);
-			}
-			purchase.setAddress(address);
-		}
-		
-		if(purchaseFacade.addPurchase(purchase)) {
-			response.sendRedirect("/transaction-approve.html");
-		}else {
-			response.sendRedirect("/transaction-fail.html");
-		}
+		try {
+	        User user = (User) session.getAttribute(LOGGED_IN_USER_ATTR);
+	        int userId = user.getId();
+
+	        String shippingCompany = request.getParameter("flexRadioDefault");
+	        String extraMessage = request.getParameter("extraMessage");
+
+	        Address address = null;
+	        if (!"localPickup".equals(shippingCompany)) {
+	            if ("true".equals(useSaveAddress)) {
+	                address = addressFacade.getAddressByUserId(userId);
+	            } else {
+	                address = createAddress(request, user);
+	            }
+	        }
+
+	        purchaseService.purchaseProduct(userId, Integer.parseInt(productId), address, shippingCompany, extraMessage);
+
+	        response.sendRedirect("/transaction-approve.html");
+	    } catch (InsufficientStockException e) {
+	        response.sendRedirect("/out-of-stock.html");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.sendRedirect("/transaction-fail.html");
+	    }
 	}
 	
 	private Address createAddress(HttpServletRequest request, User user) {

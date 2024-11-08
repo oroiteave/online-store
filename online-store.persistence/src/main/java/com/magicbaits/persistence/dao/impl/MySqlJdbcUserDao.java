@@ -5,22 +5,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.magicbaits.persistence.dao.RoleDao;
 import com.magicbaits.persistence.dao.UserDao;
 import com.magicbaits.persistence.dto.UserDto;
 import com.magicbaits.persistence.utils.DBUtils;
 
+@Repository
 public class MySqlJdbcUserDao implements UserDao{
 	
+	@Autowired
+    private DBUtils dbUtils;
+	
+	@Autowired
 	private RoleDao role;
 	
-	{
-		role = new MySqlJdbcRoleDao();
-	}
-
 	@Override
 	public boolean saveUser(UserDto user) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("INSERT INTO user (first_name,last_name,email,fk_user_role,money,password,partner_code,referrer_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")){
 			
 			ps.setString(1, user.getFirstName());
@@ -52,7 +56,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public List<UserDto> getUsers() {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM user")){
 			
 			try(var rs = ps.executeQuery()){
@@ -71,7 +75,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public UserDto getUserByEmail(String userEmail) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM user WHERE email = ?")){
 			
 			ps.setString(1, userEmail);
@@ -90,7 +94,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public UserDto getUserById(int id) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM user WHERE id = ?")){
 			
 			ps.setInt(1, id);
@@ -109,7 +113,7 @@ public class MySqlJdbcUserDao implements UserDao{
 	
 	@Override
 	public UserDto getUserByPartnerCode(String partnerCode) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM user WHERE partner_code = ?")){
 			ps.setString(1, partnerCode);
 			try(var rs = ps.executeQuery()){
@@ -144,7 +148,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public void updateUser(UserDto user) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, email = ?, fk_user_role = ?, money = ?,"
 						+ "password = ?, partner_code = ?, referrer_user_id = ? WHERE id = ?")){
 			
@@ -180,7 +184,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public List<UserDto> getReferralsByUserId(int id) {
-		try (var conn = DBUtils.getConnection();
+		try (var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT * FROM user WHERE referrer_user_id = ?")) {
 			
 			ps.setInt(1, id);
@@ -204,7 +208,7 @@ public class MySqlJdbcUserDao implements UserDao{
 
 	@Override
 	public List<String> getUserEmailsForPurchasesPaginationLimit(int page, int paginationLimit) {
-		try(var conn = DBUtils.getConnection();
+		try(var conn = dbUtils.getConnection();
 				var ps = conn.prepareStatement("SELECT u.email FROM user u JOIN purchase p ON u.id = p.fk_purchase_user LIMIT ?,?;")){
 			
 			ps.setInt(1, ((paginationLimit * page) - paginationLimit));

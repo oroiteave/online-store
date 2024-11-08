@@ -1,13 +1,13 @@
 package com.magicbaits.web.controllers;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magicbaits.core.facades.AddressFacade;
-import com.magicbaits.core.facades.impl.DefaultAddressFacade;
 import com.magicbaits.persistence.enteties.Address;
 import com.magicbaits.persistence.enteties.User;
 
@@ -18,10 +18,8 @@ public class AddressController {
 
 	private final String LOGGED_IN_USER_ATTR = "loggedInUser";
 	
+	@Autowired
 	private AddressFacade addressFacade;
-	{
-		addressFacade = DefaultAddressFacade.getInstance();
-	}
 	
 	@GetMapping("/address/user")
 	public Address getUserAddress(HttpSession session) {

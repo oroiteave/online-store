@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.magicbaits.persistence.dto.UserDto;
 import com.magicbaits.persistence.enteties.User;
 import com.magicbaits.persistence.enteties.impl.DefaultUser;
 
-
+@Component
 public class UserDtoToUserConverter {
+	@Autowired
 	private RoleDtoToRoleConverter roleConverter;
-	
-	{
-		roleConverter = new RoleDtoToRoleConverter();
-	}
 
 	public UserDto convertUserIdToUserDtoWithOnlyId(int customerId) {
 		UserDto userDto = new UserDto();

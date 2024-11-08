@@ -3,10 +3,13 @@ package com.magicbaits.persistence.dto.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.magicbaits.persistence.dto.CategoryDto;
 import com.magicbaits.persistence.enteties.Category;
 import com.magicbaits.persistence.enteties.impl.DefaultCategory;
 
+@Component
 public class CategoryDtoToCategoryConverter {
 	public CategoryDto convertCategoryNameToCategoryDtoWithOnlyName(String categoryName) {
 		CategoryDto categoryDto = new CategoryDto();

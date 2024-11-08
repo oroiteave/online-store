@@ -3,20 +3,23 @@ package com.magicbaits.persistence.dto.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.magicbaits.persistence.dto.PurchaseDto;
 import com.magicbaits.persistence.enteties.Purchase;
 import com.magicbaits.persistence.enteties.impl.DefaultPurchase;
 
+@Component
 public class PurchaseDtoToPurchaseConverter {
+	@Autowired
 	private ProductDtoToProductConverter productConverter;
-	private UserDtoToUserConverter userConverter;
-	private AddressDtoToAddressConverter addressConverter;
 	
-	{
-		productConverter = new ProductDtoToProductConverter();
-		userConverter = new UserDtoToUserConverter();
-		addressConverter = new AddressDtoToAddressConverter();
-	}
+	@Autowired
+	private UserDtoToUserConverter userConverter;
+	
+	@Autowired
+	private AddressDtoToAddressConverter addressConverter;
 	
 	public Purchase convertPurchaseDtoToPurchase(PurchaseDto purchaseDto) {
 		Purchase purchase = new DefaultPurchase();
