@@ -8,7 +8,7 @@ document.getElementById('product-form').addEventListener('submit', function(even
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
             alert('Producto agregado con éxito');
             // Opcionalmente, puedes redirigir o limpiar el formulario

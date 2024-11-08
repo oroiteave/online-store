@@ -63,7 +63,7 @@ let currentPage = 1;
                     option.value = category.id;
                     option.textContent = category.categoryName;
 
-                    if (category.id === selectedCategory) {
+                    if (category.categoryName === selectedCategory) {
                         option.selected = true;
                     }
 
