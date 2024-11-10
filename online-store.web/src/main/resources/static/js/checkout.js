@@ -6,21 +6,25 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(`/product?id=${encodeURIComponent(productId)}`)
             .then(response => response.json())
             .then(product => {
-                document.getElementById('product-details').innerHTML = `
-            <div class="me-3 position-relative">
-            	<img src="/product-images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
-            </div>
-            <div class="">
-            	<a href="#" class="nav-link">${product.productName}</a>
-            	<div class="price text-muted">Total: $${product.price}</div>
-            </div>
-                `;
-                document.getElementById('product-price').innerHTML =`
-                	<p class="mb-2">Precio total:</p>
-            		<p class="mb-2 fw-bold">$${product.price}</p>`;
-            
-            addressFormSave();
-            paypalButton(product);
+				if(product.stock>0){
+	                document.getElementById('product-details').innerHTML = `
+		            <div class="me-3 position-relative">
+		            	<img src="/product-images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+		            </div>
+		            <div class="">
+		            	<a href="#" class="nav-link">${product.productName}</a>
+		            	<div class="price text-muted">Total: $${product.price}</div>
+		            </div>
+		                `;
+		                document.getElementById('product-price').innerHTML =`
+		                	<p class="mb-2">Precio total:</p>
+		            		<p class="mb-2 fw-bold">$${product.price}</p>`;
+		            
+		            addressFormSave();
+		            paypalButton(product);
+				}else{
+					"<p>Producto sin stock</p>"
+				}
             })
             .catch(error => console.error('Error fetching product details:', error));
     }
