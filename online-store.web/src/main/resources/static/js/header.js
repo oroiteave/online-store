@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('/header.html')
+    fetch('/online-store/header.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('header-placeholder').innerHTML = data;
@@ -13,7 +13,7 @@ function insertFunctions(){
 }
 
 function updateLoggedInUserHeader() {
-        fetch('/user/current')
+        fetch('/online-store/user/current')
             .then(response => {
 				if (response.ok) {
 		            return response.text().then(text => text ? JSON.parse(text) : null);
@@ -62,12 +62,12 @@ function searchQuery(){
     function updateValue(e){
         const query = e.target.value;
 		if(query.length>0){
-			fetch(`/product/search?query=${encodeURIComponent(query)}`)
+			fetch(`/online-store/product/search?query=${encodeURIComponent(query)}`)
 	        .then(response => response.json())
 	        .then(products => {
 	            if (products.length > 0) {
 	                suggestions.innerHTML = products.map(product => 
-	                    `<a class="dropdown-item" href="/product.html?id=${product.id}">${product.productName}</a>`
+	                    `<a class="dropdown-item" href="/online-store/product.html?id=${product.id}">${product.productName}</a>`
 	                ).join('');
 	                suggestions.classList.add('show');
 	            } else {

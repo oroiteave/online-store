@@ -1,5 +1,5 @@
 function fetchCategories() {
-            fetch('/category')
+            fetch('/online-store/category')
                 .then(response => response.json())
                 .then(data => {
                     displayCategories(data);
