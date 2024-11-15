@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/product-images/**")
-                .addResourceLocations("file:///C:/Users/oroi/proyectos/webs/backend/product-images/");
+                .addResourceLocations("file:/root/proyectos/product-images/");
     }
 
 }

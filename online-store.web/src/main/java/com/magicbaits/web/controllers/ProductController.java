@@ -113,10 +113,9 @@ public class ProductController {
 	}
 	
 	private String saveImage(MultipartFile imageFile)throws IOException {
-		String folder = "C:/Users/oroi/proyectos/webs/backend/product-images/";
+		String folder = "/root/proyectos/product-images/";
 		
         String originalFilename = imageFile.getOriginalFilename();
-
         String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String uniqueFilename = UUID.randomUUID().toString() + extension;
 
