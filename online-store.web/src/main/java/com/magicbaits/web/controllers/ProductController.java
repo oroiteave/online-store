@@ -113,7 +113,7 @@ public class ProductController {
 	}
 	
 	private String saveImage(MultipartFile imageFile)throws IOException {
-		String folder = "/root/proyectos/product-images/";
+		String folder = "/opt/proyectos/product-images/";
 		
         String originalFilename = imageFile.getOriginalFilename();
         String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
