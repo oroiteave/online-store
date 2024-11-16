@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const productId = urlParams.get('id');
 
 	function renderProductDetails(productId){
-		fetch(`/product?id=${encodeURIComponent(productId)}`)
+		fetch(`/online-store/product?id=${encodeURIComponent(productId)}`)
             .then(response => response.json())
             .then(product => {
                 if (product) {
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error('Error fetching product:', error));
 	}
 	function renderBuyButton(productId){
-		fetch(`/user/current`)
+		fetch(`/online-store/user/current`)
             .then(response => {
 				if (response.ok) {
 		            return response.text().then(text => text ? JSON.parse(text) : null);
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     
                     const realButton = document.getElementById("buyButton");
                     realButton.addEventListener('click', function() {
-            			window.location.href = `checkout.html?id=${encodeURIComponent(productId)}`;
+            			window.location.href = `/online-store/checkout.html?id=${encodeURIComponent(productId)}`;
         			});
 				}
 				else{
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     
                     const realButton = document.getElementById("buyButton");
                     realButton.addEventListener('click', function() {
-            			window.location.href = `sign-in.html`;
+            			window.location.href = `/online-store/sign-in.html`;
         			});
 				}
 			})

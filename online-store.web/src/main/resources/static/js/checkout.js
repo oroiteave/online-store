@@ -3,13 +3,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const productId = params.get('id');
     
     if (productId) {
-        fetch(`/product?id=${encodeURIComponent(productId)}`)
+        fetch(`/online-store/product?id=${encodeURIComponent(productId)}`)
             .then(response => response.json())
             .then(product => {
 				if(product.stock>0){
 	                document.getElementById('product-details').innerHTML = `
 		            <div class="me-3 position-relative">
-		            	<img src="/product-images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+		            	<img src="/online-store/product-images/${product.imgName}" style="height: 96px; width: 96x;" class="img-sm rounded border" />
 		            </div>
 		            <div class="">
 		            	<a href="#" class="nav-link">${product.productName}</a>
@@ -71,7 +71,7 @@ function paypalButton(product) {
 				
 				params.append('productId', product.id);
                 
-                fetch('/purchase', {
+                fetch('/online-store/purchase', {
                     method: 'POST',
                     headers: {
         				'Content-Type': 'application/x-www-form-urlencoded'
@@ -124,7 +124,7 @@ function addressFormSave(){
         }
     }
 	    
-	fetch('/address/user')
+	fetch('/online-store/address/user')
 	.then(response => {
 		if (response.ok) {
 		            return response.text().then(text => text ? JSON.parse(text) : null);

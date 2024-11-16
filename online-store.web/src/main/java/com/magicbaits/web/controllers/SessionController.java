@@ -36,7 +36,7 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 		if(session != null) {
 			session.invalidate();
 		}
-		response.sendRedirect("/index.html");
+		response.sendRedirect("/online-store/index.html");
 	}
 	
 	@PostMapping("/login")

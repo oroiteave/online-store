@@ -25,24 +25,24 @@ function updateLoggedInUserHeader() {
                 if (data && data.firstName) {
 					if(data.roleName === "ROLE_ADMIN"){
 						document.getElementById("loggedInControllerUserName").innerHTML = `
-	                    <li class="nav-item"><a class="nav-link" href="/admin/panel.html">Bienvenido ${data.firstName}</a></li>`;
+	                    <li class="nav-item"><a class="nav-link" href="/online-store/admin/panel.html">Bienvenido ${data.firstName}</a></li>`;
 	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
-	        			<li class="nav-item"><form action="/session/logout" method="POST">
+	        			<li class="nav-item"><form action="/online-store/session/logout" method="POST">
 	                    	<button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
                     	</form></li>`;
 					}else{
 	                    document.getElementById("loggedInControllerUserName").innerHTML = `
-	                    <li class="nav-item"><a class="nav-link" href="/panel.html">Bienvenido ${data.firstName}</a></li>`;
+	                    <li class="nav-item"><a class="nav-link" href="/online-store/panel.html">Bienvenido ${data.firstName}</a></li>`;
 	        			document.getElementById("loggedInControllerLogOut").innerHTML =`
-	        			<li class="nav-item"><form action="/session/logout" method="POST">
+	        			<li class="nav-item"><form action="/online-store/session/logout" method="POST">
 	                        <button class="btn btn-link nav-link" type="submit">Cerrar sesión</button>
 	                    </form></li>`;
 					}
                 } else {
                     document.getElementById("loggedInControllerUserName").innerHTML = `
-                    <li class="nav-item"><a class="nav-link" href="/sign-in.html">Iniciar sesión</a></li>`;
+                    <li class="nav-item"><a class="nav-link" href="/online-store/sign-in.html">Iniciar sesión</a></li>`;
         			document.getElementById("loggedInControllerLogOut").innerHTML =`
-        			<li class="nav-item"><a class="nav-link" href="/sign-up.html">Registrarse</a></li>`;
+        			<li class="nav-item"><a class="nav-link" href="/online-store/sign-up.html">Registrarse</a></li>`;
                 }
             })
             .catch(error => console.error('Error:', error));

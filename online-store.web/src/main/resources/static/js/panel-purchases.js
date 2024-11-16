@@ -1,6 +1,6 @@
 let currentPage = 1;
 function fetchPurchases(currentPage){
-	fetch(`/purchase/pages?page=${encodeURIComponent(currentPage)}`)
+	fetch(`/online-store/purchase/pages?page=${encodeURIComponent(currentPage)}`)
 	.then(response => response.json())
 	.then(data => {
 	    loadPurchases(data.purchases,data.userEmails);
@@ -14,7 +14,7 @@ function updateStatus(purchaseId) {
 	const params = new URLSearchParams();
 	params.append("purchaseId",purchaseId);
 	params.append("newStatus",newStatus);
-    fetch('/purchase',{
+    fetch('/online-store/purchase',{
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
@@ -65,7 +65,7 @@ function loadPurchases(purchases,userEmails) {
     }
 }
 function deletePurchase(purchaseId){
-	fetch(`/purchase?id=${purchaseId}`,{
+	fetch(`/online-store/purchase?id=${purchaseId}`,{
 		method: 'DELETE',
 	})
 	.then(response => response.text())
@@ -80,7 +80,7 @@ function deletePurchase(purchaseId){
 }
 
 function showAddress(purchaseId) {
-    fetch(`/address/purchase?purchaseId=${encodeURIComponent(purchaseId)}`)
+    fetch(`/online-store/address/purchase?purchaseId=${encodeURIComponent(purchaseId)}`)
     .then(response => {
 		if (response.ok) {
             return response.text().then(text => text ? JSON.parse(text) : null);

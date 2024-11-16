@@ -4,7 +4,7 @@ document.getElementById('product-form').addEventListener('submit', function(even
         const formData = new FormData(this);
         
         // Puedes enviar los datos al servidor usando fetch
-        fetch('/product/add', {
+        fetch('/online-store/product/add', {
             method: 'POST',
             body: formData
         })

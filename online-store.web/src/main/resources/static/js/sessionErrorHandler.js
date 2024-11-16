@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('/session/errorMessage')
+    fetch('/online-store/session/errorMessage')
         .then(response => response.text())
         .then(data => {
             if (data) {

@@ -7,7 +7,7 @@ let currentPage = 1;
     });
 
     function loadProducts(page) {
-        fetch(`/product/products?page=${page}`)
+        fetch(`/online-store/product/products?page=${page}`)
             .then(response => response.json())
             .then(data => {
                 const products = data.products;
@@ -27,7 +27,7 @@ let currentPage = 1;
 
             row.innerHTML = `
                 <td class="id-column">${product.id}</td>
-                <td class="image-column"><img src="/product-images/${product.imgName}" alt="${product.productName}" class="product-image"></td>
+                <td class="image-column"><img src="/online-store/product-images/${product.imgName}" alt="${product.productName}" class="product-image"></td>
                 <td class="name-column"><input type="text" class="form-control" value="${product.productName}" id="name-${product.id}"></td>
                 <td class ="price-column"><input type="number" class="form-control" value="${product.price}" id="price-${product.id}" min="0" step="0.01"></td>
                 <td class="description-column"><textarea class="form-control" id="description-${product.id}" rows="2">${product.description}</textarea></td>
@@ -52,7 +52,7 @@ let currentPage = 1;
 
     function loadCategories(productId, selectedCategory) {
         // Supongamos que tienes un endpoint para obtener las categorías
-        fetch('/category')
+        fetch('/online-store/category')
             .then(response => response.json())
             .then(categories => {
                 const select = document.getElementById(`category-${productId}`);
@@ -89,7 +89,7 @@ let currentPage = 1;
             stock: stock
         };
 
-        fetch(`/product/update`, {
+        fetch(`/online-store/product/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ let currentPage = 1;
 
     function deleteProduct(productId) {
         if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-            fetch(`/product/delete?id=${productId}`, {
+            fetch(`/online-store/product/delete?id=${productId}`, {
                 method: 'DELETE',
             })
             .then(response => response.text())

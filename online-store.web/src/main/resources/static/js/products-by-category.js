@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentPage = 1;
 
     function fetchProductsByCategory(page) {
-        fetch(`/product/category?id=${encodeURIComponent(categoryId)}&page=${page}`)
+        fetch(`/online-store/product/category?id=${encodeURIComponent(categoryId)}&page=${page}`)
             .then(response => response.json())
             .then(data => {
 				const products = data.products;
@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const productsContainer = document.getElementById('products-container');
         productsContainer.innerHTML = products.map(product => `
             <div class="col-md-4">
-                <a href="product.html?id=${product.id}" class="text-decoration-none text-dark">
+                <a href="/online-store/product.html?id=${product.id}" class="text-decoration-none text-dark">
                     <div class="card mb-4 product-card">
                         <div class="image-container">
-                            <img src="/product-images/${product.imgName}" alt="${product.productName}">
+                            <img src="/online-store/product-images/${product.imgName}" alt="${product.productName}">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${product.productName}</h5>

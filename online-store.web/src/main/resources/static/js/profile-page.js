@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	function userDataRender(){
 		const userInfoContainer = document.getElementById('user-info-container');
 		const userEmailContainer = document.getElementById('user-email-container');
-	fetch('/user/current')
+	fetch('/online-store/user/current')
 	.then(response => response.json())
 	.then(user => {
 		if(user!=null){
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	function addressDataRender(){
 		const addressInfoContainer = document.getElementById("address-info-container");
-		fetch('/address/user')
+		fetch('/online-store/address/user')
 		.then(response => response.json())
 		.then(address => {
 			if(address!=null){
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				        params.append(key, value);
 		});
 		
-		fetch('/user', {
+		fetch('/online-store/user', {
             method: 'PUT',
             headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 		
 		console.log(params.toString());
-		fetch('/address', {
+		fetch('/online-store/address', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		params.append('password',currentPassword);
 		params.append('newPassword',newPassword);
 	
-		fetch('/user/password', {
+		fetch('/online-store/user/password', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		const params = new URLSearchParams();
 		params.append("email",newEmail);
 		
-        fetch('user/email', {
+        fetch('/online-store/user/email', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'

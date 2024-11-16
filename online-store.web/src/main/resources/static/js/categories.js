@@ -16,7 +16,7 @@ function fetchCategories() {
                 categoryElement.className = 'col-md-3';
                 categoryElement.innerHTML = `
                     <div class="card mb-4 shadow-sm">
-                    	<a href="category.html?id=${category.id}" class="text-decoration-none text-dark">
+                    	<a href="/online-store/category.html?id=${category.id}" class="text-decoration-none text-dark">
                     	<img src="/online-store/product-images/${category.imgName}" class="card-img-top" alt="${category.categoryName}">
                         <div class="card-body">
                             <h5 class="card-title">${category.categoryName}</h5>

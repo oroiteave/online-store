@@ -1,6 +1,6 @@
 let currentPage = 1;
 function fetchPurchases(currentPage){
-	fetch(`/purchase/user?page=${encodeURIComponent(currentPage)}`)
+	fetch(`/online-store/purchase/user?page=${encodeURIComponent(currentPage)}`)
 	.then(response => response.json())
 	.then(data => {
 	    loadPurchases(data.purchases);
