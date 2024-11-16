@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('product-name').innerText = product.productName;
                     document.getElementById('product-price').innerText = `${product.price} $`;
                     document.getElementById('product-description').innerText = product.description;
-                    document.getElementById('product-img').src = `/product-images/${product.imgName}`;
+                    document.getElementById('product-img').src = `/online-store/product-images/${product.imgName}`;
                     document.getElementById('product-img').alt = product.productName;
                     document.getElementById('product-stock').innerText = (product.stock > 0) ?  "stock: " + product.stock : "No hay stock del producto";
                     if(product.stock > 0){

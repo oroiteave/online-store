@@ -104,12 +104,12 @@ public class PurchaseController {
 
 	        purchaseService.purchaseProduct(userId, Integer.parseInt(productId), address, shippingCompany, extraMessage);
 
-	        response.sendRedirect("/transaction-approve.html");
+	        response.sendRedirect("/online-storetransaction-approve.html");
 	    } catch (InsufficientStockException e) {
-	        response.sendRedirect("/out-of-stock.html");
+	        response.sendRedirect("/online-store/out-of-stock.html");
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        response.sendRedirect("/transaction-fail.html");
+	        response.sendRedirect("/online-store/transaction-fail.html");
 	    }
 	}
 	

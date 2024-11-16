@@ -102,7 +102,7 @@ public class UserController {
         
         if(validateMessage!=null) {
         	session.setAttribute("errorMessage", validateMessage);
-        	response.sendRedirect("/sign-up.html");
+        	response.sendRedirect("/online-store/sign-up.html");
         	return;
         }
         

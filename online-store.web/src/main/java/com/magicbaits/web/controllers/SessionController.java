@@ -46,17 +46,17 @@ private static final String LOGGED_IN_USER_ATTR = "loggedInUser";
 		
 		if(errorMessage!=null) {
 			session.setAttribute("errorMessage", errorMessage);
-			response.sendRedirect("/sign-in.html");
+			response.sendRedirect("/online-store/sign-in.html");
 			return;
 		}
 		
 		session.setAttribute(LOGGED_IN_USER_ATTR, user);
 		if (user.getRoleName().equals(ADMIN_ROLE_NAME)) {
-			response.sendRedirect("/admin/panel.html");
+			response.sendRedirect("/online-store/admin/panel.html");
 			return;
 		} else {
 			session.setAttribute("errorMessage", "");
-			response.sendRedirect("/index.html");
+			response.sendRedirect("/online-store/index.html");
 			return;
 		}
 	}
