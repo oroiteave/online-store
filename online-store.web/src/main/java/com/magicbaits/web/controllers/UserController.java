@@ -117,7 +117,7 @@ public class UserController {
         
         user.setPassword(passwordSecurityEncode.encoder(password));
         userFacade.registerUser(user,partnerCode);
-        response.sendRedirect("/sign-in.html");
+        response.sendRedirect("/online-store/sign-in.html");
 	}
 	
 	private String validateSignUp(User user, String confirmPassword) {
