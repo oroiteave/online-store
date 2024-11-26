@@ -17,3 +17,5 @@ target/
 .classpath
 .project
 .settings/
+
+/online-store.web/src/main/resources/application.properties
